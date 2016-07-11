@@ -11,7 +11,8 @@ enum class WorkerState
     Idle,
     Running,
     Cancelling,
-    Finished
+    Finished,
+    Quitting
 };
 
 class IWorker
