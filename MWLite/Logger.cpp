@@ -12,7 +12,8 @@ Logger::~Logger() {}
 bool Logger::Log(const Configuration &config, size_t *result, size_t length)
 {
     auto &&theTime = time(nullptr);
-    auto now = localtime(&theTime);
+    tm now;
+    localtime_s(&now, &theTime);
 
     std::string str;
     std::stringstream ss(str);
@@ -24,13 +25,13 @@ bool Logger::Log(const Configuration &config, size_t *result, size_t length)
     TouchDirectory(str);
 
     ss << std::setfill('0');
-    ss << std::setw(4) << now->tm_year + 1900 << '-';
-    ss << std::setw(2) << now->tm_mon + 1 << '-';
-    ss << std::setw(2) << now->tm_mday;
+    ss << std::setw(4) << now.tm_year + 1900 << '-';
+    ss << std::setw(2) << now.tm_mon + 1 << '-';
+    ss << std::setw(2) << now.tm_mday;
     ss << ' ';
-    ss << std::setw(2) << now->tm_hour << '-';
-    ss << std::setw(2) << now->tm_min << '-';
-    ss << std::setw(2) << now->tm_sec << ' ';
+    ss << std::setw(2) << now.tm_hour << '-';
+    ss << std::setw(2) << now.tm_min << '-';
+    ss << std::setw(2) << now.tm_sec << ' ';
     ss << std::setw(8) << std::hex << m_Sequence << '.log';
 
     try

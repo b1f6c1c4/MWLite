@@ -155,12 +155,14 @@
     <ClInclude Include="IWorker.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="ThreadPool.h" />
     <ClInclude Include="Worker.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Dispatcher.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Logger.cpp" />
+    <ClCompile Include="ThreadPool.cpp" />
     <ClCompile Include="Worker.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -7,18 +7,20 @@
 class Worker : public IWorker
 {
 public:
-    explicit Worker(const Configuration &config);
+    Worker();
     ~Worker();
 
-    void setSaveInterval(int value) override;
-    int getSaveInterval() const override;
+    Worker(const Worker&) = delete;
+    Worker(Worker&&) = delete;
+    Worker& operator=(const Worker&) = delete;
+    Worker& operator=(Worker&&) = delete;
 
     void setSaveCallback(SaveEventHandler callback) override;
     void setFinishCallback(FinishEventHandler callback) override;
 
     WorkerState getState() const override;
 
-    bool Run(const Configuration &config, size_t repetition) override;
+    bool Run(const WorkingConfig &config) override;
     void Cancel() override;
 
 private:

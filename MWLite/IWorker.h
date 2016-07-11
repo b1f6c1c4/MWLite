@@ -3,6 +3,13 @@
 #include "Configuration.h"
 #include <functional>
 
+struct WorkingConfig
+{
+    Configuration Configuration;
+    size_t Repetition;
+    size_t SaveInterval;
+};
+
 typedef std::function<void(const Configuration &, size_t *, size_t)> SaveEventHandler;
 typedef std::function<void()> FinishEventHandler;
 
@@ -20,15 +27,12 @@ class IWorker
 public:
     virtual ~IWorker() { }
 
-    virtual void setSaveInterval(int value) = 0;
-    virtual int getSaveInterval() const = 0;
-
     virtual void setSaveCallback(SaveEventHandler callback) = 0;
     virtual void setFinishCallback(FinishEventHandler callback) = 0;
 
     virtual WorkerState getState() const = 0;
 
-    virtual bool Run(const Configuration &config, size_t repetition) = 0;
+    virtual bool Run(const WorkingConfig &config) = 0;
     virtual void Cancel() = 0;
 
 protected:

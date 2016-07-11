@@ -1,6 +1,6 @@
 #include "Worker.h"
 
-Worker::Worker(const Configuration &config) : m_SaveInterval(1), m_NotSaved(0), m_Resume(0), m_Result(nullptr), m_ResultLength(0), m_State(WorkerState::Idle), m_Thread(&Worker::WorkerThreadEntry, this) {}
+Worker::Worker() : m_SaveInterval(1), m_NotSaved(0), m_Resume(0), m_Result(nullptr), m_ResultLength(0), m_State(WorkerState::Idle), m_Thread(&Worker::WorkerThreadEntry, this) {}
 
 Worker::~Worker()
 {
@@ -12,16 +12,6 @@ Worker::~Worker()
     m_CVStart.notify_all();
 
     m_Thread.join();
-}
-
-void Worker::setSaveInterval(int value)
-{
-    m_SaveInterval = value;
-}
-
-int Worker::getSaveInterval() const
-{
-    return m_SaveInterval;
 }
 
 void Worker::setSaveCallback(SaveEventHandler callback)
@@ -39,13 +29,14 @@ WorkerState Worker::getState() const
     return m_State;
 }
 
-bool Worker::Run(const Configuration &config, size_t repetition)
+bool Worker::Run(const WorkingConfig &config)
 {
     if (m_State != WorkerState::Idle && m_State != WorkerState::Finished)
         return false;
 
-    m_Config = config;
-    m_Resume = repetition;
+    m_Config = config.Configuration;
+    m_Resume = config.Repetition;
+    m_SaveInterval = config.SaveInterval;
     m_NotSaved = 0;
     m_State = WorkerState::Running;
     m_CVStart.notify_all();
