@@ -1,11 +1,13 @@
 #pragma once
 #include "stdafx.h"
+#include "Game.h"
 
 class ISolver
 {
-    // TODO
 public:
     virtual ~ISolver() { }
+
+    virtual int Process(const Game &game) = 0;
 
 protected:
     ISolver() { }

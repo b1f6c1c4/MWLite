@@ -148,6 +148,7 @@
   <ItemGroup>
     <ClInclude Include="Configuration.h" />
     <ClInclude Include="Dispatcher.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="IGenerator.h" />
     <ClInclude Include="ILogger.h" />
     <ClInclude Include="ISolver.h" />

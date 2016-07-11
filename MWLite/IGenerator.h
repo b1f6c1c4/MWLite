@@ -1,11 +1,13 @@
 #pragma once
 #include "stdafx.h"
+#include "Game.h"
 
 class IGenerator
 {
-    // TODO
 public:
     virtual ~IGenerator() { }
+
+    virtual Game GenerateGame() = 0;
 
 protected:
     IGenerator() { }
