@@ -3,7 +3,7 @@
 #include "Configuration.h"
 #include <functional>
 
-typedef std::function<bool(const Configuration &, size_t *, size_t)> SaveEventHandler;
+typedef std::function<void(const Configuration &, size_t *, size_t)> SaveEventHandler;
 typedef std::function<void()> FinishEventHandler;
 
 enum class WorkerState

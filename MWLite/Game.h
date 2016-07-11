@@ -3,5 +3,10 @@
 
 struct Game
 {
-    // TODO
+    int Width;
+    int Height;
+
+    int TotalMines; // < 0 when unavaliable
+
+    bool *IsMine; // bool [Width * Height]
 };
