@@ -22,11 +22,11 @@ typedef std::function<void()> FinishEventHandler;
 
 enum class WorkerState
 {
-    Idle,
-    Running,
-    Cancelling,
-    Finished,
-    Quitting
+    Idle = 0,
+    Running = 1,
+    Cancelling = 2,
+    Finished = 3,
+    Quitting = 4
 };
 
 class IWorker

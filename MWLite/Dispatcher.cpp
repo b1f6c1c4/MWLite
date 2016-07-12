@@ -39,6 +39,11 @@ Dispatcher::~Dispatcher()
     }
 }
 
+size_t Dispatcher::GetNumWorkers() const
+{
+    return m_Workers.size();
+}
+
 void Dispatcher::Schedule(const Configuration &config, size_t repetition, size_t saveInterval)
 {
     auto numSave = repetition / saveInterval;
@@ -72,6 +77,16 @@ void Dispatcher::Schedule(const Configuration &config, size_t repetition, size_t
     }
 
     NotifyAllWorkers();
+}
+
+void Dispatcher::CancelWorker(int id)
+{
+    m_Workers[id]->Cancel();
+}
+
+WorkerState Dispatcher::GetWorkerState(int id) const
+{
+    return m_Workers[id]->getState();
 }
 
 void Dispatcher::NotifyAllWorkers()

@@ -8,7 +8,6 @@
 
 class Dispatcher
 {
-    // TODO
 public:
     explicit Dispatcher(int numWorkers);
     ~Dispatcher();
@@ -18,7 +17,12 @@ public:
     Dispatcher &operator=(const Dispatcher &other) = delete;
     Dispatcher &operator=(Dispatcher &&other) = delete;
 
+    size_t GetNumWorkers() const;
+
     void Schedule(const Configuration &config, size_t repetition, size_t saveInterval);
+
+    void CancelWorker(int id);
+    WorkerState GetWorkerState(int id) const;
 
 private:
     std::mutex m_MtxQueue;

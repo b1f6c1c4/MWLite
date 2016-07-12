@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace MWLiteUI
 {
@@ -6,7 +8,12 @@ namespace MWLiteUI
     {
         private bool m_Disposed;
 
-        public Core(int numWorkers) { DllWrapper.CreateWorkers(numWorkers); }
+        public Core(int numWorkers)
+        {
+            DllWrapper.CreateWorkers(numWorkers);
+            WorkerStates = new List<WorkerState>();
+            UpdateWorkerStates();
+        }
 
         public void Dispose()
         {
@@ -27,6 +34,15 @@ namespace MWLiteUI
 
         ~Core() { Dispose(false); }
 
+        public readonly List<WorkerState> WorkerStates;
+
+        public void UpdateWorkerStates()
+        {
+            WorkerStates.Clear();
+            var num = DllWrapper.GetNumWorkers();
+            for (var i = 0; i < num; i++)
+                WorkerStates.Add(DllWrapper.GetWorkerState(i));
+        }
 
         public void Schedule(Configuration config, long repetition, long saveInterval)
             => DllWrapper.Schedule(config, repetition, saveInterval);

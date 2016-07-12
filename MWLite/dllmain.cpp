@@ -16,9 +16,24 @@ extern "C"
         TheDispatcher = new Dispatcher(numWorkers);
     }
 
+    DLL_API size_t GetNumWorkers()
+    {
+        return TheDispatcher->GetNumWorkers();
+    }
+
     DLL_API void Schedule(const Configuration &config, size_t repetition, size_t saveInterval)
     {
         TheDispatcher->Schedule(config, repetition, saveInterval);
+    }
+
+    DLL_API void CancelWorker(int id)
+    {
+        TheDispatcher->CancelWorker(id);
+    }
+
+    DLL_API WorkerState GetWorkerState(int id)
+    {
+        return TheDispatcher->GetWorkerState(id);
     }
 
     DLL_API void RemoveWorkers()
