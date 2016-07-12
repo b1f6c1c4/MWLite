@@ -154,15 +154,21 @@
     <ClInclude Include="ISolver.h" />
     <ClInclude Include="IWorker.h" />
     <ClInclude Include="Logger.h" />
+    <ClInclude Include="ProbGenerator.h" />
+    <ClInclude Include="RandomGenerator.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="ThreadPool.h" />
+    <ClInclude Include="TotalGenerator.h" />
     <ClInclude Include="Worker.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Dispatcher.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Logger.cpp" />
+    <ClCompile Include="ProbGenerator.cpp" />
+    <ClCompile Include="RandomGenerator.cpp" />
     <ClCompile Include="ThreadPool.cpp" />
+    <ClCompile Include="TotalGenerator.cpp" />
     <ClCompile Include="Worker.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

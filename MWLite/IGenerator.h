@@ -7,7 +7,7 @@ class IGenerator
 public:
     virtual ~IGenerator() { }
 
-    virtual Game GenerateGame() = 0;
+    virtual void GenerateGame(Game &game) = 0;
 
 protected:
     IGenerator() { }
