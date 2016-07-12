@@ -43,5 +43,5 @@ private:
 
     void WorkerThreadEntry();
 
-    void ProcessOne();
+    void ProcessAll();
 };

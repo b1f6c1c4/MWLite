@@ -1,4 +1,10 @@
 #include "Worker.h"
+#include "IGenerator.h"
+#include "TotalGenerator.h"
+#include "ProbGenerator.h"
+#include "MWSolver.h"
+#include "SLSolver.h"
+#include "DLSolver.h"
 
 Worker::Worker() : m_SaveInterval(1), m_NotSaved(0), m_Resume(0), m_Result(nullptr), m_ResultLength(0), m_State(WorkerState::Idle), m_Thread(&Worker::WorkerThreadEntry, this) {}
 
@@ -82,29 +88,7 @@ void Worker::WorkerThreadEntry()
                 return;
         }
 
-        m_ResultLength = m_Config.UseTotalMines ? m_Config.Width * m_Config.Height : m_Config.TotalMines;
-
-        m_Result = new size_t[m_ResultLength];
-        memset(m_Result, 0, sizeof(size_t) * m_ResultLength);
-
-        while (m_Resume > 0)
-        {
-            if (m_State == WorkerState::Cancelling || m_State == WorkerState::Quitting)
-                break;
-
-            ProcessOne();
-
-            m_Resume--;
-            m_NotSaved++;
-
-            if (m_NotSaved >= m_SaveInterval)
-            {
-                m_EventSave(m_Config, m_Result, m_ResultLength);
-
-                m_NotSaved = 0;
-                memset(m_Result, 0, sizeof(size_t) * m_ResultLength);
-            }
-        }
+        ProcessAll();
         
         if (m_NotSaved > 0)
             m_EventSave(m_Config, m_Result, m_ResultLength);
@@ -119,12 +103,57 @@ void Worker::WorkerThreadEntry()
 
         m_EventFinish();
         
-        delete [] m_Result;
+        if (m_Result != nullptr)
+        {
+            delete[] m_Result;
+            m_Result = nullptr;
+        }
     }
 }
 
-void Worker::ProcessOne()
+void Worker::ProcessAll()
 {
-    // TODO
-    m_Result[0] += 1;
+    m_ResultLength = m_Config.UseTotalMines ? m_Config.Width * m_Config.Height : m_Config.TotalMines;
+
+    m_Result = new size_t[m_ResultLength];
+    memset(m_Result, 0, sizeof(size_t) * m_ResultLength);
+
+    std::unique_ptr<IGenerator> gen(nullptr);
+    if (m_Config.UseTotalMines)
+        gen = std::make_unique<TotalGenerator>(m_Config.Width, m_Config.Height, m_Config.TotalMines);
+    else
+        gen = std::make_unique<ProbGenerator>(m_Config.Width, m_Config.Height, m_Config.Probability);
+
+    Game game(0, 0);
+
+    std::unique_ptr<MWSolver> slv(nullptr);
+    auto newSolver = [&]()
+    {
+        if (m_Config.DisableDual)
+            slv = std::make_unique<SLSolver>(game);
+        else
+            slv = std::make_unique<DLSolver>(game);
+    };
+
+    while (m_Resume > 0)
+    {
+        if (m_State == WorkerState::Cancelling || m_State == WorkerState::Quitting)
+            break;
+
+        gen->GenerateGame(game);
+        newSolver();
+        auto res = slv->Solve();
+        m_Result[res]++;
+
+        m_Resume--;
+        m_NotSaved++;
+
+        if (m_NotSaved >= m_SaveInterval)
+        {
+            m_EventSave(m_Config, m_Result, m_ResultLength);
+
+            m_NotSaved = 0;
+            memset(m_Result, 0, sizeof(size_t) * m_ResultLength);
+        }
+    }
 }

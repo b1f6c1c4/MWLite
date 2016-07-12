@@ -20,5 +20,8 @@ void RandomGenerator::GenerateGame(Game &game)
         }
     }
 
+    if (game.IsMine == nullptr)
+        game.IsMine = new bool[game.Width * game.Height];
+
     Fill(game.IsMine);
 }

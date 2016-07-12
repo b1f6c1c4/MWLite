@@ -28,9 +28,7 @@ namespace MWLiteUI
         ~Core() { Dispose(false); }
 
 
-        public void Schedule(Configuration config, long repetition)
-        {
-            DllWrapper.Schedule(config, repetition, 5);
-        }
+        public void Schedule(Configuration config, long repetition, long saveInterval)
+            => DllWrapper.Schedule(config, repetition, saveInterval);
     }
 }

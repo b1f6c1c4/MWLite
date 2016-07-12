@@ -24,9 +24,6 @@
     <ClInclude Include="BLL\IGenerator.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="BLL\ISolver.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="BLL\IWorker.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -57,6 +54,18 @@
     <ClInclude Include="Entities\Game.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="BLL\BasicSolver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BLL\MWSolver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BLL\SLSolver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BLL\DLSolver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -81,6 +90,18 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="DAL\Logger.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BLL\BasicSolver.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BLL\MWSolver.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BLL\SLSolver.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BLL\DLSolver.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

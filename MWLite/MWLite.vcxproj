@@ -146,8 +146,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BLL\DLSolver.h" />
     <ClInclude Include="BLL\IGenerator.h" />
-    <ClInclude Include="BLL\ISolver.h" />
     <ClInclude Include="BLL\IWorker.h" />
     <ClInclude Include="BLL\ProbGenerator.h" />
     <ClInclude Include="BLL\RandomGenerator.h" />
@@ -159,9 +159,13 @@
     <ClInclude Include="Dispatcher.h" />
     <ClInclude Include="Entities\Configuration.h" />
     <ClInclude Include="Entities\Game.h" />
+    <ClInclude Include="BLL\BasicSolver.h" />
+    <ClInclude Include="BLL\MWSolver.h" />
+    <ClInclude Include="BLL\SLSolver.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BLL\DLSolver.cpp" />
     <ClCompile Include="BLL\ProbGenerator.cpp" />
     <ClCompile Include="BLL\RandomGenerator.cpp" />
     <ClCompile Include="BLL\TotalGenerator.cpp" />
@@ -170,6 +174,9 @@
     <ClCompile Include="DAL\Logger.cpp" />
     <ClCompile Include="Dispatcher.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="BLL\BasicSolver.cpp" />
+    <ClCompile Include="BLL\MWSolver.cpp" />
+    <ClCompile Include="BLL\SLSolver.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
