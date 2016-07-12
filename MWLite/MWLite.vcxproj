@@ -146,32 +146,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AsyncLogger.h" />
-    <ClInclude Include="Configuration.h" />
+    <ClInclude Include="BLL\IGenerator.h" />
+    <ClInclude Include="BLL\ISolver.h" />
+    <ClInclude Include="BLL\IWorker.h" />
+    <ClInclude Include="BLL\ProbGenerator.h" />
+    <ClInclude Include="BLL\RandomGenerator.h" />
+    <ClInclude Include="BLL\TotalGenerator.h" />
+    <ClInclude Include="BLL\Worker.h" />
+    <ClInclude Include="DAL\AsyncLogger.h" />
+    <ClInclude Include="DAL\ILogger.h" />
+    <ClInclude Include="DAL\Logger.h" />
     <ClInclude Include="Dispatcher.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="IGenerator.h" />
-    <ClInclude Include="ILogger.h" />
-    <ClInclude Include="ISolver.h" />
-    <ClInclude Include="IWorker.h" />
-    <ClInclude Include="Logger.h" />
-    <ClInclude Include="ProbGenerator.h" />
-    <ClInclude Include="RandomGenerator.h" />
+    <ClInclude Include="Entities\Configuration.h" />
+    <ClInclude Include="Entities\Game.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="ThreadPool.h" />
-    <ClInclude Include="TotalGenerator.h" />
-    <ClInclude Include="Worker.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AsyncLogger.cpp" />
+    <ClCompile Include="BLL\ProbGenerator.cpp" />
+    <ClCompile Include="BLL\RandomGenerator.cpp" />
+    <ClCompile Include="BLL\TotalGenerator.cpp" />
+    <ClCompile Include="BLL\Worker.cpp" />
+    <ClCompile Include="DAL\AsyncLogger.cpp" />
+    <ClCompile Include="DAL\Logger.cpp" />
     <ClCompile Include="Dispatcher.cpp" />
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="Logger.cpp" />
-    <ClCompile Include="ProbGenerator.cpp" />
-    <ClCompile Include="RandomGenerator.cpp" />
-    <ClCompile Include="ThreadPool.cpp" />
-    <ClCompile Include="TotalGenerator.cpp" />
-    <ClCompile Include="Worker.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

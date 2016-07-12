@@ -1,6 +1,6 @@
 #pragma once
-#include "stdafx.h"
-#include "Game.h"
+#include "../stdafx.h"
+#include "../Entities/Game.h"
 
 class IGenerator
 {

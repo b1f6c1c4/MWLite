@@ -1,6 +1,6 @@
 #include "Dispatcher.h"
-#include "Worker.h"
-#include "Logger.h"
+#include "./BLL/Worker.h"
+#include "./DAL/Logger.h"
 
 Dispatcher::Dispatcher(int numWorkers) : m_Logger(new Logger())
 {

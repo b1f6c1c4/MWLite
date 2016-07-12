@@ -1,10 +1,9 @@
 #pragma once
 #include "stdafx.h"
-#include "ILogger.h"
-#include "IWorker.h"
-#include "ThreadPool.h"
+#include "./DAL/ILogger.h"
+#include "./BLL/IWorker.h"
 #include <vector>
-#include <mutex>
+#include <queue>
 #include <condition_variable>
 
 class Dispatcher

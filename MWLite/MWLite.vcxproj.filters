@@ -15,49 +15,46 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Configuration.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Dispatcher.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="IWorker.h">
+    <ClInclude Include="BLL\IGenerator.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Worker.h">
+    <ClInclude Include="BLL\ISolver.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="IGenerator.h">
+    <ClInclude Include="BLL\IWorker.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="ISolver.h">
+    <ClInclude Include="BLL\ProbGenerator.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="ILogger.h">
+    <ClInclude Include="BLL\RandomGenerator.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Logger.h">
+    <ClInclude Include="BLL\TotalGenerator.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Game.h">
+    <ClInclude Include="BLL\Worker.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="ThreadPool.h">
+    <ClInclude Include="DAL\AsyncLogger.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="ProbGenerator.h">
+    <ClInclude Include="DAL\ILogger.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="TotalGenerator.h">
+    <ClInclude Include="DAL\Logger.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="RandomGenerator.h">
+    <ClInclude Include="Entities\Configuration.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="AsyncLogger.h">
+    <ClInclude Include="Entities\Game.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -68,25 +65,22 @@
     <ClCompile Include="Dispatcher.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Worker.cpp">
+    <ClCompile Include="BLL\ProbGenerator.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Logger.cpp">
+    <ClCompile Include="BLL\RandomGenerator.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="ThreadPool.cpp">
+    <ClCompile Include="BLL\TotalGenerator.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="ProbGenerator.cpp">
+    <ClCompile Include="BLL\Worker.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="TotalGenerator.cpp">
+    <ClCompile Include="DAL\AsyncLogger.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="RandomGenerator.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="AsyncLogger.cpp">
+    <ClCompile Include="DAL\Logger.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

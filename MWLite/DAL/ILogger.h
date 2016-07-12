@@ -1,6 +1,6 @@
 #pragma once
-#include "stdafx.h"
-#include "Configuration.h"
+#include "../stdafx.h"
+#include "../Entities/Configuration.h"
 #include <memory>
 
 struct Logging
