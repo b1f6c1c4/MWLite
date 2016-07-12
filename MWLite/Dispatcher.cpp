@@ -2,7 +2,7 @@
 #include "Worker.h"
 #include "Logger.h"
 
-Dispatcher::Dispatcher(int numWorkers) : m_LoggerPool(1), m_Logger(std::unique_ptr<ILogger>(std::make_unique<Logger>()))
+Dispatcher::Dispatcher(int numWorkers) : m_Logger(new Logger())
 {
     for (auto i = 0; i < numWorkers; i++)
     {
@@ -10,7 +10,7 @@ Dispatcher::Dispatcher(int numWorkers) : m_LoggerPool(1), m_Logger(std::unique_p
 
         worker->setSaveCallback([this](const Configuration &config, size_t *result, size_t length)
                                 {
-                                    m_LoggerPool.enqueue(std::bind(&ILogger::Log, m_Logger), config, result, length);
+                                    m_Logger->Log(Logging(config, result, length));
                                 });
 
         worker->setFinishCallback([this, worker]()
@@ -32,7 +32,11 @@ Dispatcher::Dispatcher(int numWorkers) : m_LoggerPool(1), m_Logger(std::unique_p
 
 Dispatcher::~Dispatcher()
 {
-    // TODO
+    if (m_Logger != nullptr)
+    {
+        delete m_Logger;
+        m_Logger = nullptr;
+    }
 }
 
 void Dispatcher::Schedule(const Configuration &config, size_t repetition, size_t saveInterval)

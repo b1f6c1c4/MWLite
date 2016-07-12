@@ -9,7 +9,7 @@ Logger::Logger() : m_Sequence(0) {}
 
 Logger::~Logger() {}
 
-bool Logger::Log(const Configuration &config, size_t *result, size_t length)
+void Logger::Process(const Logging &log)
 {
     auto &&theTime = time(nullptr);
     tm now;
@@ -21,7 +21,7 @@ bool Logger::Log(const Configuration &config, size_t *result, size_t length)
     ss << "./db";
     TouchDirectory(str);
 
-    ss << "/" << Hash(config);
+    ss << "/" << Hash(*log.Config);
     TouchDirectory(str);
 
     ss << std::setfill('0');
@@ -34,20 +34,12 @@ bool Logger::Log(const Configuration &config, size_t *result, size_t length)
     ss << std::setw(2) << now.tm_sec << ' ';
     ss << std::setw(8) << std::hex << m_Sequence << '.log';
 
-    try
-    {
-        std::ofstream fout(str);
+    std::ofstream fout(str);
 
-        for (auto i = 0; i < length; ++i)
-            fout << result[i] << std::endl;
+    for (auto i = 0; i < log.Length; ++i)
+        fout << log.Result[i] << std::endl;
 
-        fout.close();
-        return true;
-    }
-    catch (...)
-    {
-        return false;
-    }
+    fout.close();
 }
 
 std::string Logger::Hash(const Configuration &config)
@@ -60,13 +52,7 @@ void Logger::TouchDirectory(std::string path)
 {
     if (std::experimental::filesystem::is_directory(path))
         return;
-    {
-        std::lock_guard<std::mutex> lock(m_FileIO);
 
-        if (std::experimental::filesystem::is_directory(path))
-            return;
-
-        if (!std::experimental::filesystem::create_directory(path))
-            throw;
-    }
+    if (!std::experimental::filesystem::create_directory(path))
+        throw;
 }

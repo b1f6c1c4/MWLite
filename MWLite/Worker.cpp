@@ -34,7 +34,7 @@ bool Worker::Run(const WorkingConfig &config)
     if (m_State != WorkerState::Idle && m_State != WorkerState::Finished)
         return false;
 
-    m_Config = config.Configuration;
+    m_Config = config.Config;
     m_Resume = config.Repetition;
     m_SaveInterval = config.SaveInterval;
     m_NotSaved = 0;
@@ -96,8 +96,6 @@ void Worker::WorkerThreadEntry()
         
         if (m_NotSaved > 0)
             m_EventSave(m_Config, m_Result, m_ResultLength);
-        
-        m_EventFinish();
 
         {
             std::unique_lock<std::mutex> lock(m_StateChange);
@@ -106,6 +104,8 @@ void Worker::WorkerThreadEntry()
             if (m_State == WorkerState::Quitting)
                 return;
         }
+
+        m_EventFinish();
     }
 }
 

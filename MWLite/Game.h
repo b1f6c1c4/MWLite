@@ -44,7 +44,7 @@ inline Game::~Game()
 inline Game &Game::operator=(const Game &other)
 {
     if (this == &other)
-        return;
+        return *this;
 
     if (IsMine != nullptr)
     {
@@ -57,7 +57,7 @@ inline Game &Game::operator=(const Game &other)
     TotalMines = other.TotalMines;
 
     if (other.IsMine == nullptr)
-        return;
+        return *this;
     IsMine = new bool[Width * Height];
     memcpy(IsMine, other.IsMine, Width * Height);
 
@@ -67,7 +67,7 @@ inline Game &Game::operator=(const Game &other)
 inline Game &Game::operator=(Game &&other)
 {
     if (this == &other)
-        return;
+        return *this;
 
     if (IsMine != nullptr)
     {
@@ -82,7 +82,7 @@ inline Game &Game::operator=(Game &&other)
     IsMine = other.IsMine;
 
     if (other.IsMine == nullptr)
-        return;
+        return *this;
 
     delete[] other.IsMine;
     other.IsMine = nullptr;

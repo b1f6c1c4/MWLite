@@ -146,6 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AsyncLogger.h" />
     <ClInclude Include="Configuration.h" />
     <ClInclude Include="Dispatcher.h" />
     <ClInclude Include="Game.h" />
@@ -162,6 +163,7 @@
     <ClInclude Include="Worker.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AsyncLogger.cpp" />
     <ClCompile Include="Dispatcher.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Logger.cpp" />

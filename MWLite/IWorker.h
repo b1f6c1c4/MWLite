@@ -5,10 +5,17 @@
 
 struct WorkingConfig
 {
-    Configuration Configuration;
+    Configuration Config;
     size_t Repetition;
     size_t SaveInterval;
+
+    WorkingConfig(const Configuration &config, size_t repetition, size_t saveInterval);
+    WorkingConfig(Configuration &&config, size_t repetition, size_t saveInterval);
 };
+
+inline WorkingConfig::WorkingConfig(const Configuration &config, size_t repetition, size_t saveInterval) : Config(config), Repetition(repetition), SaveInterval(saveInterval) { }
+
+inline WorkingConfig::WorkingConfig(Configuration &&config, size_t repetition, size_t saveInterval) : Config(config), Repetition(repetition), SaveInterval(saveInterval) { }
 
 typedef std::function<void(const Configuration &, size_t *, size_t)> SaveEventHandler;
 typedef std::function<void()> FinishEventHandler;
