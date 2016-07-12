@@ -89,7 +89,7 @@ void Worker::WorkerThreadEntry()
         }
 
         ProcessAll();
-        
+
         if (m_NotSaved > 0)
             m_EventSave(m_Config, m_Result, m_ResultLength);
 
@@ -102,7 +102,7 @@ void Worker::WorkerThreadEntry()
         }
 
         m_EventFinish();
-        
+
         if (m_Result != nullptr)
         {
             delete[] m_Result;
@@ -128,12 +128,12 @@ void Worker::ProcessAll()
 
     std::unique_ptr<MWSolver> slv(nullptr);
     auto newSolver = [&]()
-    {
-        if (m_Config.DisableDual)
-            slv = std::make_unique<SLSolver>(game);
-        else
-            slv = std::make_unique<DLSolver>(game);
-    };
+        {
+            if (m_Config.DisableDual)
+                slv = std::make_unique<SLSolver>(game);
+            else
+                slv = std::make_unique<DLSolver>(game);
+        };
 
     while (m_Resume > 0)
     {

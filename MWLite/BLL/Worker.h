@@ -10,10 +10,10 @@ public:
     Worker();
     ~Worker();
 
-    Worker(const Worker&) = delete;
-    Worker(Worker&&) = delete;
-    Worker& operator=(const Worker&) = delete;
-    Worker& operator=(Worker&&) = delete;
+    Worker(const Worker &) = delete;
+    Worker(Worker &&) = delete;
+    Worker &operator=(const Worker &) = delete;
+    Worker &operator=(Worker &&) = delete;
 
     void setSaveCallback(SaveEventHandler callback) override;
     void setFinishCallback(FinishEventHandler callback) override;
