@@ -1,6 +1,7 @@
 #pragma once
 #include "../stdafx.h"
 
+#pragma pack(push, 8)
 struct Configuration
 {
     // generator settings
@@ -14,3 +15,4 @@ struct Configuration
     // solver settings
     bool DisableDual;
 };
+#pragma pack(pop)

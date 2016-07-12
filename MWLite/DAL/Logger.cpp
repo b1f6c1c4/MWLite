@@ -15,15 +15,15 @@ void Logger::Process(const Logging &log)
     tm now;
     localtime_s(&now, &theTime);
 
-    std::string str;
-    std::stringstream ss(str);
+    std::stringstream ss;
 
     ss << "./db";
-    TouchDirectory(str);
+    TouchDirectory(ss.str());
 
-    ss << "/" << Hash(*log.Config);
-    TouchDirectory(str);
+    ss << '/' << Hash(*log.Config);
+    TouchDirectory(ss.str());
 
+    ss << '/';
     ss << std::setfill('0');
     ss << std::setw(4) << now.tm_year + 1900 << '-';
     ss << std::setw(2) << now.tm_mon + 1 << '-';
@@ -32,23 +32,42 @@ void Logger::Process(const Logging &log)
     ss << std::setw(2) << now.tm_hour << '-';
     ss << std::setw(2) << now.tm_min << '-';
     ss << std::setw(2) << now.tm_sec << ' ';
-    ss << std::setw(8) << std::hex << m_Sequence << '.log';
+    ss << std::setw(8) << std::hex << m_Sequence << ".log";
 
-    std::ofstream fout(str);
+    std::ofstream fout(ss.str());
 
     for (auto i = 0; i < log.Length; ++i)
         fout << log.Result[i] << std::endl;
 
     fout.close();
+
+    m_Sequence++;
 }
 
 std::string Logger::Hash(const Configuration &config)
 {
-    // TODO
-    return nullptr;
+    std::stringstream ss;
+
+    if (config.DisableDual)
+        ss << "SL";
+    else
+        ss << "DL";
+
+    ss << ' ';
+
+    ss << config.Width << '-';
+    ss << config.Height << '-';
+
+    if (config.UseTotalMines)
+        ss << 'T' << config.TotalMines;
+    else
+        ss << 'P' << std::setprecision(16) << config.Probability;
+
+    return ss.str();
 }
 
-void Logger::TouchDirectory(std::string path)
+// ReSharper disable once CppMemberFunctionMayBeConst
+void Logger::TouchDirectory(const std::string &path)
 {
     if (std::experimental::filesystem::is_directory(path))
         return;

@@ -12,6 +12,12 @@ Worker::~Worker()
     m_CVStart.notify_all();
 
     m_Thread.join();
+
+    if (m_Result != nullptr)
+    {
+        delete [] m_Result;
+        m_Result = nullptr;
+    }
 }
 
 void Worker::setSaveCallback(SaveEventHandler callback)
@@ -76,6 +82,11 @@ void Worker::WorkerThreadEntry()
                 return;
         }
 
+        m_ResultLength = m_Config.UseTotalMines ? m_Config.Width * m_Config.Height : m_Config.TotalMines;
+
+        m_Result = new size_t[m_ResultLength];
+        memset(m_Result, 0, sizeof(size_t) * m_ResultLength);
+
         while (m_Resume > 0)
         {
             if (m_State == WorkerState::Cancelling || m_State == WorkerState::Quitting)
@@ -91,6 +102,7 @@ void Worker::WorkerThreadEntry()
                 m_EventSave(m_Config, m_Result, m_ResultLength);
 
                 m_NotSaved = 0;
+                memset(m_Result, 0, sizeof(size_t) * m_ResultLength);
             }
         }
         
@@ -106,10 +118,13 @@ void Worker::WorkerThreadEntry()
         }
 
         m_EventFinish();
+        
+        delete [] m_Result;
     }
 }
 
 void Worker::ProcessOne()
 {
     // TODO
+    m_Result[0] += 1;
 }

@@ -41,10 +41,34 @@ Dispatcher::~Dispatcher()
 
 void Dispatcher::Schedule(const Configuration &config, size_t repetition, size_t saveInterval)
 {
+    auto numSave = repetition / saveInterval;
+    size_t numSubTasks;
+
+    if (numSave <= 1)
+        numSubTasks = 1;
+    else if (numSave >= m_Workers.size() * m_Workers.size())
+        numSubTasks = m_Workers.size() * m_Workers.size();
+    else
+        numSubTasks = m_Workers.size();
+
+    auto repeat = repetition / numSubTasks;
+
     {
         std::unique_lock<std::mutex> lock(m_MtxQueue);
 
-        m_Queue.emplace(config, repetition, saveInterval);
+        while (repetition > 0)
+        {
+            if (repetition >= repeat)
+            {
+                m_Queue.emplace(config, repeat, saveInterval);
+                repetition -= repeat;
+            }
+            else
+            {
+                m_Queue.emplace(config, repetition, saveInterval);
+                repetition = 0;
+            }
+        }
     }
 
     NotifyAllWorkers();

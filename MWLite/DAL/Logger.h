@@ -18,5 +18,5 @@ private:
 
     static std::string Hash(const Configuration &config);
 
-    void TouchDirectory(std::string path);
+    void TouchDirectory(const std::string &path);
 };

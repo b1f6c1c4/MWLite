@@ -1,7 +1,16 @@
-﻿namespace MWLiteUI
+﻿using System.Runtime.InteropServices;
+
+namespace MWLiteUI
 {
-    public class DllWrapper
+    public static class DllWrapper
     {
-        // TODO
+        [DllImport("MWLite.dll")]
+        public static extern void CreateWorkers(int numWorkers);
+
+        [DllImport("MWLite.dll")]
+        public static extern void Schedule(Configuration config, long repetition, long saveInterval);
+
+        [DllImport("MWLite.dll")]
+        public static extern void RemoveWorkers();
     }
 }

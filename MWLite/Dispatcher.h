@@ -13,6 +13,11 @@ public:
     explicit Dispatcher(int numWorkers);
     ~Dispatcher();
 
+    Dispatcher(const Dispatcher &other) = delete;
+    Dispatcher(Dispatcher &&other) = delete;
+    Dispatcher &operator=(const Dispatcher &other) = delete;
+    Dispatcher &operator=(Dispatcher &&other) = delete;
+
     void Schedule(const Configuration &config, size_t repetition, size_t saveInterval);
 
 private:

@@ -1,12 +1,15 @@
 #include "AsyncLogger.h"
 
-AsyncLogger::AsyncLogger() : m_Quitting(false) {}
+AsyncLogger::AsyncLogger() : m_Thread(&AsyncLogger::LoggerThreadEntry, this), m_Quitting(false) {}
 
 AsyncLogger::~AsyncLogger()
 {
     std::unique_lock<std::mutex> lock(m_StateChange);
 
     m_Quitting = true;
+
+    lock.unlock();
+
     m_CVStart.notify_all();
 
     m_Thread.join();
@@ -14,13 +17,15 @@ AsyncLogger::~AsyncLogger()
 
 void AsyncLogger::LoggerThreadEntry()
 {
+    std::unique_lock<std::mutex> lock(m_StateChange, std::defer_lock);
     while (true)
     {
-        std::unique_lock<std::mutex> lock(m_StateChange);
+        // enter lock
+        lock.lock();
 
         m_CVStart.wait(lock, [&]()
                        {
-                           return !m_Queue.empty();
+                           return m_Quitting || !m_Queue.empty();
                        });
 
         if (m_Quitting)
@@ -29,7 +34,8 @@ void AsyncLogger::LoggerThreadEntry()
         auto log(std::move(m_Queue.front()));
         m_Queue.pop();
 
-        lock.release();
+        // exit lock
+        lock.unlock();
 
         Process(log);
     }
