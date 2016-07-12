@@ -54,7 +54,8 @@ int MWSolver::GetY(int id) const
 
 BlockSet MWSolver::GetBlockR(int id) const
 {
-    BlockSet blkR(8);
+    BlockSet blkR;
+    blkR.reserve(8);
     auto i = GetX(id);
     auto j = GetY(id);
     for (auto di = -1; di <= 1; ++di)
@@ -110,5 +111,5 @@ int MWSolver::RandomNonTrivial()
 
     std::uniform_int_distribution<> dist(0, static_cast<int>(m_Random_Temp.size()) - 1);
 
-    return dist(m_Random);
+    return m_Random_Temp[dist(m_Random)];
 }
