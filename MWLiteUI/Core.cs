@@ -43,7 +43,33 @@ namespace MWLiteUI
                 WorkerStates.Add(DllWrapper.GetWorkerState(i));
         }
 
-        public void Schedule(Configuration config, long repetition, long saveInterval)
-            => DllWrapper.Schedule(config, repetition, saveInterval);
+        public void Schedule(Configuration config, ulong repetition, ulong saveInterval)
+        {
+            if (config.Width <= 0)
+                throw new ArgumentException(@"Width", nameof(config));
+            if (config.Height <= 0)
+                throw new ArgumentException(@"Height", nameof(config));
+            if (config.UseTotalMines &&
+                config.TotalMines < 0)
+                throw new ArgumentException(@"TotalMines", nameof(config));
+            if (!config.UseTotalMines &&
+                (config.Probability < 0 || config.Probability > 1))
+                throw new ArgumentException(@"Probability", nameof(config));
+
+            DllWrapper.Schedule(config, repetition, saveInterval);
+        }
+
+        public void Cancel(int id)
+        {
+            UpdateWorkerStates();
+            DllWrapper.CancelWorker(id);
+        }
+        public void Cancel()
+        {
+            UpdateWorkerStates();
+            for (var i = 0; i < WorkerStates.Count; i++)
+                DllWrapper.CancelWorker(i);
+        }
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -125,10 +126,16 @@ namespace MWLiteUI
 
         private static HttpRequest ParseRequest(Stream stream)
         {
+            var method = Parse(stream, ParsingState.Method);
+            var uri = Parse(stream, ParsingState.Uri);
+            Dictionary<string, string> par;
+            var baseUri = ParseUri(uri, out par);
             var request = new HttpRequest
                               {
-                                  Method = Parse(stream, ParsingState.Method),
-                                  Uri = Parse(stream, ParsingState.Uri),
+                                  Method = method,
+                                  Uri = uri,
+                                  BaseUri = baseUri,
+                                  Parameters = par,
                                   Header = new Headers(),
                                   RequestStream = stream
                               };
@@ -306,12 +313,28 @@ namespace MWLiteUI
                     throw new ApplicationException();
             }
         }
+
+        private static string ParseUri(string uri, out Dictionary<string, string> par)
+        {
+            var sp = uri.Split(new[] { '?' }, 2);
+            if (sp.Length == 1)
+            {
+                par = null;
+                return sp[0];
+            }
+
+            var spp = sp[1].Split('&');
+            par = spp.ToDictionary(s => s.Substring(0, s.IndexOf('=')), s => s.Substring(s.IndexOf('=') + 1));
+            return sp[0];
+        }
     }
 
     internal class HttpRequest
     {
         public string Method { get; set; }
         public string Uri { get; set; }
+        public string BaseUri { get; set; }
+        public Dictionary<string, string> Parameters { get; set; }
         public Headers Header { get; set; }
         public Stream RequestStream { get; set; }
     }

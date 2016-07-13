@@ -20,7 +20,7 @@ namespace MWLiteUI
         public static extern long GetNumWorkers();
 
         [DllImport("MWLite.dll")]
-        public static extern void Schedule(Configuration config, long repetition, long saveInterval);
+        public static extern void Schedule(Configuration config, ulong repetition, ulong saveInterval);
 
         [DllImport("MWLite.dll")]
         public static extern void CancelWorker(int id);
