@@ -113,12 +113,12 @@ void Worker::WorkerThreadEntry()
 
 void Worker::ProcessAll()
 {
-    m_ResultLength = m_Config.UseTotalMines ? m_Config.Width * m_Config.Height : m_Config.TotalMines;
+    m_ResultLength = !m_Config.UseTotalMines ? m_Config.Width * m_Config.Height : m_Config.TotalMines;
 
     m_Result = new size_t[m_ResultLength];
     memset(m_Result, 0, sizeof(size_t) * m_ResultLength);
 
-    std::unique_ptr<IGenerator> gen(nullptr);
+    std::unique_ptr<IGenerator> gen;
     if (m_Config.UseTotalMines)
         gen = std::make_unique<TotalGenerator>(m_Config.Width, m_Config.Height, m_Config.TotalMines);
     else
