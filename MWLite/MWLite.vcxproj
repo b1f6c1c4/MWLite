@@ -151,6 +151,7 @@
     <ClInclude Include="BLL\IWorker.h" />
     <ClInclude Include="BLL\ProbGenerator.h" />
     <ClInclude Include="BLL\RandomGenerator.h" />
+    <ClInclude Include="Threading.h" />
     <ClInclude Include="BLL\TotalGenerator.h" />
     <ClInclude Include="BLL\Worker.h" />
     <ClInclude Include="DAL\AsyncLogger.h" />
@@ -168,6 +169,7 @@
     <ClCompile Include="BLL\DLSolver.cpp" />
     <ClCompile Include="BLL\ProbGenerator.cpp" />
     <ClCompile Include="BLL\RandomGenerator.cpp" />
+    <ClCompile Include="Threading.cpp" />
     <ClCompile Include="BLL\TotalGenerator.cpp" />
     <ClCompile Include="BLL\Worker.cpp" />
     <ClCompile Include="DAL\AsyncLogger.cpp" />

@@ -66,6 +66,9 @@
     <ClInclude Include="BLL\DLSolver.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Threading.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -102,6 +105,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="BLL\DLSolver.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Threading.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

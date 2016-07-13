@@ -65,18 +65,19 @@ namespace MWLiteUI
                                 throw new HttpException(411);
 
                             var len = Convert.ToInt32(request.Header["Content-Length"]);
-                            if (len > 4096)
+                            if (len > 1048576)
                                 throw new HttpException(413);
                             var buff = new byte[len];
                             if (len > 0)
                                 request.RequestStream.Read(buff, 0, len);
                             var str = Encoding.UTF8.GetString(buff);
 
-                            var config = JsonConvert.DeserializeObject<Configuration>(str);
+                            var config = JsonConvert.DeserializeObject<Configuration[]>(str);
                             var rep = Convert.ToUInt64(request.Parameters["r"]);
                             var sav = Convert.ToUInt64(request.Parameters["s"]);
 
-                            Program.TheCore.Schedule(config, rep, sav);
+                            foreach (var c in config)
+                                Program.TheCore.Schedule(c, rep, sav);
 
                             return new HttpResponse { ResponseCode = 202 };
 

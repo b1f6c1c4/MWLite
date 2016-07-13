@@ -71,7 +71,7 @@ namespace MWLiteUI
             m_ListenerThread = new Thread(MainProcess)
                                    {
                                        IsBackground = true,
-                                       Name = "HttpThread"
+                                       Name = "HttpServer"
                                    };
             m_ListenerThread.Start();
         }

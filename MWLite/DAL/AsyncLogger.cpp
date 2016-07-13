@@ -1,4 +1,5 @@
 #include "AsyncLogger.h"
+#include "../Threading.h"
 
 AsyncLogger::AsyncLogger() : m_Thread(&AsyncLogger::LoggerThreadEntry, this), m_Quitting(false) {}
 
@@ -17,6 +18,8 @@ AsyncLogger::~AsyncLogger()
 
 void AsyncLogger::LoggerThreadEntry()
 {
+    SetThreadName("AsyncLogger");
+
     std::unique_lock<std::mutex> lock(m_StateChange, std::defer_lock);
     while (true)
     {

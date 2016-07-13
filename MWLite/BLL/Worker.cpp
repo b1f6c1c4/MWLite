@@ -5,6 +5,7 @@
 #include "MWSolver.h"
 #include "SLSolver.h"
 #include "DLSolver.h"
+#include "../Threading.h"
 
 Worker::Worker() : m_SaveInterval(1), m_NotSaved(0), m_Resume(0), m_Result(nullptr), m_ResultLength(0), m_State(WorkerState::Idle), m_Thread(&Worker::WorkerThreadEntry, this) {}
 
@@ -73,6 +74,8 @@ void Worker::Cancel()
 
 void Worker::WorkerThreadEntry()
 {
+    SetThreadName("Worker");
+
     while (true)
     {
         {
@@ -113,7 +116,7 @@ void Worker::WorkerThreadEntry()
 
 void Worker::ProcessAll()
 {
-    m_ResultLength = !m_Config.UseTotalMines ? m_Config.Width * m_Config.Height : m_Config.TotalMines;
+    m_ResultLength = !m_Config.UseTotalMines ? m_Config.Width * m_Config.Height : m_Config.TotalMines + 1;
 
     m_Result = new size_t[m_ResultLength];
     memset(m_Result, 0, sizeof(size_t) * m_ResultLength);

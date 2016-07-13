@@ -18,7 +18,7 @@ struct Logging
 
 inline Logging::Logging(const Configuration &config, const size_t *result, size_t length) : Config(&config), Result(std::make_unique<size_t[]>(length)), Length(length)
 {
-    memcpy(Result.get(), result, length);
+    memcpy(Result.get(), result, sizeof(*result) * length);
 }
 
 class ILogger
