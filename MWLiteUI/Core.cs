@@ -67,6 +67,7 @@ namespace MWLiteUI
         public void Cancel()
         {
             UpdateWorkerStates();
+            DllWrapper.EmptyQueue();
             for (var i = 0; i < WorkerStates.Count; i++)
                 DllWrapper.CancelWorker(i);
         }

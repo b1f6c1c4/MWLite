@@ -89,6 +89,14 @@ WorkerState Dispatcher::GetWorkerState(int id) const
     return m_Workers[id]->getState();
 }
 
+void Dispatcher::EmptyQueue()
+{
+    std::lock_guard<std::mutex> lock(m_MtxQueue);
+
+    std::queue<WorkingConfig> q;
+    m_Queue.swap(q);
+}
+
 void Dispatcher::NotifyAllWorkers()
 {
     std::unique_lock<std::mutex> lock(m_MtxQueue);

@@ -36,6 +36,11 @@ extern "C"
         return TheDispatcher->GetWorkerState(id);
     }
 
+    DLL_API void EmptyQueue()
+    {
+        TheDispatcher->EmptyQueue();
+    }
+
     DLL_API void RemoveWorkers()
     {
         if (TheDispatcher != nullptr)

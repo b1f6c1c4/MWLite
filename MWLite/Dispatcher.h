@@ -23,6 +23,7 @@ public:
 
     void CancelWorker(int id);
     WorkerState GetWorkerState(int id) const;
+    void EmptyQueue();
 
 private:
     std::mutex m_MtxQueue;
