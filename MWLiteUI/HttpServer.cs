@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -106,9 +107,10 @@ namespace MWLiteUI
                     {
                         response = new HttpResponse { ResponseCode = e.ResponseCode };
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
-                        response = new HttpResponse { ResponseCode = 500 };
+                        response = GenerateHttpResponse(e.ToString(), "text/plain");
+                        response.ResponseCode = 500;
                     }
 
                     using (response)
@@ -326,6 +328,40 @@ namespace MWLiteUI
             var spp = sp[1].Split('&');
             par = spp.ToDictionary(s => s.Substring(0, s.IndexOf('=')), s => s.Substring(s.IndexOf('=') + 1));
             return sp[0];
+        }
+
+        public static string ReadToEnd(HttpRequest request, int maxLength = 1048576)
+        {
+            var len = Convert.ToInt32(request.Header["Content-Length"]);
+            if (len > maxLength)
+                throw new HttpException(413);
+
+            var buff = new byte[len];
+            if (len > 0)
+                request.RequestStream.Read(buff, 0, len);
+
+            return Encoding.UTF8.GetString(buff);
+        }
+
+        public static HttpResponse GenerateHttpResponse(string str, string contentType = "text/json")
+        {
+            var stream = new MemoryStream();
+            var sw = new StreamWriter(stream);
+            sw.Write(str);
+            sw.Flush();
+            stream.Position = 0;
+            return
+                new HttpResponse
+                {
+                    ResponseCode = 200,
+                    Header =
+                            new Dictionary<string, string>
+                                {
+                                    { "Content-Type", contentType },
+                                    { "Content-Length", stream.Length.ToString(CultureInfo.InvariantCulture) }
+                                },
+                    ResponseStream = stream
+                };
         }
     }
 

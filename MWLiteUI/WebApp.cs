@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Net;
-using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -20,25 +19,56 @@ namespace MWLiteUI
             m_Http.OnHttpRequest += HttpRequest;
         }
 
-        private static HttpResponse GenerateHttpResponse(string str, string contentType = "text/json")
+        private static HttpResponse GetWorkerStates()
         {
-            var stream = new MemoryStream();
-            var sw = new StreamWriter(stream);
-            sw.Write(str);
-            sw.Flush();
-            stream.Position = 0;
-            return
-                new HttpResponse
+            Program.TheCore.UpdateWorkerStates();
+            return HttpServer.GenerateHttpResponse(JsonConvert.SerializeObject(Program.TheCore.WorkerStates));
+        }
+
+        private static HttpResponse GetSpeed()
+        {
+            var json =
+                new JObject
                     {
-                        ResponseCode = 200,
-                        Header =
-                            new Dictionary<string, string>
-                                {
-                                    { "Content-Type", contentType },
-                                    { "Content-Length", stream.Length.ToString(CultureInfo.InvariantCulture) }
-                                },
-                        ResponseStream = stream
+                        { "Speed", Program.TheCore.Speed },
+                        { "RestGame", Program.TheCore.RestGame },
+                        { "RestTime", Program.TheCore.RestTime }
                     };
+            return HttpServer.GenerateHttpResponse(json.ToString());
+        }
+
+        private static HttpResponse GetResult(HttpRequest request)
+        {
+            var config = JsonConvert.DeserializeObject<Configuration>(HttpServer.ReadToEnd(request));
+            var res = Core.GatherResult(config);
+            return HttpServer.GenerateHttpResponse(JsonConvert.SerializeObject(res));
+        }
+
+        private static HttpResponse PutSchedule(HttpRequest request)
+        {
+            if (request.Parameters == null)
+                throw new HttpException(404);
+            if (!request.Parameters.ContainsKey("r"))
+                throw new HttpException(404);
+            if (!request.Parameters.ContainsKey("s"))
+                throw new HttpException(404);
+            if (!request.Header.ContainsKey("Content-Length"))
+                throw new HttpException(411);
+
+            var config = JsonConvert.DeserializeObject<Configuration[]>(HttpServer.ReadToEnd(request));
+            var rep = Convert.ToUInt64(request.Parameters["r"]);
+            var sav = Convert.ToUInt64(request.Parameters["s"]);
+
+            foreach (var c in config)
+                Program.TheCore.Schedule(c, rep, sav);
+
+            return new HttpResponse { ResponseCode = 202 };
+        }
+
+        private static HttpResponse PutCancel()
+        {
+            Program.TheCore.Cancel();
+            return new HttpResponse { ResponseCode = 202 };
         }
 
         private static HttpResponse HttpRequest(HttpRequest request)
@@ -49,20 +79,9 @@ namespace MWLiteUI
                     switch (request.BaseUri)
                     {
                         case "/":
-                            Program.TheCore.UpdateWorkerStates();
-                            return GenerateHttpResponse(JsonConvert.SerializeObject(Program.TheCore.WorkerStates));
-
+                            return GetWorkerStates();
                         case "/speed":
-                            var json =
-                                new JObject
-                                    {
-                                        { "Speed", Program.TheCore.Speed },
-                                        { "RestGame", Program.TheCore.RestGame },
-                                        { "RestTime", Program.TheCore.RestTime },
-                                    };
-
-                            return GenerateHttpResponse(json.ToString());
-
+                            return GetSpeed();
                         default:
                             throw new HttpException(404);
                     }
@@ -70,37 +89,11 @@ namespace MWLiteUI
                     switch (request.BaseUri)
                     {
                         case "/schedule":
-                            if (request.Parameters == null)
-                                throw new HttpException(404);
-                            if (!request.Parameters.ContainsKey("r"))
-                                throw new HttpException(404);
-                            if (!request.Parameters.ContainsKey("s"))
-                                throw new HttpException(404);
-                            if (!request.Header.ContainsKey("Content-Length"))
-                                throw new HttpException(411);
-
-                            var len = Convert.ToInt32(request.Header["Content-Length"]);
-                            if (len > 1048576)
-                                throw new HttpException(413);
-                            var buff = new byte[len];
-                            if (len > 0)
-                                request.RequestStream.Read(buff, 0, len);
-                            var str = Encoding.UTF8.GetString(buff);
-
-                            var config = JsonConvert.DeserializeObject<Configuration[]>(str);
-                            var rep = Convert.ToUInt64(request.Parameters["r"]);
-                            var sav = Convert.ToUInt64(request.Parameters["s"]);
-
-                            foreach (var c in config)
-                                Program.TheCore.Schedule(c, rep, sav);
-
-                            return new HttpResponse { ResponseCode = 202 };
-
+                            return PutSchedule(request);
                         case "/cancel":
-                            Program.TheCore.Cancel();
-
-                            return new HttpResponse { ResponseCode = 202 };
-
+                            return PutCancel();
+                        case "/result":
+                            return GetResult(request);
                         default:
                             throw new HttpException(404);
                     }

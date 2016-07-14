@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using System.Threading;
 using System.Timers;
 using Timer = System.Timers.Timer;
@@ -94,6 +96,65 @@ namespace MWLiteUI
             for (var i = 0; i < WorkerStates.Count; i++)
                 DllWrapper.CancelWorker(i);
             Interlocked.Exchange(ref m_RestGame, 0);
+        }
+
+        private static string Hash(Configuration config)
+        {
+            var sb = new StringBuilder();
+            sb.Append($"{(config.DisableDual ? "SL" : "DL")} ");
+            sb.Append($"{config.Width}-{config.Height}-");
+            sb.Append(config.UseTotalMines ? $"T{config.TotalMines}" : $"P{config.Probability:R}");
+            return sb.ToString();
+        }
+
+        public static List<ulong> GatherResult(Configuration config)
+        {
+            var db = AppDomain.CurrentDomain.BaseDirectory + @"db\" + Hash(config);
+
+            if (!Directory.Exists(db))
+                return null;
+
+            var lst = new List<ulong>();
+            if (File.Exists(db + ".log"))
+                using (var sr = new StreamReader(db + ".log"))
+                    while (!sr.EndOfStream)
+                    {
+                        var str = sr.ReadLine();
+                        lst.Add(Convert.ToUInt64(str));
+                    }
+
+            var flag = false;
+            foreach (var file in Directory.EnumerateFiles(db + @"\", @"*.log"))
+                try
+                {
+                    var id = 0;
+                    using (var sr = new StreamReader(file))
+                        while (!sr.EndOfStream)
+                        {
+                            var str = sr.ReadLine();
+                            var cnt = Convert.ToUInt64(str);
+                            if (id < lst.Count)
+                                lst[id] += cnt;
+                            else
+                                lst.Add(cnt);
+                            id++;
+                        }
+                    File.Move(file, file + ".bak");
+                    flag = true;
+                }
+                catch (Exception)
+                {
+                    // ignore
+                }
+
+            if (!flag)
+                return lst;
+
+            using (var sw = new StreamWriter(db + ".log"))
+                foreach (var cnt in lst)
+                    sw.WriteLine(cnt);
+
+            return lst;
         }
     }
 }
