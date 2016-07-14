@@ -4,9 +4,9 @@ SLSolver::SLSolver(const Game &game) : BasicSolver(game) { }
 
 SLSolver::~SLSolver() { }
 
-void SLSolver::Simplify()
+void SLSolver::Simplify(const bool *cancelToken)
 {
-    ReduceRestrains();
+    ReduceRestrains(cancelToken);
 }
 
 bool SLSolver::ReduceRestrainBlank(int row)
@@ -72,7 +72,7 @@ bool SLSolver::ReduceRestrainMine(int row)
     return true;
 }
 
-void SLSolver::ReduceRestrains()
+void SLSolver::ReduceRestrains(const bool *cancelToken)
 {
     for (auto col = 0; col < m_BlockSets.size(); ++col)
         if (ReduceBlockSet(col))
@@ -92,15 +92,20 @@ void SLSolver::ReduceRestrains()
     sum.clear();
     sum.resize(m_Matrix.front().size(), CONT_ZERO);
     for (auto cnt = 0; cnt < m_Matrix.size(); ++cnt)
+    {
+        if (*cancelToken)
+            return;
+
         for (auto i = 0; i < m_Matrix[cnt].size(); ++i)
         {
             auto v = m_Matrix[cnt][i];
-            for (auto shift = 0; shift < CONT_WIDTH(m_Matrix, cnt); ++shift , v >>= 1)
+            for (auto shift = 0; shift < CONT_WIDTH(m_Matrix, cnt); ++shift, v >>= 1)
                 if (NZ(v, 0))
                     sum[i] += m_BlockSets[cnt * CONT_SIZE + shift].size();
                 else if (v == 0)
                     break;
         }
+    }
 
     for (auto row = 0; row < m_MatrixAugment.size(); ++row)
         if (ReduceRestrainMine(row))

@@ -18,7 +18,7 @@ public:
     MWSolver &operator=(const MWSolver &other) = delete;
     MWSolver &operator=(MWSolver &&other) = delete;
 
-    int Solve();
+    int Solve(const bool *cancelToken);
 
 protected:
     bool IsOpen(int id) const;
@@ -27,7 +27,7 @@ protected:
 
     virtual void AddRestrain(Block blk, bool isMine) = 0;
     virtual void AddRestrain(const BlockSet &set, int mines) = 0;
-    virtual int NextBlock() = 0;
+    virtual int NextBlock(const bool *cancelToken) = 0;
 
 private:
     const Game &m_Game;

@@ -9,9 +9,9 @@ public:
     ~DLSolver();
 
 protected:
-    void Simplify() override;
+    void Simplify(const bool *cancelToken) override;
 
-    bool SimpleOverlapAll();
+    bool SimpleOverlapAll(const bool *cancelToken);
 
     bool SimpleOverlap(int r1, int r2);
 

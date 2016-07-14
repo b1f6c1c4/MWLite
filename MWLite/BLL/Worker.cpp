@@ -7,7 +7,7 @@
 #include "DLSolver.h"
 #include "../Threading.h"
 
-Worker::Worker() : m_SaveInterval(1), m_NotSaved(0), m_Resume(0), m_Result(nullptr), m_ResultLength(0), m_State(WorkerState::Idle), m_Thread(&Worker::WorkerThreadEntry, this) {}
+Worker::Worker() : m_EventSave(nullptr), m_EventFinish(nullptr), m_SaveInterval(1), m_NotSaved(0), m_Resume(0), m_State(WorkerState::Idle), m_Cancel(false) , m_Tick(nullptr), m_Thread(&Worker::WorkerThreadEntry, this) {}
 
 Worker::~Worker()
 {
@@ -15,16 +15,11 @@ Worker::~Worker()
         std::lock_guard<std::mutex> lock(m_StateChange);
 
         m_State = WorkerState::Quitting;
+        m_Cancel = true;
     }
     m_CVStart.notify_all();
 
     m_Thread.join();
-
-    if (m_Result != nullptr)
-    {
-        delete [] m_Result;
-        m_Result = nullptr;
-    }
 }
 
 void Worker::setSaveCallback(SaveEventHandler callback)
@@ -42,11 +37,12 @@ WorkerState Worker::getState() const
     return m_State;
 }
 
-bool Worker::Run(const WorkingConfig &config)
+bool Worker::Run(const WorkingConfig &config, std::atomic<size_t> *tick)
 {
     if (m_State != WorkerState::Idle && m_State != WorkerState::Finished)
         return false;
 
+    m_Tick = tick;
     m_Config = config.Config;
     m_Resume = config.Repetition;
     m_SaveInterval = config.SaveInterval;
@@ -68,6 +64,7 @@ void Worker::Cancel()
             return;
 
         m_State = WorkerState::Cancelling;
+        m_Cancel = true;
     }
     m_CVStart.notify_all();
 }
@@ -93,33 +90,25 @@ void Worker::WorkerThreadEntry()
 
         ProcessAll();
 
-        if (m_NotSaved > 0)
-            m_EventSave(m_Config, m_Result, m_ResultLength);
-
         {
             std::unique_lock<std::mutex> lock(m_StateChange);
 
             m_State = WorkerState::Finished;
+            m_Cancel = false;
             if (m_State == WorkerState::Quitting)
                 return;
         }
 
         m_EventFinish();
-
-        if (m_Result != nullptr)
-        {
-            delete[] m_Result;
-            m_Result = nullptr;
-        }
     }
 }
 
 void Worker::ProcessAll()
 {
-    m_ResultLength = !m_Config.UseTotalMines ? m_Config.Width * m_Config.Height : m_Config.TotalMines + 1;
+    auto length = !m_Config.UseTotalMines ? m_Config.Width * m_Config.Height : m_Config.TotalMines + 1;
 
-    m_Result = new size_t[m_ResultLength];
-    memset(m_Result, 0, sizeof(size_t) * m_ResultLength);
+    auto result = new size_t[length];
+    memset(result, 0, sizeof(size_t) * length);
 
     std::unique_ptr<IGenerator> gen;
     if (m_Config.UseTotalMines)
@@ -140,23 +129,39 @@ void Worker::ProcessAll()
 
     while (m_Resume > 0)
     {
-        if (m_State == WorkerState::Cancelling || m_State == WorkerState::Quitting)
+        if (m_Cancel)
             break;
 
         gen->GenerateGame(game);
+
         newSolver();
-        auto res = slv->Solve();
-        m_Result[res]++;
+
+        auto res = slv->Solve(&m_Cancel);
+        if (m_Cancel)
+            break;
+
+        if (m_Tick != nullptr)
+            ++*m_Tick;
+
+        if (res < 0 || res >= length)
+            throw new std::exception("solution outbound");
+
+        result[res]++;
 
         m_Resume--;
         m_NotSaved++;
 
         if (m_NotSaved >= m_SaveInterval)
         {
-            m_EventSave(m_Config, m_Result, m_ResultLength);
+            m_EventSave(m_Config, result, length);
 
             m_NotSaved = 0;
-            memset(m_Result, 0, sizeof(size_t) * m_ResultLength);
+            memset(result, 0, sizeof(size_t) * length);
         }
     }
+
+    if (m_NotSaved > 0)
+        m_EventSave(m_Config, result, length);
+
+    delete[] result;
 }

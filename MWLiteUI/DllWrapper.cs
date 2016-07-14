@@ -32,6 +32,9 @@ namespace MWLiteUI
         public static extern void EmptyQueue();
 
         [DllImport("MWLite.dll")]
+        public static extern ulong ResetCounter();
+
+        [DllImport("MWLite.dll")]
         public static extern void RemoveWorkers();
     }
 }

@@ -2,6 +2,7 @@
 #include "../stdafx.h"
 #include "../Entities/Configuration.h"
 #include <functional>
+#include <atomic>
 
 struct WorkingConfig
 {
@@ -17,7 +18,7 @@ inline WorkingConfig::WorkingConfig(const Configuration &config, size_t repetiti
 
 inline WorkingConfig::WorkingConfig(Configuration &&config, size_t repetition, size_t saveInterval) : Config(config), Repetition(repetition), SaveInterval(saveInterval) { }
 
-typedef std::function<void(const Configuration &, size_t *, size_t)> SaveEventHandler;
+typedef std::function<void(const Configuration &, const size_t *, size_t)> SaveEventHandler;
 typedef std::function<void()> FinishEventHandler;
 
 enum class WorkerState
@@ -39,7 +40,7 @@ public:
 
     virtual WorkerState getState() const = 0;
 
-    virtual bool Run(const WorkingConfig &config) = 0;
+    virtual bool Run(const WorkingConfig &config, std::atomic<size_t> *tick) = 0;
     virtual void Cancel() = 0;
 
 protected:

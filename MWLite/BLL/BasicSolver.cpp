@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <map>
 
-BasicSolver::BasicSolver(const Game &game) :MWSolver(game), m_Manager(game.Width * game.Height, BlockStatus::Unknown)
+BasicSolver::BasicSolver(const Game &game) : MWSolver(game), m_Manager(game.Width * game.Height, BlockStatus::Unknown)
 {
     m_BlockSets.emplace_back(game.Width * game.Height);
     auto &lst = m_BlockSets.back();
@@ -121,10 +121,15 @@ void BasicSolver::AddRestrain(const BlockSet &set, int mines)
     m_MatrixAugment.push_back(mines - dMines);
 }
 
-int BasicSolver::NextBlock()
+int BasicSolver::NextBlock(const bool *cancelToken)
 {
-    Simplify();
-    MergeSets();
+    Simplify(cancelToken);
+    if (*cancelToken)
+        return -1;
+
+    MergeSets(cancelToken);
+    if (*cancelToken)
+        return -1;
 
     for (auto blk = 0; blk < m_Manager.size(); ++blk)
         if (!IsOpen(blk) && m_Manager[blk] == BlockStatus::Blank)
@@ -201,11 +206,14 @@ void BasicSolver::DropRow(int row)
     }
 }
 
-void BasicSolver::MergeSets()
+void BasicSolver::MergeSets(const bool *cancelToken)
 {
     std::multimap<size_t, int> hash;
     for (auto i = 0; i < m_BlockSets.size(); ++i)
     {
+        if (*cancelToken)
+            return;
+
         size_t h = 5381;
         for (auto v : m_Matrix[CNT(i)])
             h = (h << 5) + h + B(v, SHF(i));

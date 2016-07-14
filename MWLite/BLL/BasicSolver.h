@@ -44,9 +44,9 @@ protected:
 
     void AddRestrain(Block blk, bool isMine) override;
     void AddRestrain(const BlockSet &set, int mines) override;
-    int NextBlock() override;
+    int NextBlock(const bool *cancelToken) override;
 
-    virtual void Simplify() = 0;
+    virtual void Simplify(const bool *cancelToken) = 0;
 
     std::vector<BlockStatus> m_Manager;
     std::vector<BlockSet> m_BlockSets;
@@ -67,5 +67,5 @@ private:
 
     std::vector<int> m_IntersectionCounts_Temp;
 
-    void MergeSets();
+    void MergeSets(const bool *cancelToken);
 };

@@ -2,13 +2,13 @@
 #include "./BLL/Worker.h"
 #include "./DAL/Logger.h"
 
-Dispatcher::Dispatcher(int numWorkers) : m_Logger(new Logger())
+Dispatcher::Dispatcher(int numWorkers) : m_Logger(new Logger()), m_Counter(0)
 {
     for (auto i = 0; i < numWorkers; i++)
     {
         auto worker = new Worker();
 
-        worker->setSaveCallback([this](const Configuration &config, size_t *result, size_t length)
+        worker->setSaveCallback([this](const Configuration &config, const size_t *result, size_t length)
                                 {
                                     m_Logger->Log(Logging(config, result, length));
                                 });
@@ -20,7 +20,7 @@ Dispatcher::Dispatcher(int numWorkers) : m_Logger(new Logger())
                                       if (m_Queue.empty())
                                           return;
 
-                                      worker->Run(m_Queue.front());
+                                      worker->Run(m_Queue.front(), &m_Counter);
                                       m_Queue.pop();
                                   });
 
@@ -97,6 +97,11 @@ void Dispatcher::EmptyQueue()
     m_Queue.swap(q);
 }
 
+size_t Dispatcher::ResetCounter()
+{
+    return m_Counter.exchange(0);
+}
+
 void Dispatcher::NotifyAllWorkers()
 {
     std::unique_lock<std::mutex> lock(m_MtxQueue);
@@ -105,7 +110,7 @@ void Dispatcher::NotifyAllWorkers()
     {
         auto flag = true;
         for (auto &worker : m_Workers)
-            if (worker->Run(m_Queue.front()))
+            if (worker->Run(m_Queue.front(), &m_Counter))
             {
                 flag = false;
                 break;

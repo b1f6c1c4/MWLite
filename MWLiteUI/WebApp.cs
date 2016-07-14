@@ -5,6 +5,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace MWLiteUI
 {
@@ -45,12 +46,26 @@ namespace MWLiteUI
             switch (request.Method)
             {
                 case "GET":
-                    if (request.Uri != "/")
-                        throw new HttpException(404);
+                    switch (request.BaseUri)
+                    {
+                        case "/":
+                            Program.TheCore.UpdateWorkerStates();
+                            return GenerateHttpResponse(JsonConvert.SerializeObject(Program.TheCore.WorkerStates));
 
-                    Program.TheCore.UpdateWorkerStates();
+                        case "/speed":
+                            var json =
+                                new JObject
+                                    {
+                                        { "Speed", Program.TheCore.Speed },
+                                        { "RestGame", Program.TheCore.RestGame },
+                                        { "RestTime", Program.TheCore.RestTime },
+                                    };
 
-                    return GenerateHttpResponse(JsonConvert.SerializeObject(Program.TheCore.WorkerStates));
+                            return GenerateHttpResponse(json.ToString());
+
+                        default:
+                            throw new HttpException(404);
+                    }
                 case "POST":
                     switch (request.BaseUri)
                     {
@@ -82,13 +97,7 @@ namespace MWLiteUI
                             return new HttpResponse { ResponseCode = 202 };
 
                         case "/cancel":
-                            if (request.Parameters == null || !request.Parameters.ContainsKey("id"))
-                                Program.TheCore.Cancel();
-                            else
-                            {
-                                var id = Convert.ToInt32(request.Parameters["id"]);
-                                Program.TheCore.Cancel(id);
-                            }
+                            Program.TheCore.Cancel();
 
                             return new HttpResponse { ResponseCode = 202 };
 

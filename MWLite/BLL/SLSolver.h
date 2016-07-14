@@ -10,11 +10,11 @@ public:
 
 protected:
 
-    void Simplify() override;
+    void Simplify(const bool *cancelToken) override;
 
     bool ReduceRestrainBlank(int row);
     bool ReduceRestrainMine(int row);
-    void ReduceRestrains();
+    void ReduceRestrains(const bool *cancelToken);
 
 private:
     std::vector<size_t> m_ReduceCount_Temp;

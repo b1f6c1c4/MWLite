@@ -8,17 +8,20 @@ DLSolver::~DLSolver()
         delete[] m_Pairs_Temp;
 }
 
-void DLSolver::Simplify()
+void DLSolver::Simplify(const bool *cancelToken)
 {
-    while (true)
+    while (!cancelToken)
     {
-        ReduceRestrains();
-        if (!SimpleOverlapAll())
+        ReduceRestrains(cancelToken);
+        if (*cancelToken)
+            return;
+
+        if (!SimpleOverlapAll(cancelToken))
             break;
     }
 }
 
-bool DLSolver::SimpleOverlapAll()
+bool DLSolver::SimpleOverlapAll(const bool *cancelToken)
 {
     if (m_MatrixAugment.empty())
         return false;
@@ -39,6 +42,9 @@ bool DLSolver::SimpleOverlapAll()
 
     for (auto cnt = 0; cnt < m_Matrix.size(); ++cnt)
     {
+        if (*cancelToken)
+            return false;
+
         auto id = 0;
         for (auto p = 0; p < d - 1; ++p)
             for (auto q = p + 1; q < d; ++q , ++id)

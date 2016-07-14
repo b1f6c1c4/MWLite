@@ -20,7 +20,7 @@ public:
 
     WorkerState getState() const override;
 
-    bool Run(const WorkingConfig &config) override;
+    bool Run(const WorkingConfig &config, std::atomic<size_t> *tick) override;
     void Cancel() override;
 
 private:
@@ -32,10 +32,10 @@ private:
     size_t m_NotSaved;
     size_t m_Resume;
 
-    size_t *m_Result;
-    size_t m_ResultLength;
-
     WorkerState m_State;
+    bool m_Cancel;
+
+    std::atomic<size_t> *m_Tick;
 
     std::mutex m_StateChange;
     std::condition_variable m_CVStart;

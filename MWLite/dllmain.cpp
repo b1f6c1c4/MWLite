@@ -21,7 +21,7 @@ extern "C"
         return TheDispatcher->GetNumWorkers();
     }
 
-    DLL_API void Schedule(const Configuration &config, size_t repetition, size_t saveInterval)
+    DLL_API void Schedule(Configuration config, size_t repetition, size_t saveInterval)
     {
         TheDispatcher->Schedule(config, repetition, saveInterval);
     }
@@ -39,6 +39,11 @@ extern "C"
     DLL_API void EmptyQueue()
     {
         TheDispatcher->EmptyQueue();
+    }
+
+    DLL_API size_t ResetCounter()
+    {
+        return TheDispatcher->ResetCounter();
     }
 
     DLL_API void RemoveWorkers()

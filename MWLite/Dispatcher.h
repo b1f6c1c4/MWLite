@@ -25,6 +25,8 @@ public:
     WorkerState GetWorkerState(int id) const;
     void EmptyQueue();
 
+    size_t ResetCounter();
+
 private:
     std::mutex m_MtxQueue;
     std::queue<WorkingConfig> m_Queue;
@@ -32,6 +34,8 @@ private:
     std::vector<std::unique_ptr<IWorker>> m_Workers;
 
     ILogger *m_Logger;
+
+    std::atomic<size_t> m_Counter;
 
     void NotifyAllWorkers();
 };

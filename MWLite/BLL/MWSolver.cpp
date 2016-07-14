@@ -19,11 +19,14 @@ MWSolver::MWSolver(const Game &game) : m_Game(game) , m_ToOpen(game.Width * game
 
 MWSolver::~MWSolver() { }
 
-int MWSolver::Solve()
+int MWSolver::Solve(const bool *cancelToken)
 {
     while (m_ToOpen > 0)
     {
-        auto blk = NextBlock();
+        if (*cancelToken)
+            return -1;
+
+        auto blk = NextBlock(cancelToken);
         if (blk < 0)
             blk = RandomNonTrivial();
 

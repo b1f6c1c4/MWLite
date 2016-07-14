@@ -20,7 +20,7 @@ void Logger::Process(const Logging &log)
     ss << "./db";
     TouchDirectory(ss.str());
 
-    ss << '/' << Hash(*log.Config);
+    ss << '/' << Hash(log.Config);
     TouchDirectory(ss.str());
 
     ss << '/';
@@ -36,7 +36,7 @@ void Logger::Process(const Logging &log)
 
     std::ofstream fout(ss.str());
 
-    for (auto i = 0; i < log.Length; ++i)
+    for (size_t i = 0; i < log.Length; ++i)
         fout << log.Result[i] << std::endl;
 
     fout.close();

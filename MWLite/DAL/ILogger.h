@@ -5,7 +5,7 @@
 
 struct Logging
 {
-    const Configuration *Config;
+    Configuration Config;
     std::unique_ptr<size_t[]> Result;
     size_t Length;
 
@@ -16,7 +16,7 @@ struct Logging
     Logging &operator=(Logging &&other) = default;
 };
 
-inline Logging::Logging(const Configuration &config, const size_t *result, size_t length) : Config(&config), Result(std::make_unique<size_t[]>(length)), Length(length)
+inline Logging::Logging(const Configuration &config, const size_t *result, size_t length) : Config(config), Result(std::make_unique<size_t[]>(length)), Length(length)
 {
     memcpy(Result.get(), result, sizeof(*result) * length);
 }
