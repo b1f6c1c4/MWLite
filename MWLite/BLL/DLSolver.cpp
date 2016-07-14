@@ -10,7 +10,7 @@ DLSolver::~DLSolver()
 
 void DLSolver::Simplify(const bool *cancelToken)
 {
-    while (!cancelToken)
+    while (!*cancelToken)
     {
         ReduceRestrains(cancelToken);
         if (*cancelToken)
