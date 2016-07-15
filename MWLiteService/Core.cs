@@ -6,7 +6,7 @@ using System.Threading;
 using System.Timers;
 using Timer = System.Timers.Timer;
 
-namespace MWLiteUI
+namespace MWLiteService
 {
     public sealed class Core : IDisposable
     {

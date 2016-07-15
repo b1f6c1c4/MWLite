@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using Headers = System.Collections.Generic.Dictionary<string, string>;
 
-namespace MWLiteUI
+namespace MWLiteService
 {
     internal class HttpServer
     {
@@ -352,16 +352,16 @@ namespace MWLiteUI
             stream.Position = 0;
             return
                 new HttpResponse
-                {
-                    ResponseCode = 200,
-                    Header =
+                    {
+                        ResponseCode = 200,
+                        Header =
                             new Dictionary<string, string>
                                 {
                                     { "Content-Type", contentType },
                                     { "Content-Length", stream.Length.ToString(CultureInfo.InvariantCulture) }
                                 },
-                    ResponseStream = stream
-                };
+                        ResponseStream = stream
+                    };
         }
     }
 

@@ -1,38 +1,37 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
 using System.Net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace MWLiteUI
+namespace MWLiteService
 {
     public class WebApp
     {
         // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         private readonly HttpServer m_Http;
+        private readonly Core m_Core;
 
-        public WebApp()
+        public WebApp(int numWorkers)
         {
+            m_Core = new Core(numWorkers);
             m_Http = new HttpServer(IPAddress.Any, 23456);
             m_Http.OnHttpRequest += HttpRequest;
         }
 
-        private static HttpResponse GetWorkerStates()
+        private HttpResponse GetWorkerStates()
         {
-            Program.TheCore.UpdateWorkerStates();
-            return HttpServer.GenerateHttpResponse(JsonConvert.SerializeObject(Program.TheCore.WorkerStates));
+            m_Core.UpdateWorkerStates();
+            return HttpServer.GenerateHttpResponse(JsonConvert.SerializeObject(m_Core.WorkerStates));
         }
 
-        private static HttpResponse GetSpeed()
+        private HttpResponse GetSpeed()
         {
             var json =
                 new JObject
                     {
-                        { "Speed", Program.TheCore.Speed },
-                        { "RestGame", Program.TheCore.RestGame },
-                        { "RestTime", Program.TheCore.RestTime }
+                        { "Speed", m_Core.Speed },
+                        { "RestGame", m_Core.RestGame },
+                        { "RestTime", m_Core.RestTime }
                     };
             return HttpServer.GenerateHttpResponse(json.ToString());
         }
@@ -44,7 +43,7 @@ namespace MWLiteUI
             return HttpServer.GenerateHttpResponse(JsonConvert.SerializeObject(res));
         }
 
-        private static HttpResponse PutSchedule(HttpRequest request)
+        private HttpResponse PutSchedule(HttpRequest request)
         {
             if (request.Parameters == null)
                 throw new HttpException(404);
@@ -60,18 +59,18 @@ namespace MWLiteUI
             var sav = Convert.ToUInt64(request.Parameters["s"]);
 
             foreach (var c in config)
-                Program.TheCore.Schedule(c, rep, sav);
+                m_Core.Schedule(c, rep, sav);
 
             return new HttpResponse { ResponseCode = 202 };
         }
 
-        private static HttpResponse PutCancel()
+        private HttpResponse PutCancel()
         {
-            Program.TheCore.Cancel();
+            m_Core.Cancel();
             return new HttpResponse { ResponseCode = 202 };
         }
 
-        private static HttpResponse HttpRequest(HttpRequest request)
+        private HttpResponse HttpRequest(HttpRequest request)
         {
             switch (request.Method)
             {

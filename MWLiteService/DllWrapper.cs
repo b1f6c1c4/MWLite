@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace MWLiteUI
+namespace MWLiteService
 {
     public enum WorkerState
     {

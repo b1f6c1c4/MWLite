@@ -2,7 +2,7 @@
 
 // ReSharper disable FieldCanBeMadeReadOnly.Local
 
-namespace MWLiteUI
+namespace MWLiteService
 {
     [StructLayout(LayoutKind.Sequential, Pack = 8)]
     public struct Configuration
