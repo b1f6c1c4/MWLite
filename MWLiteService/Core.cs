@@ -12,14 +12,16 @@ namespace MWLiteService
     {
         private bool m_Disposed;
 
+        // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         private readonly Timer m_Timer;
 
         public long Speed { get; private set; }
-        public long RestGame { get { return m_RestGame; } private set { m_RestGame = value; } }
+        public long RestGame => m_RestGame;
         public double RestTime { get; private set; }
 
         public Core(int numWorkers)
         {
+            DllWrapper.SetWorkingDirectory(AppDomain.CurrentDomain.BaseDirectory);
             DllWrapper.CreateWorkers(numWorkers);
 
             WorkerStates = new List<WorkerState>();

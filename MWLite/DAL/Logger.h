@@ -1,8 +1,6 @@
 #pragma once
 #include "../stdafx.h"
 #include "AsyncLogger.h"
-#include <string>
-#include <mutex>
 
 class Logger : public AsyncLogger
 {
@@ -16,7 +14,7 @@ protected:
 private:
     size_t m_Sequence;
 
-    static std::string Hash(const Configuration &config);
+    static std::wstring Hash(const Configuration &config);
 
-    void TouchDirectory(const std::string &path);
+    void TouchDirectory(const std::wstring &path);
 };

@@ -10,7 +10,7 @@ namespace MWLiteService
     {
         private static readonly string LogFilePath = AppDomain.CurrentDomain.BaseDirectory + "/MWLiteService.log";
 
-        public static void ServiceLog(string str) 
+        public static void ServiceLog(string str)
             => File.AppendAllText(LogFilePath, $"{DateTime.Now:O}: {str}{Environment.NewLine}");
 
         /// <summary>

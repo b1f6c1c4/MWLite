@@ -1,10 +1,18 @@
 #include "stdafx.h"
 #include "Dispatcher.h"
+#include <string>
 
-static Dispatcher *TheDispatcher = nullptr;
+Dispatcher *TheDispatcher = nullptr;
+
+std::wstring WorkingDirectory(L".");
 
 extern "C"
 {
+    DLL_API void SetWorkingDirectory(const wchar_t *path)
+    {
+        WorkingDirectory = std::wstring(path);
+    }
+
     DLL_API void CreateWorkers(int numWorkers)
     {
         if (TheDispatcher != nullptr)

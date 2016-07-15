@@ -5,6 +5,8 @@
 #include <fstream>
 #include <iomanip>
 
+extern std::wstring WorkingDirectory;
+
 Logger::Logger() : m_Sequence(0) {}
 
 Logger::~Logger() {}
@@ -15,24 +17,24 @@ void Logger::Process(const Logging &log)
     tm now;
     localtime_s(&now, &theTime);
 
-    std::stringstream ss;
+    std::wstringstream ss;
 
-    ss << "./db";
+    ss << WorkingDirectory << L"db";
     TouchDirectory(ss.str());
 
-    ss << '/' << Hash(log.Config);
+    ss << L"/" << Hash(log.Config);
     TouchDirectory(ss.str());
 
-    ss << '/';
-    ss << std::setfill('0');
-    ss << std::setw(4) << now.tm_year + 1900 << '-';
-    ss << std::setw(2) << now.tm_mon + 1 << '-';
+    ss << L"/";
+    ss << std::setfill(L'0');
+    ss << std::setw(4) << now.tm_year + 1900 << L"-";
+    ss << std::setw(2) << now.tm_mon + 1 << L"-";
     ss << std::setw(2) << now.tm_mday;
-    ss << ' ';
-    ss << std::setw(2) << now.tm_hour << '-';
-    ss << std::setw(2) << now.tm_min << '-';
-    ss << std::setw(2) << now.tm_sec << ' ';
-    ss << std::setw(8) << std::hex << m_Sequence << ".log";
+    ss << L" ";
+    ss << std::setw(2) << now.tm_hour << L"-";
+    ss << std::setw(2) << now.tm_min << L"-";
+    ss << std::setw(2) << now.tm_sec << L" ";
+    ss << std::setw(8) << std::hex << m_Sequence << L".log";
 
     std::ofstream fout(ss.str());
 
@@ -44,30 +46,30 @@ void Logger::Process(const Logging &log)
     m_Sequence++;
 }
 
-std::string Logger::Hash(const Configuration &config)
+std::wstring Logger::Hash(const Configuration &config)
 {
-    std::stringstream ss;
+    std::wstringstream ss;
 
     if (config.DisableDual)
-        ss << "SL";
+        ss << L"SL";
     else
-        ss << "DL";
+        ss << L"DL";
 
-    ss << ' ';
+    ss << L" ";
 
-    ss << config.Width << '-';
-    ss << config.Height << '-';
+    ss << config.Width << L"-";
+    ss << config.Height << L"-";
 
     if (config.UseTotalMines)
-        ss << 'T' << config.TotalMines;
+        ss << L"T" << config.TotalMines;
     else
-        ss << 'P' << std::setprecision(16) << config.Probability;
+        ss << L"P" << std::setprecision(16) << config.Probability;
 
     return ss.str();
 }
 
 // ReSharper disable once CppMemberFunctionMayBeConst
-void Logger::TouchDirectory(const std::string &path)
+void Logger::TouchDirectory(const std::wstring &path)
 {
     if (std::experimental::filesystem::is_directory(path))
         return;

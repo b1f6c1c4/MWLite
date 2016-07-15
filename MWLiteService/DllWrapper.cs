@@ -13,6 +13,9 @@ namespace MWLiteService
 
     public static class DllWrapper
     {
+        [DllImport("MWLite.dll", CharSet = CharSet.Unicode)]
+        public static extern void SetWorkingDirectory(string path);
+
         [DllImport("MWLite.dll")]
         public static extern void CreateWorkers(int numWorkers);
 
