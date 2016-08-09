@@ -1,20 +1,16 @@
 #pragma once
 #include "../stdafx.h"
 #include "BlockSet.h"
+#include "Configuration.h"
 
 struct Game
 {
-    int Width;
-    int Height;
+    Game() : AllMines(0) { }
 
-    int TotalMines; // < 0 when unavaliable
-
-    BlockSet AllMines; // FullSize = Width * Height
-
-    Game(int width, int height);
+    std::shared_ptr<Configuration> Config;
 
     DEFAULT_COPY(Game);
     DEFAULT_MOVE(Game);
-};
 
-inline Game::Game(int width, int height) : Width(width), Height(height), TotalMines(-1), AllMines(width * height) { }
+    BlockSet AllMines; // FullSize = Width * Height
+};

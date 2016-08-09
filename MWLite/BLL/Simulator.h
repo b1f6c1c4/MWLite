@@ -1,44 +1,43 @@
 #pragma once
 #include "../stdafx.h"
 #include "../Entities/Game.h"
-#include <random>
+#include "ISolver.h"
+#include "RandomChooser.h"
 #include <functional>
 
 class Simulator
 {
 public:
-    explicit Simulator(const Game &game);
+    explicit Simulator(const Game &game, std::shared_ptr<ISolver> slv);
     virtual ~Simulator();
 
-    Simulator(const Simulator &other) = delete;
-    Simulator(Simulator &&other) = delete;
-    Simulator &operator=(const Simulator &other) = delete;
-    Simulator &operator=(Simulator &&other) = delete;
+    NO_COPY(Simulator);
+    NO_MOVE(Simulator);
 
-    int Solve(const bool *cancelToken, std::function<void(int)> adjuster);
-
-protected:
-    bool IsOpen(int id) const;
-
-    virtual bool BlockIsMine(Block blk) const = 0;
-
-    virtual void AddRestrain(Block blk, bool isMine) = 0;
-    virtual void AddRestrain(const BlockSet &set, int mines) = 0;
-    virtual int NextBlock(const bool *cancelToken) = 0;
+    int Solve(const CancellationToken &cancel, std::function<void(int)> adjuster);
 
 private:
     const Game &m_Game;
-    std::vector<bool> m_IsOpen;
+    std::vector<BlockSet> m_DeletedNeighorhood;
 
-    std::mt19937_64 m_Random;
-    BlockSet m_Random_Temp;
+    std::shared_ptr<ISolver> m_Solver;
 
-    int m_ToOpen, m_WrongGuesses;
+    // closed blocks
+    std::shared_ptr<BlockSet> C;
+
+    // open blocks with mine
+    std::shared_ptr<BlockSet> M;
+
+    // open blocks without mine
+    std::shared_ptr<BlockSet> B;
+
+    RandomBlockChooser m_Random;
+
+    int m_ToOpen;
 
     int GetIndex(int x, int y) const;
     int GetX(int id) const;
     int GetY(int id) const;
-    BlockSet GetBlockR(int id) const;
-    void OpenBlock(int id);
-    int RandomNonTrivial();
+
+    void ResetToOpen();
 };

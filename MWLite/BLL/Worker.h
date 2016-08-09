@@ -28,12 +28,12 @@ private:
     FinishEventHandler m_EventFinish;
 
     size_t m_SaveInterval;
-    Configuration m_Config;
+    std::shared_ptr<Configuration> m_Config;
     size_t m_NotSaved;
     size_t m_Resume;
 
     WorkerState m_State;
-    bool m_Cancel;
+    CancellationToken m_Cancel;
 
     std::atomic<size_t> *m_Tick;
 

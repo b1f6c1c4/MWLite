@@ -9,12 +9,7 @@ RandomGenerator::~RandomGenerator() {}
 
 void RandomGenerator::GenerateGame(Game &game)
 {
-    if (game.Width != m_Width || game.Height != m_Height)
-    {
-        game.Width = m_Width;
-        game.Height = m_Height;
-        game.AllMines = BlockSet(game.Width * game.Height);
-    }
+    game.AllMines = BlockSet(m_Width * m_Height);
 
     Fill(game.AllMines);
 }

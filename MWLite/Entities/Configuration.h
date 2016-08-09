@@ -2,19 +2,22 @@
 #include "../stdafx.h"
 
 #pragma pack(push, 8)
-struct Configuration
+struct BaseConfiguration
 {
-    // generator settings
     int Width;
     int Height;
 
     bool UseTotalMines;
     int TotalMines;
     double Probability;
+};
+#pragma pack(pop)
 
+#pragma pack(push, 8)
+struct Configuration : BaseConfiguration
+{
     bool NotRigorous;
 
-    // solver settings
     bool DisableDual;
 };
 #pragma pack(pop)

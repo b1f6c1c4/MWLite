@@ -1,131 +1,97 @@
 #include "Simulator.h"
 
-Simulator::Simulator(const Game &game) : m_Game(game) , m_ToOpen(game.Width * game.Height), m_WrongGuesses(0), m_Random_Temp(game.AllMines.FullSize())
+Simulator::Simulator(const Game &game, std::shared_ptr<ISolver> slv) : m_Game(game), m_Solver(slv), C(std::make_shared<BlockSet>(game.AllMines.FullSize())), M(std::make_shared<BlockSet>(game.AllMines.FullSize())), B(std::make_shared<BlockSet>(game.AllMines.FullSize())), m_ToOpen(game.AllMines.FullSize())
 {
-    m_IsOpen.resize(game.Width * game.Height, false);
+    // all blocks are closed
+    *C = !*C;
 
-    m_Random.seed(std::random_device()());
-
-    if (game.TotalMines >= 0)
+    // make deleted neighborhoods
+    BlockSet blkR(m_Game.AllMines.FullSize());
+    for (Block id = 0; id < m_Game.AllMines.FullSize(); id++)
     {
-        m_ToOpen -= game.TotalMines;
-        return;
+        blkR.Clear();
+        auto i = GetX(id);
+        auto j = GetY(id);
+        for (auto di = -1; di <= 1; ++di)
+            if (i + di >= 0 && i + di < m_Game.Config->Width)
+                for (auto dj = -1; dj <= 1; ++dj)
+                    if (j + dj >= 0 && j + dj < m_Game.Config->Height)
+                        if (di != 0 || dj != 0)
+                            blkR += GetIndex(i + di, j + dj);
+        m_DeletedNeighorhood.emplace_back(blkR);
     }
 
-    for (auto i = 0; i < game.Width * game.Height; i++)
-        if (game.AllMines[i])
-            m_ToOpen--;
+    // count ToOpen
+    ResetToOpen();
 }
 
 Simulator::~Simulator() { }
 
-int Simulator::Solve(const bool *cancelToken, std::function<void(int)> generator)
+int Simulator::Solve(const CancellationToken &cancel, std::function<void(int)> generator)
 {
     auto flag = true;
+
+    State state;
+    state.Config = m_Game.Config;
+    state.C = C;
+    state.M = M;
+    state.B = B;
+    state.U = [this](Block blk)
+        {
+            return m_DeletedNeighorhood[blk];
+        };
+    state.f = [this](Block blk)
+        {
+            return (m_DeletedNeighorhood[blk] * m_Game.AllMines).Count();
+        };
+
     while (m_ToOpen > 0)
     {
-        if (*cancelToken)
+        if (cancel.IsCancelled())
             return -1;
 
-        auto blk = NextBlock(cancelToken);
-        if (blk < 0)
-            blk = RandomNonTrivial();
+        auto blk = m_Solver->Decide(state, cancel);
 
         if (flag)
         {
             generator(blk);
-
-            m_ToOpen = m_Game.Width * m_Game.Height;
-            if (m_Game.TotalMines >= 0)
-                m_ToOpen -= m_Game.TotalMines;
-            else
-                for (auto i = 0; i < m_Game.Width * m_Game.Height; i++)
-                    if (m_Game.AllMines[i])
-                        m_ToOpen--;
-
+            ResetToOpen();
             flag = false;
         }
-        OpenBlock(blk);
-    }
-    return m_WrongGuesses;
-}
 
-bool Simulator::IsOpen(int id) const
-{
-    return m_IsOpen[id];
+        ASSERT((*C)[blk]);
+        *C -= blk;
+        if (m_Game.AllMines[blk])
+            *M += blk;
+        else
+        {
+            *B += blk;
+            m_ToOpen--;
+        }
+    }
+    return M->Count();
 }
 
 int Simulator::GetIndex(int x, int y) const
 {
-    return x * m_Game.Height + y;
+    return x * m_Game.Config->Height + y;
 }
 
 int Simulator::GetX(int id) const
 {
-    return id / m_Game.Height;
+    return id / m_Game.Config->Height;
 }
 
 int Simulator::GetY(int id) const
 {
-    return id % m_Game.Height;
+    return id % m_Game.Config->Height;
 }
 
-BlockSet Simulator::GetBlockR(int id) const
+void Simulator::ResetToOpen()
 {
-    BlockSet blkR(m_Game.AllMines.FullSize());
-    auto i = GetX(id);
-    auto j = GetY(id);
-    for (auto di = -1; di <= 1; ++di)
-        if (i + di >= 0 && i + di < m_Game.Width)
-            for (auto dj = -1; dj <= 1; ++dj)
-                if (j + dj >= 0 && j + dj < m_Game.Height)
-                    if (di != 0 || dj != 0)
-                        blkR += GetIndex(i + di, j + dj);
-    return blkR;
-}
-
-void Simulator::OpenBlock(int id)
-{
-    if (m_IsOpen[id])
-        return;
-
-    m_IsOpen[id] = true;
-
-    if (m_Game.AllMines[id])
-    {
-        m_WrongGuesses++;
-        AddRestrain(id, true);
-        return;
-    }
-
-    AddRestrain(id, false);
-
-    auto surr = GetBlockR(id);
-
-    auto degree = 0;
-    for (auto blk : surr)
-        if (m_Game.AllMines[blk])
-            degree++;
-
-    if (degree == 0)
-    {
-        for (auto blk : surr)
-            OpenBlock(blk);
-    }
-    AddRestrain(surr, degree);
-
-    m_ToOpen--;
-}
-
-int Simulator::RandomNonTrivial()
-{
-    m_Random_Temp.Clear();
-
-    for (auto blk = 0; blk < m_Game.Width * m_Game.Height; blk++)
-        if (!m_IsOpen[blk] && !BlockIsMine(blk))
-            m_Random_Temp += blk;
-
-    std::uniform_int_distribution<> dist(0, static_cast<int>(m_Random_Temp.Count()) - 1);
-
-    return m_Random_Temp[dist(m_Random)];
+    m_ToOpen = m_Game.Config->Width * m_Game.Config->Height;
+    if (m_Game.Config->UseTotalMines)
+        m_ToOpen -= m_Game.Config->TotalMines;
+    else
+        m_ToOpen -= m_Game.AllMines.Count();
 }

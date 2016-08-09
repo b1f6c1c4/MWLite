@@ -6,7 +6,11 @@
 #define USE_DENSE_SET
 
 #ifdef USE_DENSE_SET
-typedef DenseSet<Block> BlockSet;
+template <typename T>
+using set_t = DenseSet<T>;
 #else
-typedef SparseSet<Block> BlockSet;
+template <typename T>
+using set_t = SparseSet<T>;
 #endif
+
+typedef set_t<Block> BlockSet;

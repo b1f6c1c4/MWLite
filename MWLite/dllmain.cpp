@@ -31,7 +31,7 @@ extern "C"
 
     DLL_API void Schedule(Configuration config, size_t repetition, size_t saveInterval)
     {
-        TheDispatcher->Schedule(config, repetition, saveInterval);
+        TheDispatcher->Schedule(std::make_shared<Configuration>(config), repetition, saveInterval);
     }
 
     DLL_API void CancelWorker(int id)

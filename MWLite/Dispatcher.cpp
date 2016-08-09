@@ -44,7 +44,7 @@ size_t Dispatcher::GetNumWorkers() const
     return m_Workers.size();
 }
 
-void Dispatcher::Schedule(const Configuration &config, size_t repetition, size_t saveInterval)
+void Dispatcher::Schedule(std::shared_ptr<Configuration> config, size_t repetition, size_t saveInterval)
 {
     auto numSave = repetition / saveInterval;
     size_t numSubTasks;

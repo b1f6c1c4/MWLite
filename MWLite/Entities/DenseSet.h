@@ -155,7 +155,8 @@ DenseSet<T> DenseSet<T>::operator!()
     DenseSet<T> DenseSet(FullSize());
 
     for (size_t i = 0; i < FullSize(); i++)
-        DenseSet[i] = !m_DenseSet[i];
+        if (!m_DenseSet[i])
+            DenseSet += i;
     return DenseSet;
 }
 

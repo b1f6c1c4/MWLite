@@ -148,6 +148,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BLL\RandomChooser.h" />
     <ClInclude Include="Entities\BlockSet.h" />
     <ClInclude Include="BLL\IGenerator.h" />
     <ClInclude Include="BLL\ISolver.h" />

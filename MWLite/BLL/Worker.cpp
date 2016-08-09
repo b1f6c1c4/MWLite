@@ -6,7 +6,7 @@
 #include "Simulator.h"
 #include "../Threading.h"
 
-Worker::Worker() : m_EventSave(nullptr), m_EventFinish(nullptr), m_SaveInterval(1), m_NotSaved(0), m_Resume(0), m_State(WorkerState::Idle), m_Cancel(false) , m_Tick(nullptr), m_Thread(&Worker::WorkerThreadEntry, this) {}
+Worker::Worker() : m_EventSave(nullptr), m_EventFinish(nullptr), m_SaveInterval(1), m_NotSaved(0), m_Resume(0), m_State(WorkerState::Idle), m_Tick(nullptr), m_Thread(&Worker::WorkerThreadEntry, this) {}
 
 Worker::~Worker()
 {
@@ -14,7 +14,7 @@ Worker::~Worker()
         std::lock_guard<std::mutex> lock(m_StateChange);
 
         m_State = WorkerState::Quitting;
-        m_Cancel = true;
+        m_Cancel.Cancel();
     }
     m_CVStart.notify_all();
 
@@ -63,7 +63,7 @@ void Worker::Cancel()
             return;
 
         m_State = WorkerState::Cancelling;
-        m_Cancel = true;
+        m_Cancel.Cancel();
     }
     m_CVStart.notify_all();
 }
@@ -93,7 +93,7 @@ void Worker::WorkerThreadEntry()
             std::unique_lock<std::mutex> lock(m_StateChange);
 
             m_State = WorkerState::Finished;
-            m_Cancel = false;
+            m_Cancel.Reset();
             if (m_State == WorkerState::Quitting)
                 return;
         }
@@ -104,45 +104,44 @@ void Worker::WorkerThreadEntry()
 
 void Worker::ProcessAll()
 {
-    auto length = !m_Config.UseTotalMines ? m_Config.Width * m_Config.Height : m_Config.TotalMines + 1;
+    auto length = !m_Config->UseTotalMines ? m_Config->Width * m_Config->Height : m_Config->TotalMines + 1;
 
     auto result = new size_t[length];
     memset(result, 0, sizeof(size_t) * length);
 
     std::shared_ptr<IGenerator> gen;
-    if (m_Config.UseTotalMines)
-        gen = std::make_shared<TotalGenerator>(m_Config.Width, m_Config.Height, m_Config.TotalMines);
+    if (m_Config->UseTotalMines)
+        gen = std::make_shared<TotalGenerator>(m_Config->Width, m_Config->Height, m_Config->TotalMines);
     else
-        gen = std::make_shared<ProbGenerator>(m_Config.Width, m_Config.Height, m_Config.Probability);
-    if (m_Config.NotRigorous)
+        gen = std::make_shared<ProbGenerator>(m_Config->Width, m_Config->Height, m_Config->Probability);
+    if (m_Config->NotRigorous)
         gen = std::make_shared<NotRigorousGenerator>(gen);
 
-    Game game(0, 0);
+    Game game;
+    game.Config = m_Config;
 
     std::unique_ptr<Simulator> slv(nullptr);
     auto newSolver = [&]()
         {
-            if (m_Config.DisableDual)
-                ; // TODO: slv = std::make_unique<SLSolver>(game);
-            else
-                ; // TODO: slv = std::make_unique<DLSolver>(game);
+            if (m_Config->DisableDual); // TODO: slv = std::make_unique<SLSolver>(game);
+            else; // TODO: slv = std::make_unique<DLSolver>(game);
         };
 
     while (m_Resume > 0)
     {
-        if (m_Cancel)
+        if (m_Cancel.IsCancelled())
             break;
 
         gen->GenerateGame(game);
 
         newSolver();
 
-        auto res = slv->Solve(&m_Cancel, [&](int initial)
-        {
-            gen->AdjustGame(game, initial);
-        });
+        auto res = slv->Solve(m_Cancel, [&](int initial)
+                              {
+                                  gen->AdjustGame(game, initial);
+                              });
 
-        if (m_Cancel)
+        if (m_Cancel.IsCancelled())
             break;
 
         if (m_Tick != nullptr)
@@ -158,7 +157,7 @@ void Worker::ProcessAll()
 
         if (m_NotSaved >= m_SaveInterval)
         {
-            m_EventSave(m_Config, result, length);
+            m_EventSave(*m_Config, result, length);
 
             m_NotSaved = 0;
             memset(result, 0, sizeof(size_t) * length);
@@ -166,7 +165,7 @@ void Worker::ProcessAll()
     }
 
     if (m_NotSaved > 0)
-        m_EventSave(m_Config, result, length);
+        m_EventSave(*m_Config, result, length);
 
     delete[] result;
 }
