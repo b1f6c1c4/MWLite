@@ -34,6 +34,15 @@ int MWSolver::Solve(const bool *cancelToken, std::function<void(int)> generator)
         if (flag)
         {
             generator(blk);
+
+            m_ToOpen = m_Game.Width * m_Game.Height;
+            if (m_Game.TotalMines >= 0)
+                m_ToOpen -= m_Game.TotalMines;
+            else
+                for (auto i = 0; i < m_Game.Width * m_Game.Height; i++)
+                    if (m_Game.IsMine[i])
+                        m_ToOpen--;
+
             flag = false;
         }
         OpenBlock(blk);

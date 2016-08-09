@@ -140,7 +140,11 @@ void Worker::ProcessAll()
 
         newSolver();
 
-        auto res = slv->Solve(&m_Cancel, std::bind(&IGenerator::AdjustGame, &*gen, game, std::placeholders::_1));
+        auto res = slv->Solve(&m_Cancel, [&](int initial)
+        {
+            gen->AdjustGame(game, initial);
+        });
+
         if (m_Cancel)
             break;
 

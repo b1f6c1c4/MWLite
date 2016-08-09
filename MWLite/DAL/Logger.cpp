@@ -65,6 +65,9 @@ std::wstring Logger::Hash(const Configuration &config)
     else
         ss << L"P" << std::setprecision(16) << config.Probability;
 
+    if (config.NotRigorous)
+        ss << L" NR";
+
     return ss.str();
 }
 

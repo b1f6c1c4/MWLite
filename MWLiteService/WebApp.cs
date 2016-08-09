@@ -59,7 +59,10 @@ namespace MWLiteService
             var sav = Convert.ToUInt64(request.Parameters["s"]);
 
             foreach (var c in config)
+            {
+                Program.ServiceLog($"{Core.Hash(c)} r={rep} s={sav}");
                 m_Core.Schedule(c, rep, sav);
+            }
 
             return new HttpResponse { ResponseCode = 202 };
         }

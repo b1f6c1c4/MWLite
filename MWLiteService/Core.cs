@@ -100,12 +100,14 @@ namespace MWLiteService
             Interlocked.Exchange(ref m_RestGame, 0);
         }
 
-        private static string Hash(Configuration config)
+        public static string Hash(Configuration config)
         {
             var sb = new StringBuilder();
             sb.Append($"{(config.DisableDual ? "SL" : "DL")} ");
             sb.Append($"{config.Width}-{config.Height}-");
             sb.Append(config.UseTotalMines ? $"T{config.TotalMines}" : $"P{config.Probability:R}");
+            if (config.NotRigorous)
+                sb.Append(" NR");
             return sb.ToString();
         }
 

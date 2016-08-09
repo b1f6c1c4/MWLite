@@ -11,13 +11,16 @@ namespace MWLiteService
         public int Width;
         public int Height;
 
+        [MarshalAs(UnmanagedType.U1)]
         public bool UseTotalMines;
         public int TotalMines;
         public double Probability;
 
+        [MarshalAs(UnmanagedType.U1)]
         public bool NotRigorous;
 
         // solver settings
+        [MarshalAs(UnmanagedType.U1)]
         public bool DisableDual;
     }
 }
