@@ -12,6 +12,9 @@ struct Game
     BlockSet AllMines; // FullSize = Width * Height
 
     Game(int width, int height);
+
+    DEFAULT_COPY(Game);
+    DEFAULT_MOVE(Game);
 };
 
 inline Game::Game(int width, int height) : Width(width), Height(height), TotalMines(-1), AllMines(width * height) { }

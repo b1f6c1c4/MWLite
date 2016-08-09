@@ -11,7 +11,12 @@ Logger::Logger() : m_Sequence(0) {}
 
 Logger::~Logger() {}
 
-void Logger::Process(const Logging &log)
+void Logger::Log(Logging &&log)
+{
+    Schedule(std::move(log));
+}
+
+void Logger::Process(const Logging &log, const ICancellationToken &cancel)
 {
     auto &&theTime = time(nullptr);
     tm now;

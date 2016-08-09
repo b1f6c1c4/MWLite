@@ -1,15 +1,18 @@
 #pragma once
 #include "../stdafx.h"
-#include "AsyncLogger.h"
+#include "../../../CppUtil/CppUtil/AsyncWorker.hpp"
+#include "ILogger.h"
 
-class Logger : public AsyncLogger
+class Logger : public AsyncWorker<Logging>, public ILogger
 {
 public:
     Logger();
     ~Logger();
 
+    void Log(Logging &&log) override;
+
 protected:
-    void Process(const Logging &log) override;
+    void Process(const Logging &log, const ICancellationToken &cancel) override;
 
 private:
     size_t m_Sequence;

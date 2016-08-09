@@ -10,6 +10,9 @@ class Set sealed
 public:
     explicit Set(size_t full);
 
+    DEFAULT_COPY(Set<T>);
+    DEFAULT_MOVE(Set<T>);
+
     bool operator[](T id) const;
 
     size_t Count() const;
@@ -119,6 +122,9 @@ class Set sealed
 {
 public:
     explicit Set(size_t full);
+
+    DEFAULT_COPY(Set<T>);
+    DEFAULT_MOVE(Set<T>);
 
     bool operator[](T id) const;
 
@@ -231,8 +237,6 @@ Set<T> Set<T>::operator!()
 
 #endif
 
-typedef Set<Block> BlockSet;
-
 template <typename T>
 Set<T> &operator+(Set<T> lhs, const Set<T> &rhs)
 {
@@ -250,3 +254,5 @@ Set<T> &operator*(Set<T> lhs, const Set<T> &rhs)
 {
     return lhs *= rhs;
 }
+
+typedef Set<Block> BlockSet;
