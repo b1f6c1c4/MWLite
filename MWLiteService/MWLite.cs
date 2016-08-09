@@ -1,5 +1,7 @@
 ﻿using System;
 using System.ServiceProcess;
+using System.Threading.Tasks;
+using MWLiteMiddleWare;
 
 namespace MWLiteService
 {
@@ -13,6 +15,7 @@ namespace MWLiteService
         {
             Program.ServiceLog("Starting");
             m_App = new WebApp(Environment.ProcessorCount);
+            m_App.Run();
             Program.ServiceLog("Started");
         }
 

@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Net;
+using CSharpUtil;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace MWLiteService
+namespace MWLiteMiddleWare
 {
     public class WebApp
     {
+        public delegate void LogEventHandler(string str);
+
+        public event LogEventHandler Log;
+
         // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         private readonly HttpServer m_Http;
         private readonly Core m_Core;
@@ -18,10 +23,12 @@ namespace MWLiteService
             m_Http.OnHttpRequest += HttpRequest;
         }
 
+        public void Run() => m_Http.Start();
+
         private HttpResponse GetWorkerStates()
         {
             m_Core.UpdateWorkerStates();
-            return HttpServer.GenerateHttpResponse(JsonConvert.SerializeObject(m_Core.WorkerStates));
+            return HttpUtil.GenerateHttpResponse(JsonConvert.SerializeObject(m_Core.WorkerStates));
         }
 
         private HttpResponse GetSpeed()
@@ -33,14 +40,31 @@ namespace MWLiteService
                         { "RestGame", m_Core.RestGame },
                         { "RestTime", m_Core.RestTime }
                     };
-            return HttpServer.GenerateHttpResponse(json.ToString());
+            return HttpUtil.GenerateHttpResponse(json.ToString());
         }
 
         private static HttpResponse GetResult(HttpRequest request)
         {
-            var config = JsonConvert.DeserializeObject<Configuration>(HttpServer.ReadToEnd(request));
-            var res = Core.GatherResult(config);
-            return HttpServer.GenerateHttpResponse(JsonConvert.SerializeObject(res));
+            dynamic json = JsonConvert.DeserializeObject(request.ReadToEnd());
+            LogicLevel level;
+            var config = ParseConfig(json, out level);
+            var res = Core.GatherResult(config, level);
+            return HttpUtil.GenerateHttpResponse(JsonConvert.SerializeObject(res));
+        }
+
+        private static Configuration ParseConfig(dynamic json, out LogicLevel level)
+        {
+            var config = new Configuration
+                             {
+                                 Width = json.Width,
+                                 Height = json.Height,
+                                 UseTotalMines = json.UseTotalMines,
+                                 TotalMines = json.TotalMines,
+                                 Probability = json.Probability,
+                                 NotRigorous = json.NotRigorous
+                             };
+            level = json.Logic;
+            return config;
         }
 
         private HttpResponse PutSchedule(HttpRequest request)
@@ -54,14 +78,16 @@ namespace MWLiteService
             if (!request.Header.ContainsKey("Content-Length"))
                 throw new HttpException(411);
 
-            var config = JsonConvert.DeserializeObject<Configuration[]>(HttpServer.ReadToEnd(request));
+            dynamic json = JsonConvert.DeserializeObject(request.ReadToEnd());
             var rep = Convert.ToUInt64(request.Parameters["r"]);
             var sav = Convert.ToUInt64(request.Parameters["s"]);
 
-            foreach (var c in config)
+            foreach (var j in json)
             {
-                Program.ServiceLog($"{Core.Hash(c)} r={rep} s={sav}");
-                m_Core.Schedule(c, rep, sav);
+                LogicLevel l;
+                var c = ParseConfig(j, out l);
+                Log?.Invoke($"{Core.Hash(c, l)} r={rep} s={sav}");
+                m_Core.Schedule(c, l, rep, sav);
             }
 
             return new HttpResponse { ResponseCode = 202 };

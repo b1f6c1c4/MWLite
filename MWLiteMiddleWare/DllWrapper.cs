@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace MWLiteService
+namespace MWLiteMiddleWare
 {
     public enum WorkerState
     {
@@ -11,7 +11,7 @@ namespace MWLiteService
         Quitting = 4
     };
 
-    public static class DllWrapper
+    internal static class DllWrapper
     {
         [DllImport("MWLite.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
         public static extern void SetWorkingDirectory(string path);
@@ -23,7 +23,7 @@ namespace MWLiteService
         public static extern long GetNumWorkers();
 
         [DllImport("MWLite.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void Schedule(Configuration config, ulong repetition, ulong saveInterval);
+        public static extern void Schedule(Configuration config, LogicLevel level, ulong repetition, ulong saveInterval);
 
         [DllImport("MWLite.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void CancelWorker(int id);

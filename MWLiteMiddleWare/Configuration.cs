@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace MWLiteService
+namespace MWLiteMiddleWare
 {
     public enum LogicLevel
     {
@@ -16,7 +16,6 @@ namespace MWLiteService
     [StructLayout(LayoutKind.Sequential, Pack = 8)]
     public struct Configuration
     {
-        // BaseConfiguration
         public int Width;
         public int Height;
 
@@ -25,8 +24,5 @@ namespace MWLiteService
         public double Probability;
 
         [MarshalAs(UnmanagedType.U1)] public bool NotRigorous;
-
-        // Configuration
-        [MarshalAs(UnmanagedType.U1)] public LogicLevel Logic;
     }
 }

@@ -6,7 +6,7 @@ using System.Threading;
 using System.Timers;
 using Timer = System.Timers.Timer;
 
-namespace MWLiteService
+namespace MWLiteMiddleWare
 {
     public sealed class Core : IDisposable
     {
@@ -74,7 +74,7 @@ namespace MWLiteService
                 WorkerStates.Add(DllWrapper.GetWorkerState(i));
         }
 
-        public void Schedule(Configuration config, ulong repetition, ulong saveInterval)
+        public void Schedule(Configuration config, LogicLevel level, ulong repetition, ulong saveInterval)
         {
             if (config.Width <= 0)
                 throw new ArgumentException(@"Width", nameof(config));
@@ -88,7 +88,7 @@ namespace MWLiteService
                 throw new ArgumentException(@"Probability", nameof(config));
 
             Interlocked.Add(ref m_RestGame, (long)repetition);
-            DllWrapper.Schedule(config, repetition, saveInterval);
+            DllWrapper.Schedule(config, level, repetition, saveInterval);
         }
 
         public void Cancel()
@@ -100,10 +100,10 @@ namespace MWLiteService
             Interlocked.Exchange(ref m_RestGame, 0);
         }
 
-        public static string Hash(Configuration config)
+        public static string Hash(Configuration config, LogicLevel level)
         {
             var sb = new StringBuilder();
-            switch (config.Logic)
+            switch (level)
             {
                 case LogicLevel.ZeroLogic:
                     sb.Append("ZL");
@@ -136,9 +136,9 @@ namespace MWLiteService
             return sb.ToString();
         }
 
-        public static List<ulong> GatherResult(Configuration config)
+        public static List<ulong> GatherResult(Configuration config, LogicLevel level)
         {
-            var db = AppDomain.CurrentDomain.BaseDirectory + @"db\" + Hash(config);
+            var db = AppDomain.CurrentDomain.BaseDirectory + @"db\" + Hash(config, level);
 
             if (!Directory.Exists(db))
                 return null;
