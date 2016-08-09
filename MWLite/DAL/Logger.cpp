@@ -55,10 +55,30 @@ std::wstring Logger::Hash(const Configuration &config)
 {
     std::wstringstream ss;
 
-    if (config.DisableDual)
+    switch (config.Logic)
+    {
+    case LogicLevel::ZeroLogic:
+        ss << L"ZL";
+        break;
+    case LogicLevel::PassiveLogic:
+        ss << L"PL";
+        break;
+    case LogicLevel::SingleLogic:
         ss << L"SL";
-    else
+        break;
+    case LogicLevel::SingleLogicExtended:
+        ss << L"SLE";
+        break;
+    case LogicLevel::DoubleLogic:
         ss << L"DL";
+        break;
+    case LogicLevel::DoubleLogicExtended:
+        ss << L"DLE";
+        break;
+    case LogicLevel::FullLogic:
+        ss << L"FL";
+        break;
+    }
 
     ss << L" ";
 

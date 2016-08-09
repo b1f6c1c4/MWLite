@@ -103,8 +103,33 @@ namespace MWLiteService
         public static string Hash(Configuration config)
         {
             var sb = new StringBuilder();
-            sb.Append($"{(config.DisableDual ? "SL" : "DL")} ");
-            sb.Append($"{config.Width}-{config.Height}-");
+            switch (config.Logic)
+            {
+                case LogicLevel.ZeroLogic:
+                    sb.Append("ZL");
+                    break;
+                case LogicLevel.PassiveLogic:
+                    sb.Append("PL");
+                    break;
+                case LogicLevel.SingleLogic:
+                    sb.Append("SL");
+                    break;
+                case LogicLevel.SingleLogicExtended:
+                    sb.Append("SLE");
+                    break;
+                case LogicLevel.DoubleLogic:
+                    sb.Append("DL");
+                    break;
+                case LogicLevel.DoubleLogicExtended:
+                    sb.Append("DLE");
+                    break;
+                case LogicLevel.FullLogic:
+                    sb.Append("FL");
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            sb.Append($" {config.Width}-{config.Height}-");
             sb.Append(config.UseTotalMines ? $"T{config.TotalMines}" : $"P{config.Probability:R}");
             if (config.NotRigorous)
                 sb.Append(" NR");

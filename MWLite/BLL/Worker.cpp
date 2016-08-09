@@ -5,6 +5,7 @@
 #include "NotRigorousGenerator.h"
 #include "Simulator.h"
 #include "../Threading.h"
+#include "Strategies/SolverBuilder.h"
 
 Worker::Worker() : m_EventSave(nullptr), m_EventFinish(nullptr), m_SaveInterval(1), m_NotSaved(0), m_Resume(0), m_State(WorkerState::Idle), m_Tick(nullptr), m_Thread(&Worker::WorkerThreadEntry, this) {}
 
@@ -120,12 +121,8 @@ void Worker::ProcessAll()
     Game game;
     game.Config = m_Config;
 
-    std::unique_ptr<Simulator> slv(nullptr);
-    auto newSolver = [&]()
-        {
-            if (m_Config->DisableDual); // TODO: slv = std::make_unique<SLSolver>(game);
-            else; // TODO: slv = std::make_unique<DLSolver>(game);
-        };
+    std::shared_ptr<ISolver> slv(nullptr);
+    std::shared_ptr<Simulator> sim(nullptr);
 
     while (m_Resume > 0)
     {
@@ -134,9 +131,10 @@ void Worker::ProcessAll()
 
         gen->GenerateGame(game);
 
-        newSolver();
+        slv = SolverBuilder::Instance().Build(*m_Config);
+        sim = std::make_shared<Simulator>(game, slv);
 
-        auto res = slv->Solve(m_Cancel, [&](int initial)
+        auto res = sim->Solve(m_Cancel, [&](int initial)
                               {
                                   gen->AdjustGame(game, initial);
                               });
