@@ -20,6 +20,6 @@ Function Gather-MWFile($fn)
     while ($i -lt $cont.Count)
     {
         $db[$i] += $cont[$i]
-        i++
+        $i++
     }
 }
