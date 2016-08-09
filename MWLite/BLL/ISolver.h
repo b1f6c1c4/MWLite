@@ -6,16 +6,16 @@
 
 struct State sealed
 {
-    std::weak_ptr<BaseConfiguration> Config;
+    std::shared_ptr<BaseConfiguration> Config;
 
     // closed blocks
-    std::weak_ptr<BlockSet> C;
+    std::shared_ptr<BlockSet> C;
 
     // open blocks with mine
-    std::weak_ptr<BlockSet> M;
+    std::shared_ptr<BlockSet> M;
 
     // open blocks without mine
-    std::weak_ptr<BlockSet> B;
+    std::shared_ptr<BlockSet> B;
 
     // get the deleted neighborhood
     std::function<const BlockSet &(Block)> U;

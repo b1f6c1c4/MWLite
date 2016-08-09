@@ -75,6 +75,15 @@
     <ClInclude Include="BLL\RandomChooser.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="BLL\DetSolver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BLL\Strategies\BasicLogics.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BLL\Strategies\SolverBuilder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -105,6 +114,15 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="BLL\Simulator.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BLL\DetSolver.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BLL\Strategies\SolverBuilder.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BLL\Strategies\BasicLogics.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -148,7 +148,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BLL\DetSolver.h" />
     <ClInclude Include="BLL\RandomChooser.h" />
+    <ClInclude Include="BLL\Strategies\BasicLogics.h" />
+    <ClInclude Include="BLL\Strategies\SolverBuilder.h" />
     <ClInclude Include="Entities\BlockSet.h" />
     <ClInclude Include="BLL\IGenerator.h" />
     <ClInclude Include="BLL\ISolver.h" />
@@ -170,9 +173,12 @@
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BLL\DetSolver.cpp" />
     <ClCompile Include="BLL\NotRigorousGenerator.cpp" />
     <ClCompile Include="BLL\ProbGenerator.cpp" />
     <ClCompile Include="BLL\RandomGenerator.cpp" />
+    <ClCompile Include="BLL\Strategies\SolverBuilder.cpp" />
+    <ClCompile Include="BLL\Strategies\BasicLogics.cpp" />
     <ClCompile Include="Threading.cpp" />
     <ClCompile Include="BLL\TotalGenerator.cpp" />
     <ClCompile Include="BLL\Worker.cpp" />

@@ -31,8 +31,6 @@ private:
     // open blocks without mine
     std::shared_ptr<BlockSet> B;
 
-    RandomBlockChooser m_Random;
-
     int m_ToOpen;
 
     int GetIndex(int x, int y) const;
