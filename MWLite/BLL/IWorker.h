@@ -7,15 +7,16 @@
 struct WorkingConfig
 {
     std::shared_ptr<Configuration> Config;
+    LogicLevel Logic;
     size_t Repetition;
     size_t SaveInterval;
 
-    WorkingConfig(std::shared_ptr<Configuration> config, size_t repetition, size_t saveInterval);
+    WorkingConfig(std::shared_ptr<Configuration> config, LogicLevel level, size_t repetition, size_t saveInterval);
 };
 
-inline WorkingConfig::WorkingConfig(std::shared_ptr<Configuration> config, size_t repetition, size_t saveInterval) : Config(config), Repetition(repetition), SaveInterval(saveInterval) { }
+inline WorkingConfig::WorkingConfig(std::shared_ptr<Configuration> config, LogicLevel level, size_t repetition, size_t saveInterval) : Config(config), Logic(level), Repetition(repetition), SaveInterval(saveInterval) { }
 
-typedef std::function<void(const Configuration &, const size_t *, size_t)> SaveEventHandler;
+typedef std::function<void(const Configuration &, LogicLevel, const size_t *, size_t)> SaveEventHandler;
 typedef std::function<void()> FinishEventHandler;
 
 enum class WorkerState

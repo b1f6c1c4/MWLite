@@ -2,7 +2,7 @@
 #include "../stdafx.h"
 
 #pragma pack(push, 8)
-struct BaseConfiguration
+struct Configuration
 {
     int Width;
     int Height;
@@ -25,10 +25,3 @@ enum class LogicLevel
     DoubleLogicExtended = 5,
     FullLogic = 6
 };
-
-#pragma pack(push, 8)
-struct Configuration : BaseConfiguration
-{
-    LogicLevel Logic;
-};
-#pragma pack(pop)

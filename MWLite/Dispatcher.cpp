@@ -8,9 +8,9 @@ Dispatcher::Dispatcher(int numWorkers) : m_Logger(new Logger()), m_Counter(0)
     {
         auto worker = new Worker();
 
-        worker->setSaveCallback([this](const Configuration &config, const size_t *result, size_t length)
+        worker->setSaveCallback([this](const Configuration &config, LogicLevel level, const size_t *result, size_t length)
                                 {
-                                    m_Logger->Log(Logging(config, result, length));
+                                    m_Logger->Log(Logging(config, level, result, length));
                                 });
 
         worker->setFinishCallback([this, worker]()
@@ -44,7 +44,7 @@ size_t Dispatcher::GetNumWorkers() const
     return m_Workers.size();
 }
 
-void Dispatcher::Schedule(std::shared_ptr<Configuration> config, size_t repetition, size_t saveInterval)
+void Dispatcher::Schedule(std::shared_ptr<Configuration> config, LogicLevel level, size_t repetition, size_t saveInterval)
 {
     auto numSave = repetition / saveInterval;
     size_t numSubTasks;
@@ -65,12 +65,12 @@ void Dispatcher::Schedule(std::shared_ptr<Configuration> config, size_t repetiti
         {
             if (repetition >= repeat)
             {
-                m_Queue.emplace(config, repeat, saveInterval);
+                m_Queue.emplace(config, level, repeat, saveInterval);
                 repetition -= repeat;
             }
             else
             {
-                m_Queue.emplace(config, repetition, saveInterval);
+                m_Queue.emplace(config, level, repetition, saveInterval);
                 repetition = 0;
             }
         }

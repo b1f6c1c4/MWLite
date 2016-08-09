@@ -29,9 +29,9 @@ extern "C"
         return TheDispatcher->GetNumWorkers();
     }
 
-    DLL_API void Schedule(Configuration config, size_t repetition, size_t saveInterval)
+    DLL_API void Schedule(Configuration config, LogicLevel level, size_t repetition, size_t saveInterval)
     {
-        TheDispatcher->Schedule(std::make_shared<Configuration>(config), repetition, saveInterval);
+        TheDispatcher->Schedule(std::make_shared<Configuration>(config), level, repetition, saveInterval);
     }
 
     DLL_API void CancelWorker(int id)

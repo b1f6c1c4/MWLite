@@ -50,7 +50,7 @@ template <typename T>
 SparseSet<T>::SparseSet(size_t full) : m_FullSize(full) { }
 
 template <typename T>
-SparseSet<T>::SparseSet(const DenseSet<T>& other)
+SparseSet<T>::SparseSet(const DenseSet<T> &other)
 {
     for (auto &id : other)
         (*this) += id;
@@ -158,19 +158,19 @@ typename std::vector<T>::const_iterator SparseSet<T>::end() const
 }
 
 template <typename T>
-SparseSet<T> &operator+(SparseSet<T> lhs, const SparseSet<T> &rhs)
+SparseSet<T> operator+(SparseSet<T> lhs, const SparseSet<T> &rhs)
 {
     return lhs += rhs;
 }
 
 template <typename T>
-SparseSet<T> &operator-(SparseSet<T> lhs, const SparseSet<T> &rhs)
+SparseSet<T> operator-(SparseSet<T> lhs, const SparseSet<T> &rhs)
 {
     return lhs -= rhs;
 }
 
 template <typename T>
-SparseSet<T> &operator*(SparseSet<T> lhs, const SparseSet<T> &rhs)
+SparseSet<T> operator*(SparseSet<T> lhs, const SparseSet<T> &rhs)
 {
     return lhs *= rhs;
 }

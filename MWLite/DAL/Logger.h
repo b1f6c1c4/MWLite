@@ -17,7 +17,7 @@ protected:
 private:
     size_t m_Sequence;
 
-    static std::wstring Hash(const Configuration &config);
+    static std::wstring Hash(const Configuration &config, LogicLevel level);
 
     void TouchDirectory(const std::wstring &path);
 };

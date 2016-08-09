@@ -5,7 +5,7 @@
 class IDetSolver
 {
 public:
-    virtual void Decide(const State& state, BlockSet &target, const CancellationToken& cancel) = 0;
+    virtual void Decide(const State &state, BlockSet &target, const CancellationToken &cancel) = 0;
 
 protected:
     IDetSolver();
@@ -20,7 +20,7 @@ public:
     NO_COPY(DetSolverManager);
     NO_MOVE(DetSolverManager);
 
-    Block Decide(const State& state, const CancellationToken& cancel) override;
+    Block Decide(const State &state, const CancellationToken &cancel) override;
 
 private:
     RandomBlockChooser m_Chooser;

@@ -11,7 +11,7 @@ void Strategies::Single::Update(const State &state, BlockSet &Mt, BlockSet &Bt)
             Mt += tmp;
         tmp = U(b) * Mt;
         if (f(b) == tmp.Count())
-            Bt += tmp;
+            Bt += U(b) - Mt;
     }
 }
 

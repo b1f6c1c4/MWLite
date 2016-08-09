@@ -27,7 +27,7 @@ void Logger::Process(const Logging &log, const ICancellationToken &cancel)
     ss << WorkingDirectory << L"db";
     TouchDirectory(ss.str());
 
-    ss << L"/" << Hash(log.Config);
+    ss << L"/" << Hash(log.Config, log.Logic);
     TouchDirectory(ss.str());
 
     ss << L"/";
@@ -51,11 +51,11 @@ void Logger::Process(const Logging &log, const ICancellationToken &cancel)
     m_Sequence++;
 }
 
-std::wstring Logger::Hash(const Configuration &config)
+std::wstring Logger::Hash(const Configuration &config, LogicLevel level)
 {
     std::wstringstream ss;
 
-    switch (config.Logic)
+    switch (level)
     {
     case LogicLevel::ZeroLogic:
         ss << L"ZL";

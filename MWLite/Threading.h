@@ -2,5 +2,5 @@
 #include "stdafx.h"
 #include <thread>
 
-void SetThreadName(const char*);
-void SetThreadName(std::thread &, const char*);
+void SetThreadName(const char *);
+void SetThreadName(std::thread &, const char *);

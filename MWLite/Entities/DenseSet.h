@@ -70,7 +70,7 @@ template <typename T>
 DenseSet<T>::DenseSet(size_t full) : m_DenseSet(full, false) { }
 
 template <typename T>
-DenseSet<T>::DenseSet(const SparseSet<T>& other)
+DenseSet<T>::DenseSet(const SparseSet<T> &other)
 {
     for (auto &id : other)
         (*this) += id;
@@ -205,29 +205,29 @@ bool DenseSet<T>::const_iterator::operator!=(const const_iterator &rhs) const
 template <typename T>
 typename DenseSet<T>::const_iterator DenseSet<T>::begin() const
 {
-    return ++const_iterator(&*m_DenseSet.begin(), &*m_DenseSet.begin() - 1, &*m_DenseSet.end());
+    return ++const_iterator(&*m_DenseSet.begin(), &*m_DenseSet.begin() - 1, &*(m_DenseSet.end() - 1) + 1);
 }
 
 template <typename T>
 typename DenseSet<T>::const_iterator DenseSet<T>::end() const
 {
-    return const_iterator(&*m_DenseSet.begin(), &*m_DenseSet.end(), &*m_DenseSet.end());
+    return const_iterator(&*m_DenseSet.begin(), &*(m_DenseSet.end() - 1) + 1, &*(m_DenseSet.end() - 1) + 1);
 }
 
 template <typename T>
-DenseSet<T> &operator+(DenseSet<T> lhs, const DenseSet<T> &rhs)
+DenseSet<T> operator+(DenseSet<T> lhs, const DenseSet<T> &rhs)
 {
     return lhs += rhs;
 }
 
 template <typename T>
-DenseSet<T> &operator-(DenseSet<T> lhs, const DenseSet<T> &rhs)
+DenseSet<T> operator-(DenseSet<T> lhs, const DenseSet<T> &rhs)
 {
     return lhs -= rhs;
 }
 
 template <typename T>
-DenseSet<T> &operator*(DenseSet<T> lhs, const DenseSet<T> &rhs)
+DenseSet<T> operator*(DenseSet<T> lhs, const DenseSet<T> &rhs)
 {
     return lhs *= rhs;
 }

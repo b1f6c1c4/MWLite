@@ -20,10 +20,10 @@ SolverBuilder &SolverBuilder::Instance()
     return *TheInstance;
 }
 
-std::shared_ptr<ISolver> SolverBuilder::Build(const Configuration &config) const
+std::shared_ptr<ISolver> SolverBuilder::Build(LogicLevel level) const
 {
     std::shared_ptr<IDetSolver> tmp;
-    switch (config.Logic)
+    switch (level)
     {
     case LogicLevel::ZeroLogic:
         tmp = std::make_unique<Strategies::ZeroLogic>();

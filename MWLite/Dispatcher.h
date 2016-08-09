@@ -19,7 +19,7 @@ public:
 
     size_t GetNumWorkers() const;
 
-    void Schedule(std::shared_ptr<Configuration> config, size_t repetition, size_t saveInterval);
+    void Schedule(std::shared_ptr<Configuration> config, LogicLevel level, size_t repetition, size_t saveInterval);
 
     void CancelWorker(int id);
     WorkerState GetWorkerState(int id) const;

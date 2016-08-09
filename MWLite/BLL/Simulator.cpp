@@ -27,7 +27,7 @@ Simulator::Simulator(const Game &game, std::shared_ptr<ISolver> slv) : m_Game(ga
 
 Simulator::~Simulator() { }
 
-int Simulator::Solve(const CancellationToken &cancel, std::function<void(int)> generator)
+int Simulator::Solve(const CancellationToken &cancel, std::function<void(int)> adjuster)
 {
     auto flag = true;
 
@@ -38,7 +38,7 @@ int Simulator::Solve(const CancellationToken &cancel, std::function<void(int)> g
     state.OpenNoMines = OpenNoMines;
     state.Neighborhood = [this](Block blk)
         {
-            return m_DeletedNeighorhood[blk];
+            return &m_DeletedNeighorhood[blk];
         };
     state.NeighborCount = [this](Block blk)
         {
@@ -54,7 +54,7 @@ int Simulator::Solve(const CancellationToken &cancel, std::function<void(int)> g
 
         if (flag)
         {
-            generator(blk);
+            adjuster(blk);
             ResetToOpen();
             flag = false;
         }

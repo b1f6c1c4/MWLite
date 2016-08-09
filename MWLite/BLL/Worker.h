@@ -29,6 +29,7 @@ private:
 
     size_t m_SaveInterval;
     std::shared_ptr<Configuration> m_Config;
+    LogicLevel m_Logic;
     size_t m_NotSaved;
     size_t m_Resume;
 

@@ -6,7 +6,7 @@
 
 struct State sealed
 {
-    std::shared_ptr<BaseConfiguration> Config;
+    std::shared_ptr<Configuration> Config;
 
     std::shared_ptr<BlockSet> ClosedBlocks;
 
@@ -14,7 +14,7 @@ struct State sealed
 
     std::shared_ptr<BlockSet> OpenNoMines;
 
-    std::function<const BlockSet &(Block)> Neighborhood;
+    std::function<const BlockSet *(Block)> Neighborhood;
 
     std::function<size_t(Block)> NeighborCount;
 };

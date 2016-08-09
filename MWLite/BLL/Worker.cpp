@@ -7,7 +7,7 @@
 #include "../Threading.h"
 #include "Strategies/SolverBuilder.h"
 
-Worker::Worker() : m_EventSave(nullptr), m_EventFinish(nullptr), m_SaveInterval(1), m_NotSaved(0), m_Resume(0), m_State(WorkerState::Idle), m_Tick(nullptr), m_Thread(&Worker::WorkerThreadEntry, this) {}
+Worker::Worker() : m_EventSave(nullptr), m_EventFinish(nullptr), m_SaveInterval(1), m_Logic(LogicLevel::ZeroLogic), m_NotSaved(0), m_Resume(0), m_State(WorkerState::Idle), m_Tick(nullptr), m_Thread(&Worker::WorkerThreadEntry, this) {}
 
 Worker::~Worker()
 {
@@ -44,6 +44,7 @@ bool Worker::Run(const WorkingConfig &config, std::atomic<size_t> *tick)
 
     m_Tick = tick;
     m_Config = config.Config;
+    m_Logic = config.Logic;
     m_Resume = config.Repetition;
     m_SaveInterval = config.SaveInterval;
     m_NotSaved = 0;
@@ -131,7 +132,7 @@ void Worker::ProcessAll()
 
         gen->GenerateGame(game);
 
-        slv = SolverBuilder::Instance().Build(*m_Config);
+        slv = SolverBuilder::Instance().Build(m_Logic);
         sim = std::make_shared<Simulator>(game, slv);
 
         auto res = sim->Solve(m_Cancel, [&](int initial)
@@ -155,7 +156,7 @@ void Worker::ProcessAll()
 
         if (m_NotSaved >= m_SaveInterval)
         {
-            m_EventSave(*m_Config, result, length);
+            m_EventSave(*m_Config, m_Logic, result, length);
 
             m_NotSaved = 0;
             memset(result, 0, sizeof(size_t) * length);
@@ -163,7 +164,7 @@ void Worker::ProcessAll()
     }
 
     if (m_NotSaved > 0)
-        m_EventSave(*m_Config, result, length);
+        m_EventSave(*m_Config, m_Logic, result, length);
 
     delete[] result;
 }

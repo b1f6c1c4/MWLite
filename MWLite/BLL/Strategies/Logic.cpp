@@ -20,7 +20,7 @@ void Strategies::LogicStrategy::Make(const State &state)
     else
         Mt += M;
 
-    if (Mt.FullSize() != B.FullSize())
+    if (Bt.FullSize() != B.FullSize())
         Bt = B + !C - M;
     else
         Bt += B + !C - M;

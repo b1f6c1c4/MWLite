@@ -8,7 +8,7 @@ class SolverBuilder sealed
 public:
     static SolverBuilder &Instance();
 
-    std::shared_ptr<ISolver> Build(const Configuration &config) const;
+    std::shared_ptr<ISolver> Build(LogicLevel level) const;
 
 private:
     static std::mutex TheMtx;
