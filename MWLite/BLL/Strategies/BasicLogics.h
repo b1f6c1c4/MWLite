@@ -4,25 +4,25 @@
 
 namespace Strategies
 {
-    class ZeroLogic : public DetSolver
+    class ZeroLogic : public IDetSolver
     {
     public:
         void Decide(const State &state, BlockSet &target, const CancellationToken &cancel) override;
     };
 
-    class PassiveLogic : public DetSolver
+    class PassiveLogic : public IDetSolver
     {
     public:
         void Decide(const State &state, BlockSet &target, const CancellationToken &cancel) override;
     };
 
-    class SingleLogic : public DetSolver
+    class SingleLogic : public IDetSolver
     {
     public:
         void Decide(const State &state, BlockSet &target, const CancellationToken &cancel) override;
     };
 
-    class SingleLogicExtended : public DetSolver
+    class SingleLogicExtended : public IDetSolver
     {
     public:
         void Decide(const State &state, BlockSet &target, const CancellationToken &cancel) override;

@@ -20,7 +20,7 @@ SolverBuilder& SolverBuilder::Instance()
 
 std::shared_ptr<ISolver> SolverBuilder::Build(const std::string& str) const
 {
-    std::shared_ptr<DetSolver> tmp;
+    std::shared_ptr<IDetSolver> tmp;
     if (str == "zl")
         tmp = BuildZeroLogic();
     else if (str == "pl")
@@ -35,22 +35,22 @@ std::shared_ptr<ISolver> SolverBuilder::Build(const std::string& str) const
     return std::make_shared<DetSolverManager>(tmp);
 }
 
-std::shared_ptr<DetSolver> SolverBuilder::BuildZeroLogic() const
+std::shared_ptr<IDetSolver> SolverBuilder::BuildZeroLogic() const
 {
     return std::make_shared<Strategies::ZeroLogic>();
 }
 
-std::shared_ptr<DetSolver> SolverBuilder::BuildPassiveLogic() const
+std::shared_ptr<IDetSolver> SolverBuilder::BuildPassiveLogic() const
 {
     return std::make_shared<Strategies::PassiveLogic>();
 }
 
-std::shared_ptr<DetSolver> SolverBuilder::BuildSingleLogic() const
+std::shared_ptr<IDetSolver> SolverBuilder::BuildSingleLogic() const
 {
     return std::make_shared<Strategies::SingleLogic>();
 }
 
-std::shared_ptr<DetSolver> SolverBuilder::BuildSingleLogicExtended() const
+std::shared_ptr<IDetSolver> SolverBuilder::BuildSingleLogicExtended() const
 {
     return std::make_shared<Strategies::SingleLogicExtended>();
 }

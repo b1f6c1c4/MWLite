@@ -2,26 +2,20 @@
 #include "ISolver.h"
 #include "RandomChooser.h"
 
-class DetSolver
+class IDetSolver
 {
 public:
-    DetSolver();
-
-    void SetBase(std::shared_ptr<DetSolver> base);
-
-    virtual void Decide(const State& state, BlockSet &target, const CancellationToken& cancel);
+    virtual void Decide(const State& state, BlockSet &target, const CancellationToken& cancel) = 0;
 
 protected:
-    virtual ~DetSolver();
-
-private:
-    std::shared_ptr<DetSolver> m_Base;
+    IDetSolver();
+    virtual ~IDetSolver();
 };
 
 class DetSolverManager sealed : public ISolver
 {
 public:
-    explicit DetSolverManager(std::shared_ptr<DetSolver> slv);
+    explicit DetSolverManager(std::shared_ptr<IDetSolver> slv);
 
     NO_COPY(DetSolverManager);
     NO_MOVE(DetSolverManager);
@@ -31,5 +25,5 @@ public:
 private:
     RandomBlockChooser m_Chooser;
 
-    std::shared_ptr<DetSolver> m_Solver;
+    std::shared_ptr<IDetSolver> m_Solver;
 };

@@ -8,20 +8,15 @@ struct State sealed
 {
     std::shared_ptr<BaseConfiguration> Config;
 
-    // closed blocks
-    std::shared_ptr<BlockSet> C;
+    std::shared_ptr<BlockSet> ClosedBlocks;
 
-    // open blocks with mine
-    std::shared_ptr<BlockSet> M;
+    std::shared_ptr<BlockSet> OpenMines;
 
-    // open blocks without mine
-    std::shared_ptr<BlockSet> B;
+    std::shared_ptr<BlockSet> OpenNoMines;
 
-    // get the deleted neighborhood
-    std::function<const BlockSet &(Block)> U;
+    std::function<const BlockSet &(Block)> Neighborhood;
 
-    // get total mines in the deleted neighborhood
-    std::function<size_t(Block)> f;
+    std::function<size_t(Block)> NeighborCount;
 };
 
 class ISolver

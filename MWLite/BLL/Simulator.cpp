@@ -1,9 +1,9 @@
 #include "Simulator.h"
 
-Simulator::Simulator(const Game &game, std::shared_ptr<ISolver> slv) : m_Game(game), m_Solver(slv), C(std::make_shared<BlockSet>(game.AllMines.FullSize())), M(std::make_shared<BlockSet>(game.AllMines.FullSize())), B(std::make_shared<BlockSet>(game.AllMines.FullSize())), m_ToOpen(game.AllMines.FullSize())
+Simulator::Simulator(const Game &game, std::shared_ptr<ISolver> slv) : m_Game(game), m_Solver(slv), ClosedBlocks(std::make_shared<BlockSet>(game.AllMines.FullSize())), OpenMines(std::make_shared<BlockSet>(game.AllMines.FullSize())), OpenNoMines(std::make_shared<BlockSet>(game.AllMines.FullSize())), m_ToOpen(game.AllMines.FullSize())
 {
     // all blocks are closed
-    *C = !*C;
+    *ClosedBlocks = !*ClosedBlocks;
 
     // make deleted neighborhoods
     BlockSet blkR(m_Game.AllMines.FullSize());
@@ -33,14 +33,14 @@ int Simulator::Solve(const CancellationToken &cancel, std::function<void(int)> g
 
     State state;
     state.Config = m_Game.Config;
-    state.C = C;
-    state.M = M;
-    state.B = B;
-    state.U = [this](Block blk)
+    state.ClosedBlocks = ClosedBlocks;
+    state.OpenMines = OpenMines;
+    state.OpenNoMines = OpenNoMines;
+    state.Neighborhood = [this](Block blk)
         {
             return m_DeletedNeighorhood[blk];
         };
-    state.f = [this](Block blk)
+    state.NeighborCount = [this](Block blk)
         {
             return (m_DeletedNeighorhood[blk] * m_Game.AllMines).Count();
         };
@@ -59,17 +59,17 @@ int Simulator::Solve(const CancellationToken &cancel, std::function<void(int)> g
             flag = false;
         }
 
-        ASSERT((*C)[blk]);
-        *C -= blk;
+        ASSERT((*ClosedBlocks)[blk]);
+        *ClosedBlocks -= blk;
         if (m_Game.AllMines[blk])
-            *M += blk;
+            *OpenMines += blk;
         else
         {
-            *B += blk;
+            *OpenNoMines += blk;
             m_ToOpen--;
         }
     }
-    return M->Count();
+    return OpenMines->Count();
 }
 
 int Simulator::GetIndex(int x, int y) const

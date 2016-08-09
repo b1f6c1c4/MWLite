@@ -22,14 +22,11 @@ private:
 
     std::shared_ptr<ISolver> m_Solver;
 
-    // closed blocks
-    std::shared_ptr<BlockSet> C;
+    std::shared_ptr<BlockSet> ClosedBlocks;
 
-    // open blocks with mine
-    std::shared_ptr<BlockSet> M;
+    std::shared_ptr<BlockSet> OpenMines;
 
-    // open blocks without mine
-    std::shared_ptr<BlockSet> B;
+    std::shared_ptr<BlockSet> OpenNoMines;
 
     int m_ToOpen;
 

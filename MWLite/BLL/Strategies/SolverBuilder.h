@@ -14,8 +14,8 @@ private:
     static std::mutex TheMtx;
     static std::unique_ptr<SolverBuilder> TheInstance;
 
-    std::shared_ptr<DetSolver> BuildZeroLogic() const;
-    std::shared_ptr<DetSolver> BuildPassiveLogic() const;
-    std::shared_ptr<DetSolver> BuildSingleLogic() const;
-    std::shared_ptr<DetSolver> BuildSingleLogicExtended() const;
+    std::shared_ptr<IDetSolver> BuildZeroLogic() const;
+    std::shared_ptr<IDetSolver> BuildPassiveLogic() const;
+    std::shared_ptr<IDetSolver> BuildSingleLogic() const;
+    std::shared_ptr<IDetSolver> BuildSingleLogicExtended() const;
 };
