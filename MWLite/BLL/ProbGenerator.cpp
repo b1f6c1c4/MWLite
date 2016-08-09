@@ -5,9 +5,9 @@ ProbGenerator::ProbGenerator(int width, int height, double prob) : RandomGenerat
 
 ProbGenerator::~ProbGenerator() {}
 
-void ProbGenerator::Fill(bool *data)
+void ProbGenerator::Fill(BlockSet &data)
 {
     std::bernoulli_distribution dist(m_Prob);
     for (auto i = 0; i < m_Width * m_Height; i++)
-        data[i] = dist(m_Random);
+        data += dist(m_Random);
 }

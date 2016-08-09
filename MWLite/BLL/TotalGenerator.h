@@ -9,7 +9,7 @@ public:
     ~TotalGenerator();
 
 protected:
-    void Fill(bool *data) override;
+    void Fill(BlockSet &data) override;
 
 private:
     int m_Total;

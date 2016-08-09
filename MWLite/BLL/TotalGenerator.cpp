@@ -5,12 +5,15 @@ TotalGenerator::TotalGenerator(int width, int height, int total) : RandomGenerat
 
 TotalGenerator::~TotalGenerator() {}
 
-void TotalGenerator::Fill(bool *data)
+void TotalGenerator::Fill(BlockSet &data)
 {
-    memset(data, false, sizeof(*data) * m_Width * m_Height);
+    std::vector<int_fast8_t> set;
+    for (auto i = 0; i < m_Total; i++)
+        set[i] = true;
+
+    std::shuffle(set.begin(), set.end(), m_Random);
 
     for (auto i = 0; i < m_Total; i++)
-        data[i] = true;
-
-    std::shuffle(data, data + m_Width * m_Height, m_Random);
+        if (set[i])
+            data += i;
 }

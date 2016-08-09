@@ -148,41 +148,37 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="BLL\DLSolver.h" />
+    <ClInclude Include="Entities\BlockSet.h" />
     <ClInclude Include="BLL\IGenerator.h" />
+    <ClInclude Include="BLL\ISolver.h" />
     <ClInclude Include="BLL\IWorker.h" />
     <ClInclude Include="BLL\NotRigorousGenerator.h" />
     <ClInclude Include="BLL\ProbGenerator.h" />
     <ClInclude Include="BLL\RandomGenerator.h" />
+    <ClInclude Include="Entities\DenseSet.h" />
+    <ClInclude Include="Entities\SparseSet.h" />
     <ClInclude Include="Threading.h" />
     <ClInclude Include="BLL\TotalGenerator.h" />
     <ClInclude Include="BLL\Worker.h" />
-    <ClInclude Include="DAL\AsyncLogger.h" />
     <ClInclude Include="DAL\ILogger.h" />
     <ClInclude Include="DAL\Logger.h" />
     <ClInclude Include="Dispatcher.h" />
     <ClInclude Include="Entities\Configuration.h" />
     <ClInclude Include="Entities\Game.h" />
-    <ClInclude Include="BLL\BasicSolver.h" />
-    <ClInclude Include="BLL\MWSolver.h" />
-    <ClInclude Include="BLL\SLSolver.h" />
+    <ClInclude Include="BLL\Simulator.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BLL\DLSolver.cpp" />
     <ClCompile Include="BLL\NotRigorousGenerator.cpp" />
     <ClCompile Include="BLL\ProbGenerator.cpp" />
     <ClCompile Include="BLL\RandomGenerator.cpp" />
     <ClCompile Include="Threading.cpp" />
     <ClCompile Include="BLL\TotalGenerator.cpp" />
     <ClCompile Include="BLL\Worker.cpp" />
-    <ClCompile Include="DAL\AsyncLogger.cpp" />
     <ClCompile Include="DAL\Logger.cpp" />
     <ClCompile Include="Dispatcher.cpp" />
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="BLL\BasicSolver.cpp" />
-    <ClCompile Include="BLL\MWSolver.cpp" />
-    <ClCompile Include="BLL\SLSolver.cpp" />
+    <ClCompile Include="BLL\Simulator.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

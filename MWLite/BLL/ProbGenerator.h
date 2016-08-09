@@ -9,7 +9,7 @@ public:
     ~ProbGenerator();
 
 protected:
-    void Fill(bool *data) override;
+    void Fill(BlockSet &data) override;
 
 private:
     double m_Prob;

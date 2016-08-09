@@ -19,5 +19,5 @@ protected:
 
     int m_Width, m_Height;
 
-    virtual void Fill(bool *data) = 0;
+    virtual void Fill(BlockSet &data) = 0;
 };

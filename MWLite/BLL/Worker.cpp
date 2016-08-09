@@ -1,12 +1,9 @@
 #include "Worker.h"
-#include <memory>
 #include "IGenerator.h"
 #include "TotalGenerator.h"
 #include "ProbGenerator.h"
 #include "NotRigorousGenerator.h"
-#include "MWSolver.h"
-#include "SLSolver.h"
-#include "DLSolver.h"
+#include "Simulator.h"
 #include "../Threading.h"
 
 Worker::Worker() : m_EventSave(nullptr), m_EventFinish(nullptr), m_SaveInterval(1), m_NotSaved(0), m_Resume(0), m_State(WorkerState::Idle), m_Cancel(false) , m_Tick(nullptr), m_Thread(&Worker::WorkerThreadEntry, this) {}
@@ -122,13 +119,13 @@ void Worker::ProcessAll()
 
     Game game(0, 0);
 
-    std::unique_ptr<MWSolver> slv(nullptr);
+    std::unique_ptr<Simulator> slv(nullptr);
     auto newSolver = [&]()
         {
             if (m_Config.DisableDual)
-                slv = std::make_unique<SLSolver>(game);
+                ; // TODO: slv = std::make_unique<SLSolver>(game);
             else
-                slv = std::make_unique<DLSolver>(game);
+                ; // TODO: slv = std::make_unique<DLSolver>(game);
         };
 
     while (m_Resume > 0)

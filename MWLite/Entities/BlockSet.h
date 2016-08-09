@@ -1,30 +1,12 @@
 #pragma once
 #include "../stdafx.h"
+#include "SparseSet.h"
+#include "DenseSet.h"
 
 #define USE_DENSE_SET
 
 #ifdef USE_DENSE_SET
-#include "BlockSet_Dense.h"
+typedef DenseSet<Block> BlockSet;
 #else
-#include "BlockSet_Sparse.h"
+typedef SparseSet<Block> BlockSet;
 #endif
-
-template <typename T>
-Set<T> &operator+(Set<T> lhs, const Set<T> &rhs)
-{
-    return lhs += rhs;
-}
-
-template <typename T>
-Set<T> &operator-(Set<T> lhs, const Set<T> &rhs)
-{
-    return lhs -= rhs;
-}
-
-template <typename T>
-Set<T> &operator*(Set<T> lhs, const Set<T> &rhs)
-{
-    return lhs *= rhs;
-}
-
-typedef Set<Block> BlockSet;

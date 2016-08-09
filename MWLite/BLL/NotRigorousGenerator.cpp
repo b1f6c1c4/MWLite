@@ -11,6 +11,6 @@ void NotRigorousGenerator::GenerateGame(Game &game)
 
 void NotRigorousGenerator::AdjustGame(Game &game, int initial)
 {
-    while (game.IsMine[initial])
+    while (game.AllMines[initial])
         m_Base->GenerateGame(game);
 }

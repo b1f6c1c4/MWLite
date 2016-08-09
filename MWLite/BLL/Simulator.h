@@ -1,23 +1,19 @@
 #pragma once
 #include "../stdafx.h"
 #include "../Entities/Game.h"
-#include <vector>
 #include <random>
 #include <functional>
 
-typedef int Block;
-typedef std::vector<Block> BlockSet;
-
-class MWSolver
+class Simulator
 {
 public:
-    explicit MWSolver(const Game &game);
-    virtual ~MWSolver();
+    explicit Simulator(const Game &game);
+    virtual ~Simulator();
 
-    MWSolver(const MWSolver &other) = delete;
-    MWSolver(MWSolver &&other) = delete;
-    MWSolver &operator=(const MWSolver &other) = delete;
-    MWSolver &operator=(MWSolver &&other) = delete;
+    Simulator(const Simulator &other) = delete;
+    Simulator(Simulator &&other) = delete;
+    Simulator &operator=(const Simulator &other) = delete;
+    Simulator &operator=(Simulator &&other) = delete;
 
     int Solve(const bool *cancelToken, std::function<void(int)> adjuster);
 

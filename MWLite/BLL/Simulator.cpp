@@ -1,6 +1,6 @@
-#include "MWSolver.h"
+#include "Simulator.h"
 
-MWSolver::MWSolver(const Game &game) : m_Game(game) , m_ToOpen(game.Width * game.Height), m_WrongGuesses(0)
+Simulator::Simulator(const Game &game) : m_Game(game) , m_ToOpen(game.Width * game.Height), m_WrongGuesses(0), m_Random_Temp(game.AllMines.FullSize())
 {
     m_IsOpen.resize(game.Width * game.Height, false);
 
@@ -13,13 +13,13 @@ MWSolver::MWSolver(const Game &game) : m_Game(game) , m_ToOpen(game.Width * game
     }
 
     for (auto i = 0; i < game.Width * game.Height; i++)
-        if (game.IsMine[i])
+        if (game.AllMines[i])
             m_ToOpen--;
 }
 
-MWSolver::~MWSolver() { }
+Simulator::~Simulator() { }
 
-int MWSolver::Solve(const bool *cancelToken, std::function<void(int)> generator)
+int Simulator::Solve(const bool *cancelToken, std::function<void(int)> generator)
 {
     auto flag = true;
     while (m_ToOpen > 0)
@@ -40,7 +40,7 @@ int MWSolver::Solve(const bool *cancelToken, std::function<void(int)> generator)
                 m_ToOpen -= m_Game.TotalMines;
             else
                 for (auto i = 0; i < m_Game.Width * m_Game.Height; i++)
-                    if (m_Game.IsMine[i])
+                    if (m_Game.AllMines[i])
                         m_ToOpen--;
 
             flag = false;
@@ -50,30 +50,29 @@ int MWSolver::Solve(const bool *cancelToken, std::function<void(int)> generator)
     return m_WrongGuesses;
 }
 
-bool MWSolver::IsOpen(int id) const
+bool Simulator::IsOpen(int id) const
 {
     return m_IsOpen[id];
 }
 
-int MWSolver::GetIndex(int x, int y) const
+int Simulator::GetIndex(int x, int y) const
 {
     return x * m_Game.Height + y;
 }
 
-int MWSolver::GetX(int id) const
+int Simulator::GetX(int id) const
 {
     return id / m_Game.Height;
 }
 
-int MWSolver::GetY(int id) const
+int Simulator::GetY(int id) const
 {
     return id % m_Game.Height;
 }
 
-BlockSet MWSolver::GetBlockR(int id) const
+BlockSet Simulator::GetBlockR(int id) const
 {
-    BlockSet blkR;
-    blkR.reserve(8);
+    BlockSet blkR(m_Game.AllMines.FullSize());
     auto i = GetX(id);
     auto j = GetY(id);
     for (auto di = -1; di <= 1; ++di)
@@ -81,18 +80,18 @@ BlockSet MWSolver::GetBlockR(int id) const
             for (auto dj = -1; dj <= 1; ++dj)
                 if (j + dj >= 0 && j + dj < m_Game.Height)
                     if (di != 0 || dj != 0)
-                        blkR.push_back(GetIndex(i + di, j + dj));
+                        blkR += GetIndex(i + di, j + dj);
     return blkR;
 }
 
-void MWSolver::OpenBlock(int id)
+void Simulator::OpenBlock(int id)
 {
     if (m_IsOpen[id])
         return;
 
     m_IsOpen[id] = true;
 
-    if (m_Game.IsMine[id])
+    if (m_Game.AllMines[id])
     {
         m_WrongGuesses++;
         AddRestrain(id, true);
@@ -105,7 +104,7 @@ void MWSolver::OpenBlock(int id)
 
     auto degree = 0;
     for (auto blk : surr)
-        if (m_Game.IsMine[blk])
+        if (m_Game.AllMines[blk])
             degree++;
 
     if (degree == 0)
@@ -118,16 +117,15 @@ void MWSolver::OpenBlock(int id)
     m_ToOpen--;
 }
 
-int MWSolver::RandomNonTrivial()
+int Simulator::RandomNonTrivial()
 {
-    m_Random_Temp.clear();
-    m_Random_Temp.reserve(m_Game.Width * m_Game.Height);
+    m_Random_Temp.Clear();
 
     for (auto blk = 0; blk < m_Game.Width * m_Game.Height; blk++)
         if (!m_IsOpen[blk] && !BlockIsMine(blk))
-            m_Random_Temp.push_back(blk);
+            m_Random_Temp += blk;
 
-    std::uniform_int_distribution<> dist(0, static_cast<int>(m_Random_Temp.size()) - 1);
+    std::uniform_int_distribution<> dist(0, static_cast<int>(m_Random_Temp.Count()) - 1);
 
     return m_Random_Temp[dist(m_Random)];
 }

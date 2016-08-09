@@ -13,17 +13,10 @@ void RandomGenerator::GenerateGame(Game &game)
     {
         game.Width = m_Width;
         game.Height = m_Height;
-        if (game.IsMine != nullptr)
-        {
-            delete[] game.IsMine;
-            game.IsMine = nullptr;
-        }
+        game.AllMines = BlockSet(game.Width * game.Height);
     }
 
-    if (game.IsMine == nullptr)
-        game.IsMine = new bool[game.Width * game.Height];
-
-    Fill(game.IsMine);
+    Fill(game.AllMines);
 }
 
 void RandomGenerator::AdjustGame(Game &, int) { }

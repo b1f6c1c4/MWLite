@@ -16,6 +16,8 @@
 #define ASSERT(val)
 #endif
 
+#include "../../CppUtil/CppUtil/CopyMove.hpp"
+
 #include <vector>
 #include <memory>
 

@@ -39,9 +39,6 @@
     <ClInclude Include="BLL\Worker.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="DAL\AsyncLogger.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="DAL\ILogger.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -54,22 +51,25 @@
     <ClInclude Include="Entities\Game.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="BLL\BasicSolver.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="BLL\MWSolver.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="BLL\SLSolver.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="BLL\DLSolver.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Threading.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="BLL\NotRigorousGenerator.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BLL\ISolver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BLL\Simulator.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\BlockSet.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\DenseSet.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\SparseSet.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -92,28 +92,16 @@
     <ClCompile Include="BLL\Worker.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="DAL\AsyncLogger.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="DAL\Logger.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="BLL\BasicSolver.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="BLL\MWSolver.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="BLL\SLSolver.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="BLL\DLSolver.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Threading.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="BLL\NotRigorousGenerator.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BLL\Simulator.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
