@@ -59,7 +59,7 @@ SparseSet<T>::SparseSet(const DenseSet<T> &other)
 template <typename T>
 bool SparseSet<T>::operator[](T id) const
 {
-    auto lb = std::lower_bound(m_SparseSet.begin, m_SparseSet.end(), id);
+    auto lb = std::lower_bound(m_SparseSet.begin(), m_SparseSet.end(), id);
     if (lb == m_SparseSet.end())
         return false;
     return *lb == id;
@@ -86,7 +86,7 @@ void SparseSet<T>::Clear()
 template <typename T>
 SparseSet<T> &SparseSet<T>::operator+=(T id)
 {
-    auto lb = std::lower_bound(m_SparseSet.begin, m_SparseSet.end(), id);
+    auto lb = std::lower_bound(m_SparseSet.begin(), m_SparseSet.end(), id);
     if (lb != m_SparseSet.end() && *lb == id)
         return *this;
     m_SparseSet.insert(lb, id);
@@ -96,7 +96,7 @@ SparseSet<T> &SparseSet<T>::operator+=(T id)
 template <typename T>
 SparseSet<T> &SparseSet<T>::operator-=(T id)
 {
-    auto lb = std::lower_bound(m_SparseSet.begin, m_SparseSet.end(), id);
+    auto lb = std::lower_bound(m_SparseSet.begin(), m_SparseSet.end(), id);
     if (lb == m_SparseSet.end() || *lb != id)
         return *this;
     m_SparseSet.erase(lb);

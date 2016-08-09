@@ -63,17 +63,17 @@ public:
     }
 };
 
-Interval &operator+(Interval lhs, const Interval &rhs)
+Interval operator+(Interval lhs, const Interval &rhs)
 {
     return lhs += rhs;
 }
 
-Interval &operator-(Interval lhs, const Interval &rhs)
+Interval operator-(Interval lhs, const Interval &rhs)
 {
     return lhs -= rhs;
 }
 
-Interval &operator*(Interval lhs, const Interval &rhs)
+Interval operator*(Interval lhs, const Interval &rhs)
 {
     return lhs *= rhs;
 }
@@ -98,9 +98,13 @@ void Strategies::Double::Update(const State &state, BlockSet &Mt, BlockSet &Bt)
             auto fAB = f(b1);
             auto fBC = f(b2);
 
-            Interval rA(0, sA.Count());
-            Interval rB(0, sB.Count());
-            Interval rC(0, sC.Count());
+            auto cA = sA.Count();
+            auto cB = sB.Count();
+            auto cC = sC.Count();
+
+            Interval rA(0, cA);
+            Interval rB(0, cB);
+            Interval rC(0, cC);
 
             REPEAT
                   {
@@ -116,17 +120,17 @@ void Strategies::Double::Update(const State &state, BlockSet &Mt, BlockSet &Bt)
 
             if (rA.Ub == 0)
                 Bt += sA;
-            else if (rA.Lb == sA.Count())
+            else if (rA.Lb == cA)
                 Mt += sA;
 
             if (rB.Ub == 0)
                 Bt += sB;
-            else if (rB.Lb == sB.Count())
+            else if (rB.Lb == cB)
                 Mt += sB;
 
             if (rC.Ub == 0)
                 Bt += sC;
-            else if (rC.Lb == sC.Count())
+            else if (rC.Lb == cC)
                 Mt += sC;
         }
 }
