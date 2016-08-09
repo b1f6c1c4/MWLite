@@ -15,3 +15,8 @@
 #else
 #define ASSERT(val)
 #endif
+
+#include <vector>
+#include <memory>
+
+typedef int_fast32_t Block;
