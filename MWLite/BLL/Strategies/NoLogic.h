@@ -15,16 +15,4 @@ namespace Strategies
     public:
         void Decide(const State &state, BlockSet &target, const CancellationToken &cancel) override;
     };
-
-    class SingleLogic : public IDetSolver
-    {
-    public:
-        void Decide(const State &state, BlockSet &target, const CancellationToken &cancel) override;
-    };
-
-    class SingleLogicExtended : public IDetSolver
-    {
-    public:
-        void Decide(const State &state, BlockSet &target, const CancellationToken &cancel) override;
-    };
 }

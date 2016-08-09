@@ -1,11 +1,12 @@
 #include "SolverBuilder.h"
 #include "../../stdafx.h"
-#include "BasicLogics.h"
+#include "NoLogic.h"
+#include "SingleLogic.h"
 
 std::mutex SolverBuilder::TheMtx;
 std::unique_ptr<SolverBuilder> SolverBuilder::TheInstance;
 
-SolverBuilder& SolverBuilder::Instance()
+SolverBuilder &SolverBuilder::Instance()
 {
     if (TheInstance == nullptr)
     {
@@ -18,7 +19,7 @@ SolverBuilder& SolverBuilder::Instance()
     return *TheInstance;
 }
 
-std::shared_ptr<ISolver> SolverBuilder::Build(const std::string& str) const
+std::shared_ptr<ISolver> SolverBuilder::Build(const std::string &str) const
 {
     std::shared_ptr<IDetSolver> tmp;
     if (str == "zl")

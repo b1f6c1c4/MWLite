@@ -150,8 +150,11 @@
   <ItemGroup>
     <ClInclude Include="BLL\DetSolver.h" />
     <ClInclude Include="BLL\RandomChooser.h" />
-    <ClInclude Include="BLL\Strategies\BasicLogics.h" />
+    <ClInclude Include="BLL\Strategies\NoLogic.h" />
+    <ClInclude Include="BLL\Strategies\Logic.h" />
+    <ClInclude Include="BLL\Strategies\SingleLogic.h" />
     <ClInclude Include="BLL\Strategies\SolverBuilder.h" />
+    <ClInclude Include="BLL\Strategies\StrategyMacros.h" />
     <ClInclude Include="Entities\BlockSet.h" />
     <ClInclude Include="BLL\IGenerator.h" />
     <ClInclude Include="BLL\ISolver.h" />
@@ -177,8 +180,10 @@
     <ClCompile Include="BLL\NotRigorousGenerator.cpp" />
     <ClCompile Include="BLL\ProbGenerator.cpp" />
     <ClCompile Include="BLL\RandomGenerator.cpp" />
+    <ClCompile Include="BLL\Strategies\Logic.cpp" />
+    <ClCompile Include="BLL\Strategies\SingleLogic.cpp" />
     <ClCompile Include="BLL\Strategies\SolverBuilder.cpp" />
-    <ClCompile Include="BLL\Strategies\BasicLogics.cpp" />
+    <ClCompile Include="BLL\Strategies\NoLogic.cpp" />
     <ClCompile Include="Threading.cpp" />
     <ClCompile Include="BLL\TotalGenerator.cpp" />
     <ClCompile Include="BLL\Worker.cpp" />

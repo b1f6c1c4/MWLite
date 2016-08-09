@@ -78,10 +78,19 @@
     <ClInclude Include="BLL\DetSolver.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="BLL\Strategies\BasicLogics.h">
+    <ClInclude Include="BLL\Strategies\SolverBuilder.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="BLL\Strategies\SolverBuilder.h">
+    <ClInclude Include="BLL\Strategies\NoLogic.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BLL\Strategies\StrategyMacros.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BLL\Strategies\SingleLogic.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BLL\Strategies\Logic.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -122,7 +131,13 @@
     <ClCompile Include="BLL\Strategies\SolverBuilder.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="BLL\Strategies\BasicLogics.cpp">
+    <ClCompile Include="BLL\Strategies\NoLogic.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BLL\Strategies\SingleLogic.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BLL\Strategies\Logic.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
