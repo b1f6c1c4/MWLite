@@ -28,16 +28,16 @@ void Strategies::LogicStrategy::Make(const State &state)
 
 void Strategies::LogicStrategy::Updates(const State &state, const CancellationToken &cancel)
 {
-    auto oldMt = Mt.Count() + 1, oldBt = Bt.Count() + 1;
-    while (oldMt != Mt.Count() || oldBt != Bt.Count())
-    {
-        oldMt = Mt.Count() , oldBt = Bt.Count();
+    REPEAT
+          {
+              if (cancel.IsCancelled())
+                  return;
 
-        if (cancel.IsCancelled())
-            return;
-
-        Update(state);
-    }
+              Update(state);
+          }
+          UNTIL(Mt.Count())
+          UNTIL(Bt.Count())
+          END_REPEAT
 }
 
 void Strategies::LogicStrategy::Collect(const State &state, BlockSet &target)

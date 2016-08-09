@@ -93,6 +93,9 @@
     <ClInclude Include="BLL\Strategies\Logic.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="BLL\Strategies\DoubleLogic.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -138,6 +141,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="BLL\Strategies\Logic.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BLL\Strategies\DoubleLogic.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
