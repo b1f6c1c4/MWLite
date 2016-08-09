@@ -12,6 +12,8 @@ struct Configuration
     int TotalMines;
     double Probability;
 
+    bool NotRigorous;
+
     // solver settings
     bool DisableDual;
 };

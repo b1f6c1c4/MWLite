@@ -9,6 +9,9 @@ public:
     ~RandomGenerator();
 
     void GenerateGame(Game &game) override;
+
+    virtual void AdjustGame(Game &game, int initial) override;
+
 protected:
     RandomGenerator(int width, int height);
 

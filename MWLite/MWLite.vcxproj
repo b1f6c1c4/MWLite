@@ -151,6 +151,7 @@
     <ClInclude Include="BLL\DLSolver.h" />
     <ClInclude Include="BLL\IGenerator.h" />
     <ClInclude Include="BLL\IWorker.h" />
+    <ClInclude Include="BLL\NotRigorousGenerator.h" />
     <ClInclude Include="BLL\ProbGenerator.h" />
     <ClInclude Include="BLL\RandomGenerator.h" />
     <ClInclude Include="Threading.h" />
@@ -169,6 +170,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BLL\DLSolver.cpp" />
+    <ClCompile Include="BLL\NotRigorousGenerator.cpp" />
     <ClCompile Include="BLL\ProbGenerator.cpp" />
     <ClCompile Include="BLL\RandomGenerator.cpp" />
     <ClCompile Include="Threading.cpp" />

@@ -25,3 +25,5 @@ void RandomGenerator::GenerateGame(Game &game)
 
     Fill(game.IsMine);
 }
+
+void RandomGenerator::AdjustGame(Game &, int) { }

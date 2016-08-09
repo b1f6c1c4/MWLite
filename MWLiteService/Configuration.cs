@@ -15,6 +15,8 @@ namespace MWLiteService
         public int TotalMines;
         public double Probability;
 
+        public bool NotRigorous;
+
         // solver settings
         public bool DisableDual;
     }

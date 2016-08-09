@@ -1,7 +1,9 @@
 #include "Worker.h"
+#include <memory>
 #include "IGenerator.h"
 #include "TotalGenerator.h"
 #include "ProbGenerator.h"
+#include "NotRigorousGenerator.h"
 #include "MWSolver.h"
 #include "SLSolver.h"
 #include "DLSolver.h"
@@ -110,11 +112,13 @@ void Worker::ProcessAll()
     auto result = new size_t[length];
     memset(result, 0, sizeof(size_t) * length);
 
-    std::unique_ptr<IGenerator> gen;
+    std::shared_ptr<IGenerator> gen;
     if (m_Config.UseTotalMines)
-        gen = std::make_unique<TotalGenerator>(m_Config.Width, m_Config.Height, m_Config.TotalMines);
+        gen = std::make_shared<TotalGenerator>(m_Config.Width, m_Config.Height, m_Config.TotalMines);
     else
-        gen = std::make_unique<ProbGenerator>(m_Config.Width, m_Config.Height, m_Config.Probability);
+        gen = std::make_shared<ProbGenerator>(m_Config.Width, m_Config.Height, m_Config.Probability);
+    if (m_Config.NotRigorous)
+        gen = std::make_shared<NotRigorousGenerator>(gen);
 
     Game game(0, 0);
 
@@ -136,7 +140,7 @@ void Worker::ProcessAll()
 
         newSolver();
 
-        auto res = slv->Solve(&m_Cancel);
+        auto res = slv->Solve(&m_Cancel, std::bind(&IGenerator::AdjustGame, &*gen, game, std::placeholders::_1));
         if (m_Cancel)
             break;
 

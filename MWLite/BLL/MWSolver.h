@@ -3,6 +3,7 @@
 #include "../Entities/Game.h"
 #include <vector>
 #include <random>
+#include <functional>
 
 typedef int Block;
 typedef std::vector<Block> BlockSet;
@@ -18,7 +19,7 @@ public:
     MWSolver &operator=(const MWSolver &other) = delete;
     MWSolver &operator=(MWSolver &&other) = delete;
 
-    int Solve(const bool *cancelToken);
+    int Solve(const bool *cancelToken, std::function<void(int)> adjuster);
 
 protected:
     bool IsOpen(int id) const;

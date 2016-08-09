@@ -9,6 +9,8 @@ public:
 
     virtual void GenerateGame(Game &game) = 0;
 
+    virtual void AdjustGame(Game &game, int initial) = 0;
+
 protected:
     IGenerator() { }
 };

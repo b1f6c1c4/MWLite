@@ -19,8 +19,9 @@ MWSolver::MWSolver(const Game &game) : m_Game(game) , m_ToOpen(game.Width * game
 
 MWSolver::~MWSolver() { }
 
-int MWSolver::Solve(const bool *cancelToken)
+int MWSolver::Solve(const bool *cancelToken, std::function<void(int)> generator)
 {
+    auto flag = true;
     while (m_ToOpen > 0)
     {
         if (*cancelToken)
@@ -30,6 +31,11 @@ int MWSolver::Solve(const bool *cancelToken)
         if (blk < 0)
             blk = RandomNonTrivial();
 
+        if (flag)
+        {
+            generator(blk);
+            flag = false;
+        }
         OpenBlock(blk);
     }
     return m_WrongGuesses;
