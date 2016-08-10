@@ -11,6 +11,9 @@ Block DetSolverManager::Decide(const State &state, const CancellationToken &canc
 {
     BlockSet target(state.ClosedBlocks->FullSize());
     m_Solver->Decide(state, target, cancel);
+
+    ASSERT((target - *state.ClosedBlocks).Count() == 0);
+
     if (target.Count() == 0)
         return m_Chooser.Choose(*state.ClosedBlocks);
     return m_Chooser.Choose(target);

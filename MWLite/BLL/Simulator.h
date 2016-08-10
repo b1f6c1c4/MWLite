@@ -18,7 +18,7 @@ public:
 
 private:
     const Game &m_Game;
-    std::vector<BlockSet> m_DeletedNeighorhood;
+    std::vector<SparseBlockSet> m_DeletedNeighorhood;
 
     std::shared_ptr<ISolver> m_Solver;
 

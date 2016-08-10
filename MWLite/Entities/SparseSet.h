@@ -11,8 +11,8 @@ class SparseSet sealed
 {
 public:
     explicit SparseSet(size_t full);
-    // ReSharper disable once CppNonExplicitConvertingConstructor
-    SparseSet(const DenseSet<T> &other);
+    template <template <typename T> typename Set>
+    explicit SparseSet(const Set<T> &other);
 
     DEFAULT_COPY(SparseSet<T>);
     DEFAULT_MOVE(SparseSet<T>);
@@ -50,7 +50,8 @@ template <typename T>
 SparseSet<T>::SparseSet(size_t full) : m_FullSize(full) { }
 
 template <typename T>
-SparseSet<T>::SparseSet(const DenseSet<T> &other)
+template <template <typename T> class Set>
+SparseSet<T>::SparseSet(const Set<T> &other)
 {
     for (auto &id : other)
         (*this) += id;

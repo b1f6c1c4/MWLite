@@ -96,6 +96,9 @@
     <ClInclude Include="BLL\Strategies\DoubleLogic.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Entities\DenseBitSet.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">

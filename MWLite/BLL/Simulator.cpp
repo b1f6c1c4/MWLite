@@ -6,7 +6,7 @@ Simulator::Simulator(const Game &game, std::shared_ptr<ISolver> slv) : m_Game(ga
     *ClosedBlocks = !*ClosedBlocks;
 
     // make deleted neighborhoods
-    BlockSet blkR(m_Game.AllMines.FullSize());
+    SparseBlockSet blkR(m_Game.AllMines.FullSize());
     for (Block id = 0; id < m_Game.AllMines.FullSize(); id++)
     {
         blkR.Clear();
@@ -18,7 +18,7 @@ Simulator::Simulator(const Game &game, std::shared_ptr<ISolver> slv) : m_Game(ga
                     if (j + dj >= 0 && j + dj < m_Game.Config->Height)
                         if (di != 0 || dj != 0)
                             blkR += GetIndex(i + di, j + dj);
-        m_DeletedNeighorhood.emplace_back(blkR);
+        m_DeletedNeighorhood.push_back(blkR);
     }
 
     // count ToOpen
@@ -62,7 +62,10 @@ int Simulator::Solve(const CancellationToken &cancel, std::function<void(int)> a
         ASSERT((*ClosedBlocks)[blk]);
         *ClosedBlocks -= blk;
         if (m_Game.AllMines[blk])
+        {
             *OpenMines += blk;
+            break;
+        }
         else
         {
             *OpenNoMines += blk;

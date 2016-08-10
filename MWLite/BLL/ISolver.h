@@ -14,7 +14,7 @@ struct State sealed
 
     std::shared_ptr<BlockSet> OpenNoMines;
 
-    std::function<const BlockSet *(Block)> Neighborhood;
+    std::function<const SparseBlockSet *(Block)> Neighborhood;
 
     std::function<size_t(Block)> NeighborCount;
 };

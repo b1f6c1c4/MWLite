@@ -10,8 +10,8 @@ class DenseSet sealed
 {
 public:
     explicit DenseSet(size_t full);
-    // ReSharper disable once CppNonExplicitConvertingConstructor
-    DenseSet(const SparseSet<T> &other);
+    template <template <typename T> typename Set>
+    explicit DenseSet(const Set<T> &other);
 
     DEFAULT_COPY(DenseSet<T>);
     DEFAULT_MOVE(DenseSet<T>);
@@ -70,7 +70,8 @@ template <typename T>
 DenseSet<T>::DenseSet(size_t full) : m_DenseSet(full, false) { }
 
 template <typename T>
-DenseSet<T>::DenseSet(const SparseSet<T> &other)
+template <template <typename T> class Set>
+DenseSet<T>::DenseSet(const Set<T> &other)
 {
     for (auto &id : other)
         (*this) += id;

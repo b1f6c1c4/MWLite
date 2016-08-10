@@ -163,6 +163,7 @@
     <ClInclude Include="BLL\NotRigorousGenerator.h" />
     <ClInclude Include="BLL\ProbGenerator.h" />
     <ClInclude Include="BLL\RandomGenerator.h" />
+    <ClInclude Include="Entities\DenseBitSet.h" />
     <ClInclude Include="Entities\DenseSet.h" />
     <ClInclude Include="Entities\SparseSet.h" />
     <ClInclude Include="Threading.h" />
