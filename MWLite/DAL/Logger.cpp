@@ -27,7 +27,7 @@ void Logger::Process(const Logging &log, const ICancellationToken &cancel)
     ss << WorkingDirectory << L"db";
     TouchDirectory(ss.str());
 
-    ss << L"/" << Hash(log.Config, log.Logic);
+    ss << L"/" << Hash(*log.Config, log.Logic);
     TouchDirectory(ss.str());
 
     ss << L"/";

@@ -91,20 +91,14 @@ void Strategies::Double::Update(const State &state, BlockSet &Mt, BlockSet &Bt)
             if (b1 == b2)
                 continue;
 
-            auto sA = U(b1) - U(b2);
-            auto sB = U(b2) - U(b1);
-            auto sC = U(b1) * U(b2);
+            auto sA = U(b1) - U(b2), sB = U(b2) - U(b1), sC = U(b1) * U(b2);
 
-            auto fAB = f(b1);
-            auto fBC = f(b2);
+            auto fAB = f(b1), fBC = f(b2);
 
-            auto cA = sA.Count();
-            auto cB = sB.Count();
-            auto cC = sC.Count();
+            auto lA = (sA * Mt).Count(), lB = (sB * Mt).Count(), lC = (sC * Mt).Count();
+            auto uA = (sA - Bt).Count(), uB = (sB - Bt).Count(), uC = (sC - Bt).Count();
 
-            Interval rA(0, cA);
-            Interval rB(0, cB);
-            Interval rC(0, cC);
+            Interval rA(lA, uA), rB(lB, uB), rC(lC, uC);
 
             REPEAT
                   {
@@ -118,20 +112,20 @@ void Strategies::Double::Update(const State &state, BlockSet &Mt, BlockSet &Bt)
                   UNTIL(rC)
                   END_REPEAT
 
-            if (rA.Ub == 0)
-                Bt += sA;
-            else if (rA.Lb == cA)
-                Mt += sA;
+            if (rA.Ub == lA)
+                Bt += sA - Mt;
+            else if (rA.Lb == uA)
+                Mt += sA - Bt;
 
-            if (rB.Ub == 0)
-                Bt += sB;
-            else if (rB.Lb == cB)
-                Mt += sB;
+            if (rB.Ub == lB)
+                Bt += sB - Mt;
+            else if (rB.Lb == uB)
+                Mt += sB - Bt;
 
-            if (rC.Ub == 0)
-                Bt += sC;
-            else if (rC.Lb == cC)
-                Mt += sC;
+            if (rC.Ub == lC)
+                Bt += sC - Mt;
+            else if (rC.Lb == uC)
+                Mt += sC - Bt;
         }
 }
 

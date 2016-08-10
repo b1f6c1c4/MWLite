@@ -5,18 +5,18 @@
 
 struct Logging
 {
-    Configuration Config;
+    std::shared_ptr<Configuration> Config;
     LogicLevel Logic;
     std::shared_ptr<std::vector<size_t>> Result;
 
-    Logging(const Configuration &config, LogicLevel level, std::shared_ptr<std::vector<size_t>> result);
+    Logging(std::shared_ptr<Configuration> config, LogicLevel level, std::shared_ptr<std::vector<size_t>> result);
     Logging(const Logging &other) = delete;
     Logging(Logging &&other) = default;
     Logging &operator=(const Logging &other) = delete;
     Logging &operator=(Logging &&other) = default;
 };
 
-inline Logging::Logging(const Configuration &config, LogicLevel level, std::shared_ptr<std::vector<size_t>> result) : Config(config), Logic(level), Result(result) { }
+inline Logging::Logging(std::shared_ptr<Configuration> config, LogicLevel level, std::shared_ptr<std::vector<size_t>> result) : Config(config), Logic(level), Result(result) { }
 
 class ILogger
 {

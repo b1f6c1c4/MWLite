@@ -33,7 +33,7 @@ private:
 
     std::vector<std::unique_ptr<IWorker>> m_Workers;
 
-    ILogger *m_Logger;
+    std::unique_ptr<ILogger> m_Logger;
 
     std::atomic<size_t> m_Counter;
 

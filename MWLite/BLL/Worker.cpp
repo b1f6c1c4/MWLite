@@ -142,7 +142,7 @@ void Worker::ProcessAll()
 
         if (m_NotSaved >= m_SaveInterval)
         {
-            m_EventSave(*m_Config, m_Logic, result);
+            m_EventSave(m_Config, m_Logic, result);
 
             m_NotSaved = 0;
             result = std::make_shared<std::vector<size_t>>();
@@ -150,5 +150,5 @@ void Worker::ProcessAll()
     }
 
     if (m_NotSaved > 0)
-        m_EventSave(*m_Config, m_Logic, result);
+        m_EventSave(m_Config, m_Logic, result);
 }

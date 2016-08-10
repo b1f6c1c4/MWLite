@@ -109,14 +109,10 @@ size_t DenseBitSet<T>::Count() const
 {
     size_t c = 0;
     for (size_t i = 0; i < m_DenseBitSet.size(); i++)
-        if (i == m_DenseBitSet.size() - 1)
+        if (i == FullSize() / BIN_SIZE)
             c += COUNT_ONE(m_DenseBitSet[i] & (BIN_T(1) << BIT_ID(FullSize())) - BIN_T(1));
         else
             c += COUNT_ONE(m_DenseBitSet[i]);
-
-    //    for (auto t = v; t != BIN_T(0); t >>= BIN_T(1))
-    //        if (t & BIN_T(1))
-    //            ++c;
 
     return c;
 }

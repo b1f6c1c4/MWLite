@@ -2,13 +2,13 @@
 #include "./BLL/Worker.h"
 #include "./DAL/Logger.h"
 
-Dispatcher::Dispatcher(int numWorkers) : m_Logger(new Logger()), m_Counter(0)
+Dispatcher::Dispatcher(int numWorkers) : m_Logger(std::make_unique<Logger>()), m_Counter(0)
 {
     for (auto i = 0; i < numWorkers; i++)
     {
         auto worker = new Worker();
 
-        worker->setSaveCallback([this](const Configuration &config, LogicLevel level, std::shared_ptr<std::vector<size_t>> result)
+        worker->setSaveCallback([this](std::shared_ptr<Configuration> config, LogicLevel level, std::shared_ptr<std::vector<size_t>> result)
                                 {
                                     m_Logger->Log(Logging(config, level, result));
                                 });
@@ -30,14 +30,7 @@ Dispatcher::Dispatcher(int numWorkers) : m_Logger(new Logger()), m_Counter(0)
     }
 }
 
-Dispatcher::~Dispatcher()
-{
-    if (m_Logger != nullptr)
-    {
-        delete m_Logger;
-        m_Logger = nullptr;
-    }
-}
+Dispatcher::~Dispatcher() { }
 
 size_t Dispatcher::GetNumWorkers() const
 {
