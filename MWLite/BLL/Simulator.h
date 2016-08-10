@@ -4,21 +4,29 @@
 #include "ISolver.h"
 #include "RandomChooser.h"
 #include <functional>
+#include "IGenerator.h"
+#include "Strategies/SolverBuilder.h"
 
 class Simulator
 {
 public:
-    explicit Simulator(const Game &game, std::shared_ptr<ISolver> slv);
+    Simulator(std::shared_ptr<Configuration> config, std::shared_ptr<IGenerator> gameGen, std::shared_ptr<SolverBuilder> solverGen, bool imme);
     virtual ~Simulator();
 
     NO_COPY(Simulator);
     NO_MOVE(Simulator);
 
-    int Solve(const CancellationToken &cancel, std::function<void(int)> adjuster);
+    int Simulate(const CancellationToken &cancel);
 
 private:
-    const Game &m_Game;
-    std::vector<SparseBlockSet> m_DeletedNeighorhood;
+    std::shared_ptr<Configuration> m_Config;
+    std::shared_ptr<IGenerator> m_GameGen;
+    std::shared_ptr<SolverBuilder> m_SolverGen;
+    bool m_Imme;
+
+    std::shared_ptr<Game> m_Game;
+    std::vector<SparseBlockSet> m_DeletedNeighborhood;
+    std::vector<size_t> m_NeighborCount;
 
     std::shared_ptr<ISolver> m_Solver;
 
@@ -35,4 +43,5 @@ private:
     int GetY(int id) const;
 
     void ResetToOpen();
+    void ResetNeighborCount();
 };

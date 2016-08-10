@@ -106,7 +106,7 @@ void Worker::WorkerThreadEntry()
 
 void Worker::ProcessAll()
 {
-    auto length = !m_Config->UseTotalMines ? m_Config->Width * m_Config->Height : m_Config->TotalMines + 1;
+    auto length = !m_Config->UseTotalMines ? m_Config->Mines() : m_Config->TotalMines + 1;
 
     auto result = new size_t[length];
     memset(result, 0, sizeof(size_t) * length);
@@ -119,26 +119,16 @@ void Worker::ProcessAll()
     if (m_Config->NotRigorous)
         gen = std::make_shared<NotRigorousGenerator>(gen);
 
-    Game game;
-    game.Config = m_Config;
+    auto slv = std::make_shared<SolverBuilder>(m_Logic);
 
-    std::shared_ptr<ISolver> slv(nullptr);
-    std::shared_ptr<Simulator> sim(nullptr);
+    auto sim = std::make_shared<Simulator>(m_Config, gen, slv, true);
 
     while (m_Resume > 0)
     {
         if (m_Cancel.IsCancelled())
             break;
 
-        gen->GenerateGame(game);
-
-        slv = SolverBuilder::Instance().Build(m_Logic);
-        sim = std::make_shared<Simulator>(game, slv);
-
-        auto res = sim->Solve(m_Cancel, [&](int initial)
-                              {
-                                  gen->AdjustGame(game, initial);
-                              });
+        auto res = sim->Simulate(m_Cancel);
 
         if (m_Cancel.IsCancelled())
             break;

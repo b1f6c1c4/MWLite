@@ -4,26 +4,10 @@
 #include "SingleLogic.h"
 #include "DoubleLogic.h"
 
-std::mutex SolverBuilder::TheMtx;
-std::unique_ptr<SolverBuilder> SolverBuilder::TheInstance;
-
-SolverBuilder &SolverBuilder::Instance()
-{
-    if (TheInstance == nullptr)
-    {
-        std::lock_guard<std::mutex> lock(TheMtx);
-
-        if (TheInstance == nullptr)
-            TheInstance = std::make_unique<SolverBuilder>();
-    }
-
-    return *TheInstance;
-}
-
-std::shared_ptr<ISolver> SolverBuilder::Build(LogicLevel level) const
+std::shared_ptr<ISolver> SolverBuilder::Build() const
 {
     std::shared_ptr<IDetSolver> tmp;
-    switch (level)
+    switch (m_Logic)
     {
     case LogicLevel::ZeroLogic:
         tmp = std::make_unique<Strategies::ZeroLogic>();
@@ -52,3 +36,5 @@ std::shared_ptr<ISolver> SolverBuilder::Build(LogicLevel level) const
 
     return std::make_shared<DetSolverManager>(tmp);
 }
+
+SolverBuilder::SolverBuilder(LogicLevel level) : m_Logic(level) { }

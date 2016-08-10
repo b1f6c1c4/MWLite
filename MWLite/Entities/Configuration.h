@@ -12,6 +12,11 @@ struct Configuration
     double Probability;
 
     bool NotRigorous;
+
+    size_t Mines() const
+    {
+        return Width * Height;
+    }
 };
 #pragma pack(pop)
 

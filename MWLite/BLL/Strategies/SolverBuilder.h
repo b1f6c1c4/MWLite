@@ -1,16 +1,15 @@
 #pragma once
 #include "../../stdafx.h"
 #include "../DetSolver.h"
-#include <mutex>
 
 class SolverBuilder sealed
 {
 public:
-    static SolverBuilder &Instance();
+    // ReSharper disable once CppNonExplicitConvertingConstructor
+    SolverBuilder(LogicLevel level);
 
-    std::shared_ptr<ISolver> Build(LogicLevel level) const;
+    std::shared_ptr<ISolver> Build() const;
 
 private:
-    static std::mutex TheMtx;
-    static std::unique_ptr<SolverBuilder> TheInstance;
+    LogicLevel m_Logic;
 };
