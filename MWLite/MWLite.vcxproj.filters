@@ -18,13 +18,7 @@
     <ClInclude Include="stdafx.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Dispatcher.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="BLL\IGenerator.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="BLL\IWorker.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="BLL\ProbGenerator.h">
@@ -39,19 +33,7 @@
     <ClInclude Include="BLL\Worker.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="DAL\ILogger.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="DAL\Logger.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Entities\Configuration.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Entities\Game.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Threading.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="BLL\NotRigorousGenerator.h">
@@ -104,9 +86,6 @@
     <ClCompile Include="dllmain.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Dispatcher.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="BLL\ProbGenerator.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -117,12 +96,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="BLL\Worker.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="DAL\Logger.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Threading.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="BLL\NotRigorousGenerator.cpp">

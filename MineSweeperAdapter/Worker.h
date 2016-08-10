@@ -1,7 +1,7 @@
 #pragma once
-#include "../stdafx.h"
-#include "../../MWLiteFundamental/BLL/BaseWorker.h"
-#include "Simulator.h"
+#include "stdafx.h"
+#include "../MWLiteFundamental/BLL/BaseWorker.h"
+#include "../../MineSweeperProb/MineSweeperSolver/GameMgr.h"
 
 class Worker : public BaseWorker
 {
@@ -16,5 +16,5 @@ protected:
     size_t ProcessOne() override;
 
 private:
-    std::shared_ptr<Simulator> m_Simulator;
+    Strategy m_Strategy;
 };

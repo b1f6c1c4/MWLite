@@ -2,10 +2,10 @@
 #include <SDKDDKVer.h>
 #define WIN32_LEAN_AND_MEAN 
 
-#ifdef MWLITE_EXPORTS
-#define DLL_API __declspec(dllexport)
+#ifdef MINESWEEPERADAPTER_EXPORTS
+#define ADAPTER_DLL_API __declspec(dllexport)
 #else
-#define DLL_API __declspec(dllimport)
+#define ADAPTER_DLL_API __declspec(dllimport)
 #endif
 
 #ifdef _DEBUG
@@ -22,5 +22,3 @@
 
 #include <vector>
 #include <memory>
-
-typedef int_fast32_t Block;

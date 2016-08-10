@@ -11,20 +11,20 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{B442EA5A-B42A-4EA3-BCB4-6542B560805D}</ProjectGuid>
+    <ProjectGuid>{769B370D-7E6B-4E72-9FAD-49ADC12EE00B}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>MWLite</RootNamespace>
+    <RootNamespace>MWLiteFundamental</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -42,89 +42,52 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LinkIncremental>true</LinkIncremental>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LinkIncremental>false</LinkIncremental>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>MWLITE_EXPORTS;_DEBUG;_WINDOWS;_USRDLL;MWLITE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level4</WarningLevel>
+      <WarningLevel>Level3</WarningLevel>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>MWLITE_EXPORTS;NDEBUG;_WINDOWS;_USRDLL;MWLITE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="BLL\DetSolver.h" />
-    <ClInclude Include="BLL\RandomChooser.h" />
-    <ClInclude Include="BLL\Strategies\DoubleLogic.h" />
-    <ClInclude Include="BLL\Strategies\NoLogic.h" />
-    <ClInclude Include="BLL\Strategies\Logic.h" />
-    <ClInclude Include="BLL\Strategies\SingleLogic.h" />
-    <ClInclude Include="BLL\Strategies\SolverBuilder.h" />
-    <ClInclude Include="BLL\Strategies\StrategyMacros.h" />
-    <ClInclude Include="Entities\BlockSet.h" />
-    <ClInclude Include="BLL\IGenerator.h" />
-    <ClInclude Include="BLL\ISolver.h" />
-    <ClInclude Include="BLL\NotRigorousGenerator.h" />
-    <ClInclude Include="BLL\ProbGenerator.h" />
-    <ClInclude Include="BLL\RandomGenerator.h" />
-    <ClInclude Include="Entities\DenseBitSet.h" />
-    <ClInclude Include="Entities\DenseSet.h" />
-    <ClInclude Include="Entities\SparseSet.h" />
-    <ClInclude Include="BLL\TotalGenerator.h" />
-    <ClInclude Include="BLL\Worker.h" />
-    <ClInclude Include="Entities\Game.h" />
-    <ClInclude Include="BLL\Simulator.h" />
+    <ClInclude Include="BLL\IWorker.h" />
+    <ClInclude Include="BLL\BaseWorker.h" />
+    <ClInclude Include="DAL\ILogger.h" />
+    <ClInclude Include="DAL\Logger.h" />
+    <ClInclude Include="Dispatcher.h" />
+    <ClInclude Include="Entities\Configuration.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Threading.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BLL\DetSolver.cpp" />
-    <ClCompile Include="BLL\NotRigorousGenerator.cpp" />
-    <ClCompile Include="BLL\ProbGenerator.cpp" />
-    <ClCompile Include="BLL\RandomGenerator.cpp" />
-    <ClCompile Include="BLL\Strategies\DoubleLogic.cpp" />
-    <ClCompile Include="BLL\Strategies\Logic.cpp" />
-    <ClCompile Include="BLL\Strategies\SingleLogic.cpp" />
-    <ClCompile Include="BLL\Strategies\SolverBuilder.cpp" />
-    <ClCompile Include="BLL\Strategies\NoLogic.cpp" />
-    <ClCompile Include="BLL\TotalGenerator.cpp" />
-    <ClCompile Include="BLL\Worker.cpp" />
-    <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="BLL\Simulator.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MWLiteFundamental\MWLiteFundamental.vcxproj">
-      <Project>{769b370d-7e6b-4e72-9fad-49adc12ee00b}</Project>
-    </ProjectReference>
+    <ClCompile Include="BLL\BaseWorker.cpp" />
+    <ClCompile Include="DAL\Logger.cpp" />
+    <ClCompile Include="Dispatcher.cpp" />
+    <ClCompile Include="Threading.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

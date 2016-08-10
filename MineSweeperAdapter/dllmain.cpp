@@ -2,7 +2,7 @@
 #include <windows.h>
 
 #include "../MWLiteFundamental/Dispatcher.h"
-#include "BLL/Worker.h"
+#include "Worker.h"
 
 Dispatcher *TheDispatcher = nullptr;
 
@@ -10,12 +10,12 @@ std::wstring WorkingDirectory(L".");
 
 extern "C"
 {
-    DLL_API void SetWorkingDirectory(const wchar_t *path)
+    ADAPTER_DLL_API void SetWorkingDirectory(const wchar_t *path)
     {
         WorkingDirectory = std::wstring(path);
     }
 
-    DLL_API void CreateWorkers(int numWorkers)
+    ADAPTER_DLL_API void CreateWorkers(int numWorkers)
     {
         if (TheDispatcher != nullptr)
         {
@@ -29,37 +29,37 @@ extern "C"
                                        });
     }
 
-    DLL_API size_t GetNumWorkers()
+    ADAPTER_DLL_API size_t GetNumWorkers()
     {
         return TheDispatcher->GetNumWorkers();
     }
 
-    DLL_API void Schedule(Configuration config, LogicLevel level, size_t repetition, size_t saveInterval)
+    ADAPTER_DLL_API void Schedule(Configuration config, LogicLevel level, size_t repetition, size_t saveInterval)
     {
         TheDispatcher->Schedule(std::make_shared<Configuration>(config), level, repetition, saveInterval);
     }
 
-    DLL_API void CancelWorker(int id)
+    ADAPTER_DLL_API void CancelWorker(int id)
     {
         TheDispatcher->CancelWorker(id);
     }
 
-    DLL_API WorkerState GetWorkerState(int id)
+    ADAPTER_DLL_API WorkerState GetWorkerState(int id)
     {
         return TheDispatcher->GetWorkerState(id);
     }
 
-    DLL_API void EmptyQueue()
+    ADAPTER_DLL_API void EmptyQueue()
     {
         TheDispatcher->EmptyQueue();
     }
 
-    DLL_API size_t ResetCounter()
+    ADAPTER_DLL_API size_t ResetCounter()
     {
         return TheDispatcher->ResetCounter();
     }
 
-    DLL_API void RemoveWorkers()
+    ADAPTER_DLL_API void RemoveWorkers()
     {
         if (TheDispatcher != nullptr)
         {

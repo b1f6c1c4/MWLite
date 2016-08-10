@@ -1,19 +1,18 @@
 #include "Dispatcher.h"
-#include "./BLL/Worker.h"
 #include "./DAL/Logger.h"
 
-Dispatcher::Dispatcher(int numWorkers) : m_Logger(std::make_unique<Logger>()), m_Counter(0)
+Dispatcher::Dispatcher(int numWorkers, std::function<std::shared_ptr<IWorker>()> creator) : m_Logger(std::make_unique<Logger>()), m_Counter(0)
 {
     for (auto i = 0; i < numWorkers; i++)
     {
-        auto worker = new Worker();
+        auto worker = creator();
 
         worker->setSaveCallback([this](std::shared_ptr<Configuration> config, LogicLevel level, std::shared_ptr<std::vector<size_t>> result)
                                 {
                                     m_Logger->Log(Logging(config, level, result));
                                 });
 
-        worker->setFinishCallback([this, worker]()
+        worker->setFinishCallback([this, &worker]()
                                   {
                                       std::unique_lock<std::mutex> lock(m_MtxQueue);
 
@@ -24,9 +23,7 @@ Dispatcher::Dispatcher(int numWorkers) : m_Logger(std::make_unique<Logger>()), m
                                       m_Queue.pop();
                                   });
 
-        // DO NOT write emplace_back(worker) here
-        // because emplace_back may throw an exception
-        m_Workers.emplace_back(std::unique_ptr<IWorker>(worker));
+        m_Workers.push_back(worker);
     }
 }
 

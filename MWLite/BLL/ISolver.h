@@ -1,6 +1,5 @@
 #pragma once
 #include "../stdafx.h"
-#include "../Entities/Configuration.h"
 #include "../Entities/BlockSet.h"
 #include <functional>
 

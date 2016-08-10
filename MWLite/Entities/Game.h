@@ -1,7 +1,6 @@
 #pragma once
 #include "../stdafx.h"
 #include "BlockSet.h"
-#include "Configuration.h"
 
 struct Game
 {

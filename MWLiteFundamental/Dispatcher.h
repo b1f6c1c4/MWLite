@@ -9,7 +9,7 @@
 class Dispatcher
 {
 public:
-    explicit Dispatcher(int numWorkers);
+    Dispatcher(int numWorkers, std::function<std::shared_ptr<IWorker>()> creator);
     ~Dispatcher();
 
     Dispatcher(const Dispatcher &other) = delete;
@@ -31,7 +31,7 @@ private:
     std::mutex m_MtxQueue;
     std::queue<WorkingConfig> m_Queue;
 
-    std::vector<std::unique_ptr<IWorker>> m_Workers;
+    std::vector<std::shared_ptr<IWorker>> m_Workers;
 
     std::unique_ptr<ILogger> m_Logger;
 

@@ -10,10 +10,28 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MWLiteFundamental\MWLiteFundamental.vcxproj">
+      <Project>{769b370d-7e6b-4e72-9fad-49adc12ee00b}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MineSweeperProb\MineSweeperSolver\MineSweeperSolver.vcxproj">
+      <Project>{B0BB7DC3-F3CD-456A-AE21-2D32D7338B59}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Worker.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="Worker.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{B442EA5A-B42A-4EA3-BCB4-6542B560805D}</ProjectGuid>
+    <ProjectGuid>{0F82BD63-B9FD-42EE-933C-680FD90C6911}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>MWLite</RootNamespace>
+    <RootNamespace>MineSweeperAdapter</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -44,9 +62,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <LibraryPath>C:\Users\b1f6c1c4\Documents\GitHub\MineSweeperProb\$(Platform)\$(Configuration);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <LibraryPath>C:\Users\b1f6c1c4\Documents\GitHub\MineSweeperProb\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -54,78 +74,34 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>MWLITE_EXPORTS;_DEBUG;_WINDOWS;_USRDLL;MWLITE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>MINESWEEPERADAPTER_EXPORTS;_DEBUG;_WINDOWS;_USRDLL;MINESWEEPERADAPTER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>MineSweeperSolver.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level4</WarningLevel>
+      <WarningLevel>Level3</WarningLevel>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>MWLITE_EXPORTS;NDEBUG;_WINDOWS;_USRDLL;MWLITE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>MINESWEEPERADAPTER_EXPORTS;NDEBUG;_WINDOWS;_USRDLL;MINESWEEPERADAPTER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>MineSweeperSolver.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="BLL\DetSolver.h" />
-    <ClInclude Include="BLL\RandomChooser.h" />
-    <ClInclude Include="BLL\Strategies\DoubleLogic.h" />
-    <ClInclude Include="BLL\Strategies\NoLogic.h" />
-    <ClInclude Include="BLL\Strategies\Logic.h" />
-    <ClInclude Include="BLL\Strategies\SingleLogic.h" />
-    <ClInclude Include="BLL\Strategies\SolverBuilder.h" />
-    <ClInclude Include="BLL\Strategies\StrategyMacros.h" />
-    <ClInclude Include="Entities\BlockSet.h" />
-    <ClInclude Include="BLL\IGenerator.h" />
-    <ClInclude Include="BLL\ISolver.h" />
-    <ClInclude Include="BLL\NotRigorousGenerator.h" />
-    <ClInclude Include="BLL\ProbGenerator.h" />
-    <ClInclude Include="BLL\RandomGenerator.h" />
-    <ClInclude Include="Entities\DenseBitSet.h" />
-    <ClInclude Include="Entities\DenseSet.h" />
-    <ClInclude Include="Entities\SparseSet.h" />
-    <ClInclude Include="BLL\TotalGenerator.h" />
-    <ClInclude Include="BLL\Worker.h" />
-    <ClInclude Include="Entities\Game.h" />
-    <ClInclude Include="BLL\Simulator.h" />
-    <ClInclude Include="stdafx.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="BLL\DetSolver.cpp" />
-    <ClCompile Include="BLL\NotRigorousGenerator.cpp" />
-    <ClCompile Include="BLL\ProbGenerator.cpp" />
-    <ClCompile Include="BLL\RandomGenerator.cpp" />
-    <ClCompile Include="BLL\Strategies\DoubleLogic.cpp" />
-    <ClCompile Include="BLL\Strategies\Logic.cpp" />
-    <ClCompile Include="BLL\Strategies\SingleLogic.cpp" />
-    <ClCompile Include="BLL\Strategies\SolverBuilder.cpp" />
-    <ClCompile Include="BLL\Strategies\NoLogic.cpp" />
-    <ClCompile Include="BLL\TotalGenerator.cpp" />
-    <ClCompile Include="BLL\Worker.cpp" />
-    <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="BLL\Simulator.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MWLiteFundamental\MWLiteFundamental.vcxproj">
-      <Project>{769b370d-7e6b-4e72-9fad-49adc12ee00b}</Project>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
