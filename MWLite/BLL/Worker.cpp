@@ -106,10 +106,7 @@ void Worker::WorkerThreadEntry()
 
 void Worker::ProcessAll()
 {
-    auto length = !m_Config->UseTotalMines ? m_Config->Mines() : m_Config->TotalMines + 1;
-
-    auto result = new size_t[length];
-    memset(result, 0, sizeof(size_t) * length);
+    auto result = std::make_shared<std::vector<size_t>>();
 
     std::shared_ptr<IGenerator> gen;
     if (m_Config->UseTotalMines)
@@ -136,25 +133,22 @@ void Worker::ProcessAll()
         if (m_Tick != nullptr)
             ++*m_Tick;
 
-        if (res < 0 || res >= length)
-            throw new std::exception("solution outbound");
-
-        result[res]++;
+        if (res >= result->size())
+            result->resize(res + 1, 0);
+        (*result)[res]++;
 
         m_Resume--;
         m_NotSaved++;
 
         if (m_NotSaved >= m_SaveInterval)
         {
-            m_EventSave(*m_Config, m_Logic, result, length);
+            m_EventSave(*m_Config, m_Logic, result);
 
             m_NotSaved = 0;
-            memset(result, 0, sizeof(size_t) * length);
+            result = std::make_shared<std::vector<size_t>>();
         }
     }
 
     if (m_NotSaved > 0)
-        m_EventSave(*m_Config, m_Logic, result, length);
-
-    delete[] result;
+        m_EventSave(*m_Config, m_Logic, result);
 }

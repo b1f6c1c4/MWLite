@@ -43,8 +43,8 @@ void Logger::Process(const Logging &log, const ICancellationToken &cancel)
 
     std::ofstream fout(ss.str());
 
-    for (size_t i = 0; i < log.Length; ++i)
-        fout << log.Result[i] << std::endl;
+    for (auto r : *log.Result)
+        fout << r << std::endl;
 
     fout.close();
 

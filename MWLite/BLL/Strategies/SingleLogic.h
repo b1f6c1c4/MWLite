@@ -1,6 +1,7 @@
 #pragma once
 #include "../../stdafx.h"
 #include "Logic.h"
+#include "StrategyMacros.h"
 
 namespace Strategies
 {
@@ -14,11 +15,16 @@ namespace Strategies
     {
     protected:
         void Update(const State &state) override;
+    private:
+        USE_LOGIC_T(Single);
     };
 
     class SingleLogicExtended : public LogicStrategy
     {
     protected:
         void Update(const State &state) override;
+    private:
+        USE_LOGIC_T(Single);
+        USE_LOGIC_T(Extended);
     };
 }

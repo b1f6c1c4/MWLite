@@ -130,7 +130,7 @@ size_t DenseBitSet<T>::FullSize() const
 template <typename T>
 void DenseBitSet<T>::Clear()
 {
-    memset(&*m_DenseBitSet.begin(), BIN_T(0), BIN_SIZE * m_DenseBitSet.size());
+    memset(&*m_DenseBitSet.begin(), BIN_T(0), sizeof(bin_t) * m_DenseBitSet.size());
 }
 
 template <typename T>

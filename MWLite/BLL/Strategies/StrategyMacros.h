@@ -6,7 +6,8 @@
 #define U(b) (*state.Neighborhood(b))
 #define f(b) (state.NeighborCount(b))
 
-#define USE_LOGIC(cls) ((cls()).Update(state, Mt, Bt))
+#define USE_LOGIC_T(cls) cls cls##_inst
+#define USE_LOGIC(cls) (cls##_inst).Update(state, Mt, Bt)
 
 inline void FixPoint(std::function<void()> fun)
 {

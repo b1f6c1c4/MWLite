@@ -44,4 +44,5 @@ private:
 
     void ResetToOpen();
     void ResetNeighborCount();
+    size_t GetNeighborCount(Block id);
 };

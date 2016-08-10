@@ -15,7 +15,6 @@ namespace Strategies
     class LogicStrategy : public IDetSolver
     {
     public:
-        LogicStrategy();
 
         void Decide(const State &state, BlockSet &target, const CancellationToken &cancel) override;
 
@@ -23,10 +22,12 @@ namespace Strategies
         BlockSet Mt;
         BlockSet Bt;
 
+        LogicStrategy();
+
         void Make(const State &state);
         void Updates(const State &state, const CancellationToken &cancel);
-        virtual void Update(const State &state) = 0;
         virtual void Collect(const State &state, BlockSet &target);
+        virtual void Update(const State &state) = 0;
     };
 
     class Extended : public ILogic

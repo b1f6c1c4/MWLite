@@ -8,9 +8,9 @@ Dispatcher::Dispatcher(int numWorkers) : m_Logger(new Logger()), m_Counter(0)
     {
         auto worker = new Worker();
 
-        worker->setSaveCallback([this](const Configuration &config, LogicLevel level, const size_t *result, size_t length)
+        worker->setSaveCallback([this](const Configuration &config, LogicLevel level, std::shared_ptr<std::vector<size_t>> result)
                                 {
-                                    m_Logger->Log(Logging(config, level, result, length));
+                                    m_Logger->Log(Logging(config, level, result));
                                 });
 
         worker->setFinishCallback([this, worker]()

@@ -16,7 +16,7 @@ struct WorkingConfig
 
 inline WorkingConfig::WorkingConfig(std::shared_ptr<Configuration> config, LogicLevel level, size_t repetition, size_t saveInterval) : Config(config), Logic(level), Repetition(repetition), SaveInterval(saveInterval) { }
 
-typedef std::function<void(const Configuration &, LogicLevel, const size_t *, size_t)> SaveEventHandler;
+typedef std::function<void(const Configuration &, LogicLevel, std::shared_ptr<std::vector<size_t>>)> SaveEventHandler;
 typedef std::function<void()> FinishEventHandler;
 
 enum class WorkerState

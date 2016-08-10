@@ -13,7 +13,7 @@ struct Configuration
 
     bool NotRigorous;
 
-    size_t Mines() const
+    size_t TotalBlocks() const
     {
         return Width * Height;
     }
