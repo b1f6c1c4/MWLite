@@ -18,21 +18,25 @@ void Worker::Prepare()
     m_Strategy.HeuristicEnabled = true; // NH
     switch (m_Logic)
     {
-    case LogicLevel::ZeroLogic:
     case LogicLevel::PassiveLogic:
-        m_Strategy.Logic = LogicMethod::None; // TODO
+        m_Strategy.Logic = LogicMethod::Passive;
         break;
     case LogicLevel::SingleLogic:
+        m_Strategy.Logic = LogicMethod::Single;
+        break;
     case LogicLevel::SingleLogicExtended:
-        m_Strategy.Logic = LogicMethod::Single; // TODO
+        m_Strategy.Logic = LogicMethod::SingleExtended;
         break;
     case LogicLevel::DoubleLogic:
+        m_Strategy.Logic = LogicMethod::Double;
+        break;
     case LogicLevel::DoubleLogicExtended:
-        m_Strategy.Logic = LogicMethod::Double; // TODO
+        m_Strategy.Logic = LogicMethod::DoubleExtended;
         break;
     case LogicLevel::FullLogic:
         m_Strategy.Logic = LogicMethod::Full;
         break;
+    case LogicLevel::ZeroLogic:
     default:
         throw std::runtime_error("not implemented");
     }
@@ -41,8 +45,7 @@ void Worker::Prepare()
 size_t Worker::ProcessOne()
 {
     auto imme = false;
-    GameMgr mgr(m_Config->Width, m_Config->Height, m_Config->TotalMines, imme);
-    mgr.BasicStrategy = m_Strategy;
+    GameMgr mgr(m_Config->Width, m_Config->Height, m_Config->TotalMines, m_Strategy, !imme);
     mgr.Automatic();
     if (imme)
         return mgr.GetSucceed() ? 0 : 1;

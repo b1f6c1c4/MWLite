@@ -12,7 +12,7 @@ Dispatcher::Dispatcher(int numWorkers, std::function<std::shared_ptr<IWorker>()>
                                     m_Logger->Log(Logging(config, level, result));
                                 });
 
-        worker->setFinishCallback([this, &worker]()
+        worker->setFinishCallback([this, worker]()
                                   {
                                       std::unique_lock<std::mutex> lock(m_MtxQueue);
 
