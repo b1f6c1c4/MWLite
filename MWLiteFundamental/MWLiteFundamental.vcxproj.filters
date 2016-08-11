@@ -18,22 +18,7 @@
     <ClInclude Include="Entities\Configuration.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="BLL\IWorker.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="DAL\ILogger.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="DAL\Logger.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Threading.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="stdafx.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Dispatcher.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="BLL\BaseWorker.h">
@@ -41,15 +26,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DAL\Logger.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Threading.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Dispatcher.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="BLL\BaseWorker.cpp">
       <Filter>源文件</Filter>
     </ClCompile>

@@ -7,7 +7,7 @@ namespace MWLiteStandalone
     {
         private static void Main(string[] args)
         {
-            var app = new WebApp(Environment.ProcessorCount);
+            var app = new WebApp();
             app.Run();
             Console.Read();
         }

@@ -25,4 +25,11 @@ namespace MWLiteMiddleWare
 
         [MarshalAs(UnmanagedType.U1)] public bool NotRigorous;
     }
+
+    public struct WorkingConfig
+    {
+        public Configuration Config;
+        public LogicLevel Logic;
+        public ulong Repetition;
+    }
 }

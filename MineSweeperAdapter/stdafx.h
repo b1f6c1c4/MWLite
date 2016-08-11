@@ -18,7 +18,6 @@
 #include "../../CppUtil/CppUtil/CancellationToken.hpp"
 
 #include "../MWLiteFundamental/Entities/Configuration.h"
-#include "../MWLiteFundamental/BLL/IWorker.h"
 
 #include <vector>
 #include <memory>

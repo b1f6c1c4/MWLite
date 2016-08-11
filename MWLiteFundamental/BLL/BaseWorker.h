@@ -1,54 +1,27 @@
 #pragma once
 #include "../stdafx.h"
-#include <thread>
-#include <condition_variable>
-#include "IWorker.h"
+#include "../Entities/Configuration.h"
 
-class BaseWorker : public IWorker
+class BaseWorker
 {
 public:
-    ~BaseWorker();
+    virtual ~BaseWorker();
 
-    NO_COPY(BaseWorker);
-    NO_MOVE(BaseWorker);
+    std::shared_ptr<Configuration> Config;
+    LogicLevel Logic;
+    size_t Repetition;
 
-    void setSaveCallback(SaveEventHandler callback) override;
-    void setFinishCallback(FinishEventHandler callback) override;
+    std::vector<size_t> Result;
 
-    WorkerState getState() const override;
+    void Process();
 
-    bool Run(const WorkingConfig &config, std::atomic<size_t> *tick) override;
-    void Cancel() override;
+    void Cancel();
 
 protected:
     BaseWorker();
 
-    virtual void Prepare() = 0;
-
-    virtual size_t ProcessOne() = 0;
-
-    std::shared_ptr<Configuration> m_Config;
-    LogicLevel m_Logic;
-
     CancellationToken m_Cancel;
 
-private:
-    SaveEventHandler m_EventSave;
-    FinishEventHandler m_EventFinish;
-
-    size_t m_SaveInterval;
-    size_t m_NotSaved;
-    size_t m_Resume;
-
-    WorkerState m_State;
-
-    std::atomic<size_t> *m_Tick;
-
-    std::mutex m_StateChange;
-    std::condition_variable m_CVStart;
-    std::thread m_Thread;
-
-    void WorkerThreadEntry();
-
-    void ProcessAll();
+    virtual void Prepare();
+    virtual size_t ProcessOne() = 0;
 };

@@ -6,17 +6,17 @@ Worker::Worker() { }
 
 void Worker::Prepare()
 {
-    if (!m_Config->UseTotalMines)
+    if (!Config->UseTotalMines)
         throw std::runtime_error("not implemented");
 
-    CacheBinomials(m_Config->TotalBlocks(), m_Config->TotalMines);
+    CacheBinomials(Config->TotalBlocks(), Config->TotalMines);
 
     m_Strategy.InitialPositionSpecified = false;
     m_Strategy.PruningEnabled = false;
     m_Strategy.ExhaustEnabled = false;
 
     m_Strategy.HeuristicEnabled = true; // NH
-    switch (m_Logic)
+    switch (Logic)
     {
     case LogicLevel::PassiveLogic:
         m_Strategy.Logic = LogicMethod::Passive;
@@ -45,7 +45,7 @@ void Worker::Prepare()
 size_t Worker::ProcessOne()
 {
     auto imme = false;
-    GameMgr mgr(m_Config->Width, m_Config->Height, m_Config->TotalMines, m_Strategy, !imme);
+    GameMgr mgr(Config->Width, Config->Height, Config->TotalMines, m_Strategy, !imme);
     mgr.Automatic();
     if (imme)
         return mgr.GetSucceed() ? 0 : 1;

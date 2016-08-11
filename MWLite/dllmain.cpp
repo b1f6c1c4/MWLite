@@ -1,71 +1,29 @@
 #include "stdafx.h"
 #include <windows.h>
 
-#include "../MWLiteFundamental/Dispatcher.h"
 #include "BLL/Worker.h"
-
-Dispatcher *TheDispatcher = nullptr;
-
-std::wstring WorkingDirectory(L".");
 
 extern "C"
 {
-    DLL_API void SetWorkingDirectory(const wchar_t *path)
+    DLL_API size_t *Run(Configuration config, LogicLevel level, size_t repetition, size_t &len)
     {
-        WorkingDirectory = std::wstring(path);
+        Worker worker;
+        worker.Config = std::make_shared<Configuration>(config);
+        worker.Logic = level;
+        worker.Repetition = repetition;
+
+        worker.Process();
+
+        len = worker.Result.size();
+        auto res = new size_t[len];
+        memcpy(res, &*worker.Result.begin(), len * sizeof(size_t));
+        return res;
     }
 
-    DLL_API void CreateWorkers(int numWorkers)
+    DLL_API void Dispose(size_t *ptr)
     {
-        if (TheDispatcher != nullptr)
-        {
-            delete TheDispatcher;
-            TheDispatcher = nullptr;
-        }
-
-        TheDispatcher = new Dispatcher(numWorkers, []()
-                                       {
-                                           return std::make_shared<Worker>();
-                                       });
-    }
-
-    DLL_API size_t GetNumWorkers()
-    {
-        return TheDispatcher->GetNumWorkers();
-    }
-
-    DLL_API void Schedule(Configuration config, LogicLevel level, size_t repetition, size_t saveInterval)
-    {
-        TheDispatcher->Schedule(std::make_shared<Configuration>(config), level, repetition, saveInterval);
-    }
-
-    DLL_API void CancelWorker(int id)
-    {
-        TheDispatcher->CancelWorker(id);
-    }
-
-    DLL_API WorkerState GetWorkerState(int id)
-    {
-        return TheDispatcher->GetWorkerState(id);
-    }
-
-    DLL_API void EmptyQueue()
-    {
-        TheDispatcher->EmptyQueue();
-    }
-
-    DLL_API size_t ResetCounter()
-    {
-        return TheDispatcher->ResetCounter();
-    }
-
-    DLL_API void RemoveWorkers()
-    {
-        if (TheDispatcher != nullptr)
-        {
-            delete TheDispatcher;
-            TheDispatcher = nullptr;
-        }
+        if (ptr != nullptr)
+            delete[] ptr;
     }
 }
 
@@ -76,9 +34,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
     case DLL_PROCESS_ATTACH:
     case DLL_THREAD_ATTACH:
     case DLL_THREAD_DETACH:
-        break;
     case DLL_PROCESS_DETACH:
-        RemoveWorkers();
         break;
     }
     return TRUE;

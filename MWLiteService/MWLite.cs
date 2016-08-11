@@ -14,7 +14,7 @@ namespace MWLiteService
         protected override void OnStart(string[] args)
         {
             Program.ServiceLog("Starting");
-            m_App = new WebApp(Environment.ProcessorCount);
+            m_App = new WebApp();
             m_App.Run();
             Program.ServiceLog("Started");
         }

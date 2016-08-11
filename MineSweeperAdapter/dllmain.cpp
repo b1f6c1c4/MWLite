@@ -1,71 +1,45 @@
 #include "stdafx.h"
 #include <windows.h>
 
-#include "../MWLiteFundamental/Dispatcher.h"
 #include "Worker.h"
-
-Dispatcher *TheDispatcher = nullptr;
-
-std::wstring WorkingDirectory(L".");
 
 extern "C"
 {
-    ADAPTER_DLL_API void SetWorkingDirectory(const wchar_t *path)
+    ADAPTER_DLL_API Worker *MakeWorker(Configuration config, LogicLevel level, size_t repetition)
     {
-        WorkingDirectory = std::wstring(path);
+        auto worker = new Worker;
+        worker->Config = std::make_shared<Configuration>(config);
+        worker->Logic = level;
+        worker->Repetition = repetition;
+
+        return worker;
     }
 
-    ADAPTER_DLL_API void CreateWorkers(int numWorkers)
+    ADAPTER_DLL_API size_t *Run(Worker *worker, size_t &len)
     {
-        if (TheDispatcher != nullptr)
-        {
-            delete TheDispatcher;
-            TheDispatcher = nullptr;
-        }
+        worker->Process();
 
-        TheDispatcher = new Dispatcher(numWorkers, []()
-                                       {
-                                           return std::make_shared<Worker>();
-                                       });
+        len = worker->Result.size();
+        auto res = new size_t[len];
+        memcpy(res, &*worker->Result.begin(), len * sizeof(size_t));
+        return res;
     }
 
-    ADAPTER_DLL_API size_t GetNumWorkers()
+    ADAPTER_DLL_API void CancelWorker(Worker *ptr)
     {
-        return TheDispatcher->GetNumWorkers();
+        ptr->Cancel();
     }
 
-    ADAPTER_DLL_API void Schedule(Configuration config, LogicLevel level, size_t repetition, size_t saveInterval)
+    ADAPTER_DLL_API void DisposeWorker(Worker *ptr)
     {
-        TheDispatcher->Schedule(std::make_shared<Configuration>(config), level, repetition, saveInterval);
+        if (ptr != nullptr)
+            delete[] ptr;
     }
 
-    ADAPTER_DLL_API void CancelWorker(int id)
+    ADAPTER_DLL_API void DisposeResult(size_t *ptr)
     {
-        TheDispatcher->CancelWorker(id);
-    }
-
-    ADAPTER_DLL_API WorkerState GetWorkerState(int id)
-    {
-        return TheDispatcher->GetWorkerState(id);
-    }
-
-    ADAPTER_DLL_API void EmptyQueue()
-    {
-        TheDispatcher->EmptyQueue();
-    }
-
-    ADAPTER_DLL_API size_t ResetCounter()
-    {
-        return TheDispatcher->ResetCounter();
-    }
-
-    ADAPTER_DLL_API void RemoveWorkers()
-    {
-        if (TheDispatcher != nullptr)
-        {
-            delete TheDispatcher;
-            TheDispatcher = nullptr;
-        }
+        if (ptr != nullptr)
+            delete[] ptr;
     }
 }
 
@@ -76,9 +50,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
     case DLL_PROCESS_ATTACH:
     case DLL_THREAD_ATTACH:
     case DLL_THREAD_DETACH:
-        break;
     case DLL_PROCESS_DETACH:
-        RemoveWorkers();
         break;
     }
     return TRUE;

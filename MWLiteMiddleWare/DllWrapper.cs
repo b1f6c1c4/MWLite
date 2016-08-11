@@ -1,43 +1,23 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace MWLiteMiddleWare
 {
-    public enum WorkerState
-    {
-        Idle = 0,
-        Running = 1,
-        Cancelling = 2,
-        Finished = 3,
-        Quitting = 4
-    };
-
     internal static class DllWrapper
     {
-        [DllImport("MWLite.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
-        public static extern void SetWorkingDirectory(string path);
+        [DllImport("MWLite.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr MakeWorker(Configuration config, LogicLevel level, ulong repetition);
 
         [DllImport("MWLite.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void CreateWorkers(int numWorkers);
+        public static extern IntPtr Run(IntPtr worker, [Out] out ulong len);
 
         [DllImport("MWLite.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern long GetNumWorkers();
+        public static extern void CancelWorker(IntPtr ptr);
 
         [DllImport("MWLite.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void Schedule(Configuration config, LogicLevel level, ulong repetition, ulong saveInterval);
+        public static extern void DisposeWorker(IntPtr ptr);
 
         [DllImport("MWLite.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void CancelWorker(int id);
-
-        [DllImport("MWLite.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern WorkerState GetWorkerState(int id);
-
-        [DllImport("MWLite.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void EmptyQueue();
-
-        [DllImport("MWLite.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern ulong ResetCounter();
-
-        [DllImport("MWLite.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void RemoveWorkers();
+        public static extern void DisposeResult(IntPtr ptr);
     }
 }

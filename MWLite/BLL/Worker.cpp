@@ -11,16 +11,16 @@ Worker::Worker() { }
 void Worker::Prepare()
 {
     std::shared_ptr<IGenerator> gen;
-    if (m_Config->UseTotalMines)
-        gen = std::make_shared<TotalGenerator>(m_Config->Width, m_Config->Height, m_Config->TotalMines);
+    if (Config->UseTotalMines)
+        gen = std::make_shared<TotalGenerator>(Config->Width, Config->Height, Config->TotalMines);
     else
-        gen = std::make_shared<ProbGenerator>(m_Config->Width, m_Config->Height, m_Config->Probability);
-    if (m_Config->NotRigorous)
+        gen = std::make_shared<ProbGenerator>(Config->Width, Config->Height, Config->Probability);
+    if (Config->NotRigorous)
         gen = std::make_shared<NotRigorousGenerator>(gen);
 
-    auto slv = std::make_shared<SolverBuilder>(m_Logic);
+    auto slv = std::make_shared<SolverBuilder>(Logic);
 
-    m_Simulator = std::make_shared<Simulator>(m_Config, gen, slv, true);
+    m_Simulator = std::make_shared<Simulator>(Config, gen, slv, true);
 }
 
 size_t Worker::ProcessOne()

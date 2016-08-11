@@ -74,20 +74,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="BLL\IWorker.h" />
     <ClInclude Include="BLL\BaseWorker.h" />
-    <ClInclude Include="DAL\ILogger.h" />
-    <ClInclude Include="DAL\Logger.h" />
-    <ClInclude Include="Dispatcher.h" />
     <ClInclude Include="Entities\Configuration.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="Threading.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BLL\BaseWorker.cpp" />
-    <ClCompile Include="DAL\Logger.cpp" />
-    <ClCompile Include="Dispatcher.cpp" />
-    <ClCompile Include="Threading.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
