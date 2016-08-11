@@ -62,11 +62,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <LibraryPath>C:\Users\b1f6c1c4\Documents\GitHub\MineSweeperProb\$(Platform)\$(Configuration);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
+    <LibraryPath>C:\Users\b1f6c1c4\Documents\Tools\boost_1_61_0\stage\lib;C:\Users\b1f6c1c4\Documents\GitHub\MineSweeperProb\$(Platform)\$(Configuration);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <LibraryPath>C:\Users\b1f6c1c4\Documents\GitHub\MineSweeperProb\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Users\b1f6c1c4\Documents\Tools\boost_1_61_0\stage\lib;C:\Users\b1f6c1c4\Documents\GitHub\MineSweeperProb\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
