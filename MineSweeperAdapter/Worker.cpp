@@ -11,6 +11,10 @@ void Worker::Prepare()
 
     CacheBinomials(m_Config->TotalBlocks(), m_Config->TotalMines);
 
+    m_Strategy.InitialPositionSpecified = false;
+    m_Strategy.PruningEnabled = false;
+    m_Strategy.ExhaustEnabled = false;
+
     m_Strategy.HeuristicEnabled = true; // NH
     switch (m_Logic)
     {
