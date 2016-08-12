@@ -23,7 +23,14 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MineSweeperAdapter", "MineS
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MWLiteFundamental", "MWLiteFundamental\MWLiteFundamental.vcxproj", "{769B370D-7E6B-4E72-9FAD-49ADC12EE00B}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "AsmUpdater", "AsmUpdater\AsmUpdater.shproj", "{8129CBFB-34E7-4EFF-80CD-97044F6BE41F}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		AsmUpdater\AsmUpdater.projitems*{7772aa15-13c1-4f50-9996-fdf4e24b6446}*SharedItemsImports = 4
+		AsmUpdater\AsmUpdater.projitems*{6e313725-5310-4ca0-8798-d31ac6e565de}*SharedItemsImports = 4
+		AsmUpdater\AsmUpdater.projitems*{8129cbfb-34e7-4eff-80cd-97044f6be41f}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 		Release|x64 = Release|x64

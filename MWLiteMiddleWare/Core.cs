@@ -3,9 +3,14 @@ using System.Collections.Generic;
 
 namespace MWLiteMiddleWare
 {
-    public sealed class Core : IDisposable
+    public delegate void ExceptionEventHandler(Exception e);
+
+    internal sealed class Core : IDisposable
     {
+        public event ExceptionEventHandler OnException;
+
         private bool m_Disposed;
+        // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         private readonly DbHelper m_Db;
         private readonly List<Worker> m_Workers;
 
@@ -15,7 +20,11 @@ namespace MWLiteMiddleWare
 
             m_Workers = new List<Worker>();
             for (var i = 0; i < numWorkers; i++)
-                m_Workers.Add(new Worker(m_Db));
+            {
+                var worker = new Worker(m_Db);
+                worker.OnException += e => OnException?.Invoke(e);
+                m_Workers.Add(worker);
+            }
         }
 
         public void CancelCurrent()

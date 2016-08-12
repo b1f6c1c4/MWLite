@@ -69,26 +69,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="$(SolutionDir)$(PlatformName)\$(ConfigurationName)\MWLite.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="$(SolutionDir)$(PlatformName)\$(ConfigurationName)\MWLite.pdb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="ProjectInstaller.resx">
       <DependentUpon>ProjectInstaller.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MWLiteMiddleWare\MWLiteMiddleWare.csproj">
-      <Project>{02C74CD1-1F50-453B-9601-1FDDF78BC78F}</Project>
-      <Name>MWLiteMiddleWare</Name>
-    </ProjectReference>
-  </ItemGroup>
+  <Import Project="..\AsmUpdater\AsmUpdater.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

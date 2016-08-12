@@ -1,20 +1,19 @@
-﻿using System;
-using System.ServiceProcess;
-using System.Threading.Tasks;
-using MWLiteMiddleWare;
+﻿using System.ServiceProcess;
+using AsmUpdater;
 
 namespace MWLiteService
 {
     public partial class MWLite : ServiceBase
     {
-        private static WebApp m_App;
+        private static MW m_App;
 
         public MWLite() { InitializeComponent(); }
 
         protected override void OnStart(string[] args)
         {
             Program.ServiceLog("Starting");
-            m_App = new WebApp();
+            m_App = new MW();
+            m_App.OnLog += Program.ServiceLog;
             m_App.Run();
             Program.ServiceLog("Started");
         }
@@ -22,7 +21,6 @@ namespace MWLiteService
         protected override void OnStop()
         {
             Program.ServiceLog("Stopping");
-            m_App = null;
             Program.ServiceLog("Stopped");
         }
     }

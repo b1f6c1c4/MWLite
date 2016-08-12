@@ -2,7 +2,7 @@
 
 namespace MWLiteMiddleWare
 {
-    public enum LogicLevel
+    internal enum LogicLevel
     {
         ZeroLogic = 0,
         PassiveLogic = 1,
@@ -14,7 +14,7 @@ namespace MWLiteMiddleWare
     };
 
     [StructLayout(LayoutKind.Sequential, Pack = 8)]
-    public struct Configuration
+    internal struct Configuration
     {
         public int Width;
         public int Height;
@@ -26,7 +26,7 @@ namespace MWLiteMiddleWare
         [MarshalAs(UnmanagedType.U1)] public bool NotRigorous;
     }
 
-    public struct WorkingConfig
+    internal struct WorkingConfig
     {
         public Configuration Config;
         public LogicLevel Logic;

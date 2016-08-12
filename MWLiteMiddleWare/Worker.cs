@@ -6,6 +6,8 @@ namespace MWLiteMiddleWare
 {
     internal class Worker : IDisposable
     {
+        public event ExceptionEventHandler OnException;
+
         private bool m_Disposed;
 
         private readonly object m_Lock = new object();
@@ -50,35 +52,51 @@ namespace MWLiteMiddleWare
         private void WorkerThreadEntry()
         {
             while (!m_Token.IsCancellationRequested)
-            {
-                var work = m_Db.GetWorkLoad();
-                long[] result;
                 try
                 {
-                    Make(work);
-
-                    var ptr = IntPtr.Zero;
-                    try
-                    {
-                        ulong len;
-                        ptr = DllWrapper.Run(m_Worker, out len);
-
-                        result = new long[len];
-                        Marshal.Copy(ptr, result, 0, (int)len);
-                    }
-                    finally
-                    {
-                        if (ptr != IntPtr.Zero)
-                            DllWrapper.DisposeResult(ptr);
-                    }
+                    var work = m_Db.GetWorkLoad();
+                    var result = Run(work);
+                    m_Db.PutResult(work.Config, work.Logic, result);
                 }
-                finally
+                catch (Exception e)
                 {
-                    CancelCurrent();
+                    OnException?.Invoke(e);
                 }
+        }
 
-                m_Db.PutResult(work.Config, work.Logic, result);
+        private long[] Run(WorkingConfig work)
+        {
+            long[] result;
+            try
+            {
+                Make(work);
+                result = GetResult();
             }
+            finally
+            {
+                CancelCurrent();
+            }
+            return result;
+        }
+
+        private long[] GetResult()
+        {
+            long[] result;
+            var ptr = IntPtr.Zero;
+            try
+            {
+                ulong len;
+                ptr = DllWrapper.Run(m_Worker, out len);
+
+                result = new long[len];
+                Marshal.Copy(ptr, result, 0, (int)len);
+            }
+            finally
+            {
+                if (ptr != IntPtr.Zero)
+                    DllWrapper.DisposeResult(ptr);
+            }
+            return result;
         }
 
         private void Make(WorkingConfig cfg)
