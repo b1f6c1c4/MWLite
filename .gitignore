@@ -4,21 +4,22 @@ Desktop.ini
 
 $RECYCLE.BIN/
 
-**/*.suo
-**/*.cache
-**/*.sdf
-**/*.opensdf
-**/*.user
-**/bin
-**/obj
-**/x64
-**/.vs
-**/ipch
-**/*.opendb
+*.log
+*.suo
+*.cache
+*.sdf
+*.opensdf
+*.user
+bin
+obj
+x64
+.vs
+ipch
+*.opendb
 
-**/*.bak
+*.bak
 
-**/*~
+*~
 
 /packages/
 node_modules

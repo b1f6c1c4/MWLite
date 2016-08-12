@@ -2,22 +2,31 @@
 
 namespace MWLiteMiddleWare
 {
+    public delegate void StringExceptionEventHandler(string exception);
+
     [Serializable]
     // ReSharper disable once UnusedMember.Global
     public class Facade : MarshalByRefObject, IDisposable
     {
         // ReSharper disable once EventNeverSubscribedTo.Global
-        public event ExceptionEventHandler OnException;
+        public event StringExceptionEventHandler OnException;
 
         private bool m_Disposed;
 
         // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
-        private Core m_Core;
+        private readonly Core m_Core;
 
         public Facade(string host)
         {
-            m_Core = new Core(Environment.ProcessorCount, host);
-            m_Core.OnException += e => OnException?.Invoke(e);
+            try
+            {
+                m_Core = new Core(Environment.ProcessorCount, host);
+                m_Core.OnException += e => OnException?.Invoke(e.ToString());
+            }
+            catch (Exception e)
+            {
+                OnException?.Invoke(e.ToString());
+            }
         }
 
         public void Dispose()

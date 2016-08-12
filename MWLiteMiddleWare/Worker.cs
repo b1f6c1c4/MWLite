@@ -26,7 +26,7 @@ namespace MWLiteMiddleWare
             m_Db = db;
             m_Cancellation = new CancellationTokenSource();
             m_Token = m_Cancellation.Token;
-            m_Thread = new Thread(WorkerThreadEntry);
+            m_Thread = new Thread(WorkerThreadEntry) { Name = "MWWorker" };
             m_Thread.Start();
         }
 
