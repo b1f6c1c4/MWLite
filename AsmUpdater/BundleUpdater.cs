@@ -1,77 +1,46 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace AsmUpdater
 {
     public delegate void NamedEventHandler(string name);
 
-    internal class BundleUpdater
+    internal class BundleUpdater : IEnumerable<string>
     {
         public event NamedEventHandler OnUpdating;
         public event NamedEventHandler OnNoUpdate;
         public event ExceptionEventHandler OnUpdateException;
-        public event EventHandler OnStart;
         public event EventHandler OnStop;
 
-        private bool m_Stopped;
         private bool m_Error;
 
-        private sealed class Target
+        private readonly string m_BaseUri;
+        private readonly string m_BaseDirectory;
+
+        private readonly List<Updater> m_Targets;
+
+        public BundleUpdater(string baseUri, string baseDirectory)
         {
-            // ReSharper disable once MemberCanBePrivate.Local
-            public readonly string Name;
-
-            public readonly Updater Updater;
-
-            private readonly string BaseDirectory;
-
-            public Target(string name, string baseDirectory, Updater updater)
-            {
-                Name = name;
-                Updater = updater;
-                BaseDirectory = baseDirectory;
-                Updater.OnChecking += Check;
-            }
-
-            private DateTime? Check()
-            {
-                if (!File.Exists(Path))
-                    return null;
-                return File.GetLastWriteTime(Path);
-            }
-
-            public void Write(Stream stream)
-            {
-                using (var file = File.Create(Path))
-                    stream.CopyTo(file);
-            }
-
-            private string Path => System.IO.Path.Combine(BaseDirectory, Name);
-        }
-
-        private readonly List<Target> m_Targets;
-
-        public BundleUpdater(string baseUri, string baseDirectory, IEnumerable<string> names)
-        {
-            m_Stopped = false;
             m_Error = false;
 
-            m_Targets = new List<Target>();
-            foreach (var name in names)
-                m_Targets.Add(MakeTarget(baseUri, baseDirectory, name));
+            m_BaseUri = baseUri;
+            m_BaseDirectory = baseDirectory;
+
+            m_Targets = new List<Updater>();
         }
 
-        private Target MakeTarget(string baseUri, string baseDirectory, string name)
+        public void Add(string name) => m_Targets.Add(MakeTarget(name));
+
+        public void Clear() => m_Targets.Clear();
+
+        private Updater MakeTarget(string name)
         {
-            var updater = new Updater(baseUri + name);
-            var target = new Target(name, baseDirectory, updater);
+            var updater = new Updater(m_BaseUri + name, m_BaseDirectory, name);
             updater.OnUpdating += stream =>
                                   {
-                                      Stop();
+                                      OnStop?.Invoke();
                                       OnUpdating?.Invoke(name);
-                                      target.Write(stream);
                                   };
             updater.OnNoUpdate += () => OnNoUpdate?.Invoke(name);
             updater.OnUpdateException += e =>
@@ -79,28 +48,17 @@ namespace AsmUpdater
                                              m_Error = true;
                                              OnUpdateException?.Invoke(e);
                                          };
-            return target;
-        }
-
-        private void Stop()
-        {
-            if (m_Stopped)
-                return;
-
-            OnStop?.Invoke();
-            m_Stopped = true;
+            return updater;
         }
 
         public bool ForceUpdate()
         {
             m_Error = false;
-            var updated = m_Targets.Aggregate(false, (u, target) => u | target.Updater.ForceUpdate());
-            if (!updated || m_Error)
-                return false;
-
-            OnStart?.Invoke();
-            m_Stopped = false;
-            return true;
+            var updated = m_Targets.Aggregate(false, (u, target) => u | target.Update());
+            return updated && !m_Error;
         }
+
+        public IEnumerator<string> GetEnumerator() => m_Targets.Select(u => u.Name).GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => m_Targets.Select(u => u.Name).GetEnumerator();
     }
 }

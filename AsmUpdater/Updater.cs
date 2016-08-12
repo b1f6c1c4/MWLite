@@ -5,8 +5,6 @@ using System.Runtime.Remoting;
 
 namespace AsmUpdater
 {
-    public delegate DateTime? CheckingEventHandler();
-
     public delegate void UpdatingEventHandler(Stream stream);
 
     public delegate void EventHandler();
@@ -15,30 +13,46 @@ namespace AsmUpdater
 
     internal class Updater
     {
-        public event CheckingEventHandler OnChecking;
         public event UpdatingEventHandler OnUpdating;
         public event EventHandler OnNoUpdate;
         public event ExceptionEventHandler OnUpdateException;
 
-        private readonly object m_Lock = new object();
-
         private readonly string m_Uri;
 
-        public Updater(string uri) { m_Uri = uri; }
+        private readonly string m_BaseDirectory;
 
-        public bool ForceUpdate()
+        // ReSharper disable once MemberCanBePrivate.Local
+        public readonly string Name;
+
+        private DateTime? Check()
         {
-            lock (m_Lock)
-                return Update();
+            if (!File.Exists(CurrentPath))
+                return null;
+            return File.GetLastWriteTime(CurrentPath);
         }
 
-        private bool Update()
+        public void Write(Stream stream)
+        {
+            using (var file = File.Create(CurrentPath))
+                stream.CopyTo(file);
+        }
+
+        private string CurrentPath => Path.Combine(m_BaseDirectory, Name);
+
+        public Updater(string uri, string baseDirectory, string name)
+        {
+            m_Uri = uri;
+            m_BaseDirectory = baseDirectory;
+            Name = name;
+        }
+
+        public bool Update()
         {
             try
             {
                 var req = WebRequest.CreateHttp(m_Uri);
                 req.KeepAlive = true;
-                var lmd = OnChecking?.Invoke();
+                var lmd = Check();
                 if (lmd != null)
                     req.IfModifiedSince = lmd.Value.ToUniversalTime();
 
@@ -67,6 +81,10 @@ namespace AsmUpdater
             return false;
         }
 
-        private void GoUpdate(Stream stream) => OnUpdating?.Invoke(stream);
+        private void GoUpdate(Stream stream)
+        {
+            OnUpdating?.Invoke(stream);
+            Write(stream);
+        }
     }
 }
