@@ -21,3 +21,4 @@ $RECYCLE.BIN/
 **/*~
 
 /packages/
+node_modules

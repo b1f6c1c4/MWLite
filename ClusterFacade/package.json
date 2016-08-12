@@ -1,0 +1,19 @@
+{
+  "name": "cluster-facade",
+  "version": "0.0.0",
+  "private": true,
+  "description": "ClusterFacade",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "main": "app.js",
+  "author": {
+    "name": "b1f6c1c4",
+    "email": "b1f6c1c4@gmail.com"
+  },
+  "dependencies": {
+    "body-parser": "^1.15.1",
+    "express": "^4.13.4",
+    "redis": "^2.6.2"
+  }
+}
