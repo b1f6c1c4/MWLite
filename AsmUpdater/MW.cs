@@ -62,7 +62,7 @@ namespace AsmUpdater
                                  RegularUpdate();
                                  Launch();
 
-                                 Thread.Sleep(10000);
+                                 Thread.Sleep(600000);
                              }
                              catch (Exception e)
                              {

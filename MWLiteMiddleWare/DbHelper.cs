@@ -70,6 +70,43 @@ namespace MWLiteMiddleWare
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+            if (config.InitialPosition >= 0)
+                sb.Append(
+                          $"@[{(config.InitialPosition % config.Height) + 1}," +
+                          $"{(config.InitialPosition / config.Height) + 1}]");
+            sb.Append("-");
+            if (!config.HeuristicEnabled)
+                sb.Append("Pure");
+            else if (config.DecisionTree.Count == 0)
+                sb.Append("NH");
+            else
+                foreach (var method in config.DecisionTree)
+                    switch (method)
+                    {
+                        case HeuristicMethod.MinMineProb:
+                            sb.Append("P");
+                            break;
+                        case HeuristicMethod.MaxZeroProb:
+                            sb.Append("Z");
+                            break;
+                        case HeuristicMethod.MaxZerosProb:
+                            sb.Append("S");
+                            break;
+                        case HeuristicMethod.MaxZerosExp:
+                            sb.Append("E");
+                            break;
+                        case HeuristicMethod.MaxQuantityExp:
+                            sb.Append("Q");
+                            break;
+                        case HeuristicMethod.MinFrontierDist:
+                            sb.Append("F");
+                            break;
+                        case HeuristicMethod.MaxUpperBound:
+                            sb.Append("U");
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
             sb.Append($"-{config.Width}-{config.Height}-");
             sb.Append($"T{config.TotalMines}");
             sb.Append("-NR");
