@@ -10,7 +10,7 @@ void Worker::Prepare()
 
 size_t Worker::ProcessOne()
 {
-    auto imme = false;
+    auto imme = true;
     GameMgr mgr(Config.Width, Config.Height, Config.TotalMines, Config, !imme);
     mgr.Automatic();
     if (imme)
