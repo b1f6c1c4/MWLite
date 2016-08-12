@@ -17,7 +17,7 @@
 #include "../../CppUtil/CppUtil/CopyMove.hpp"
 #include "../../CppUtil/CppUtil/CancellationToken.hpp"
 
-#include "../MWLiteFundamental/Entities/Configuration.h"
+#include "Configuration.h"
 
 #include <vector>
 #include <memory>

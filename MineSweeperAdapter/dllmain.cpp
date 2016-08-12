@@ -5,11 +5,25 @@
 
 extern "C"
 {
-    ADAPTER_DLL_API Worker *MakeWorker(Configuration config, LogicLevel level, size_t repetition)
+    ADAPTER_DLL_API Worker *MakeWorker(RawConfiguration config, size_t repetition)
     {
         auto worker = new Worker;
-        worker->Config = std::make_shared<Configuration>(config);
-        worker->Logic = level;
+
+        worker->Config.Width = config.Width;
+        worker->Config.Height = config.Height;
+        worker->Config.TotalMines = config.TotalMines;
+        worker->Config.InitialPositionSpecified = config.InitialPosition >= 0;
+        worker->Config.Index = config.InitialPosition;
+        worker->Config.Logic = config.Logic;
+        worker->Config.HeuristicEnabled = config.HeuristicEnabled;
+        worker->Config.DecisionTree.resize(config.DecisionTreeLen);
+        if (config.DecisionTreeLen > 0)
+            memcpy(&*worker->Config.DecisionTree.begin(), config.DecisionTree, config.DecisionTreeLen * sizeof(HeuristicMethod));
+        worker->Config.ExhaustEnabled = config.ExhaustEnabled;
+        worker->Config.ExhaustCriterion = config.ExhaustCriterion;
+        worker->Config.PruningEnabled = false;
+        worker->Config.PruningCriterion = 0;
+
         worker->Repetition = repetition;
 
         return worker;

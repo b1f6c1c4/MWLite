@@ -25,11 +25,11 @@ namespace MWLiteMiddleWare
             }
         }
 
-        public void PutResult(Configuration config, LogicLevel level, long[] result)
+        public void PutResult(Configuration config, long[] result)
         {
             var db = m_Connection.GetDatabase();
             var trans = db.CreateTransaction();
-            var keyBase = Hash(config, level);
+            var keyBase = Hash(config);
             for (var i = 0; i < result.Length; i++)
             {
                 var val = result[i];
@@ -41,39 +41,38 @@ namespace MWLiteMiddleWare
             trans.Execute();
         }
 
-        private static string Hash(Configuration config, LogicLevel level)
+        private static string Hash(Configuration config)
         {
             var sb = new StringBuilder();
-            switch (level)
+            switch (config.Logic)
             {
-                case LogicLevel.ZeroLogic:
-                    sb.Append("ZL");
-                    break;
-                case LogicLevel.PassiveLogic:
+                //case LogicMethod.ZeroLogic:
+                //    sb.Append("ZL");
+                //    break;
+                case LogicMethod.Passive:
                     sb.Append("PL");
                     break;
-                case LogicLevel.SingleLogic:
+                case LogicMethod.Single:
                     sb.Append("SL");
                     break;
-                case LogicLevel.SingleLogicExtended:
+                case LogicMethod.SingleExtended:
                     sb.Append("SLE");
                     break;
-                case LogicLevel.DoubleLogic:
+                case LogicMethod.Double:
                     sb.Append("DL");
                     break;
-                case LogicLevel.DoubleLogicExtended:
+                case LogicMethod.DoubleExtended:
                     sb.Append("DLE");
                     break;
-                case LogicLevel.FullLogic:
+                case LogicMethod.Full:
                     sb.Append("FL");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
             sb.Append($"-{config.Width}-{config.Height}-");
-            sb.Append(config.UseTotalMines ? $"T{config.TotalMines}" : $"P{config.Probability:R}");
-            if (config.NotRigorous)
-                sb.Append("-NR");
+            sb.Append($"T{config.TotalMines}");
+            sb.Append("-NR");
             return sb.ToString();
         }
     }

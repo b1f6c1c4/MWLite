@@ -8,13 +8,12 @@ class Worker : public BaseWorker
 public:
     Worker();
 
+    Configuration Config;
+
     NO_COPY(Worker);
     NO_MOVE(Worker);
 
 protected:
     void Prepare() override;
     size_t ProcessOne() override;
-
-private:
-    Strategy m_Strategy;
 };

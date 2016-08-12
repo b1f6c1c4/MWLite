@@ -56,7 +56,7 @@ namespace MWLiteMiddleWare
                 {
                     var work = m_Db.GetWorkLoad();
                     var result = Run(work);
-                    m_Db.PutResult(work.Config, work.Logic, result);
+                    m_Db.PutResult(work.Config, result);
                 }
                 catch (Exception e)
                 {
@@ -105,15 +105,11 @@ namespace MWLiteMiddleWare
                 throw new ArgumentException(@"Width", nameof(cfg.Config));
             if (cfg.Config.Height <= 0)
                 throw new ArgumentException(@"Height", nameof(cfg.Config));
-            if (cfg.Config.UseTotalMines &&
-                cfg.Config.TotalMines < 0)
+            if (cfg.Config.TotalMines < 0)
                 throw new ArgumentException(@"TotalMines", nameof(cfg.Config));
-            if (!cfg.Config.UseTotalMines &&
-                (cfg.Config.Probability < 0 || cfg.Config.Probability > 1))
-                throw new ArgumentException(@"Probability", nameof(cfg.Config));
 
             lock (m_Lock)
-                m_Worker = DllWrapper.MakeWorker(cfg.Config, cfg.Logic, cfg.Repetition);
+                m_Worker = DllWrapper.MakeWorker(cfg.Config, cfg.Repetition);
         }
 
         public void CancelCurrent()

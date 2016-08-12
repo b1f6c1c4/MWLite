@@ -1,6 +1,6 @@
 #include "BaseWorker.h"
 
-BaseWorker::BaseWorker() : Logic(LogicLevel::ZeroLogic), Repetition(0) { }
+BaseWorker::BaseWorker() : Repetition(0) { }
 
 BaseWorker::~BaseWorker() { }
 

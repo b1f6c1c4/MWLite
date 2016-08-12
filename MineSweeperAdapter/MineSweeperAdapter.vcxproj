@@ -11,16 +11,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MineSweeperProb\MineSweeperSolver\MineSweeperSolver.vcxproj">
+      <Project>{B0BB7DC3-F3CD-456A-AE21-2D32D7338B59}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\MWLiteFundamental\MWLiteFundamental.vcxproj">
       <Project>{769b370d-7e6b-4e72-9fad-49adc12ee00b}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MineSweeperProb\MineSweeperSolver\MineSweeperSolver.vcxproj">
-      <Project>{B0BB7DC3-F3CD-456A-AE21-2D32D7338B59}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
+    <ClInclude Include="Configuration.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Worker.h" />
   </ItemGroup>
