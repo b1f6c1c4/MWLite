@@ -12,16 +12,16 @@ namespace MWLiteMiddleWare
         private bool m_Disposed;
         // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         private readonly DbHelper m_Db;
-        private readonly List<Worker> m_Workers;
+        private readonly List<WorkerBase> m_Workers;
 
-        public Core(int numWorkers, string uri)
+        public Core(int numWorkers, string uri, Func<DbHelper, WorkerBase> creator)
         {
             m_Db = new DbHelper(uri);
 
-            m_Workers = new List<Worker>();
+            m_Workers = new List<WorkerBase>();
             for (var i = 0; i < numWorkers; i++)
             {
-                var worker = new Worker(m_Db);
+                var worker = creator(m_Db);
                 worker.OnException += e => OnException?.Invoke(e);
                 m_Workers.Add(worker);
             }

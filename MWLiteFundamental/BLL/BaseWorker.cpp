@@ -1,34 +1,8 @@
 #include "BaseWorker.h"
 
-BaseWorker::BaseWorker() : Repetition(0) { }
-
-BaseWorker::~BaseWorker() { }
-
-void BaseWorker::Process()
+void BaseWorker::Gather(size_t res)
 {
-    Prepare();
-
-    while (Repetition > 0)
-    {
-        if (m_Cancel.IsCancelled())
-            break;
-
-        auto res = ProcessOne();
-
-        if (m_Cancel.IsCancelled())
-            break;
-
-        if (res >= Result.size())
-            Result.resize(res + 1, 0);
-        Result[res]++;
-
-        Repetition--;
-    }
+    if (res >= Result.size())
+        Result.resize(res + 1, 0);
+    Result[res]++;
 }
-
-void BaseWorker::Cancel()
-{
-    m_Cancel.Cancel();
-}
-
-void BaseWorker::Prepare() { }

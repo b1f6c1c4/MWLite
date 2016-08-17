@@ -74,12 +74,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BLL\BaseBaseWorker.h" />
     <ClInclude Include="BLL\BaseWorker.h" />
+    <ClInclude Include="BLL\BaseWorkerT.h" />
     <ClInclude Include="Entities\Configuration.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BLL\BaseBaseWorker.cpp" />
     <ClCompile Include="BLL\BaseWorker.cpp" />
+    <ClCompile Include="BLL\BaseWorkerT.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

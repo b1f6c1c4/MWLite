@@ -1,4 +1,5 @@
-﻿using System.ServiceProcess;
+﻿using System;
+using System.ServiceProcess;
 using AsmUpdater;
 
 namespace MWLiteService
@@ -12,7 +13,7 @@ namespace MWLiteService
         protected override void OnStart(string[] args)
         {
             Program.ServiceLog("Starting");
-            m_App = new MW();
+            m_App = new MW(Environment.ProcessorCount, false, true);
             m_App.OnLog += Program.ServiceLog;
             m_App.Run();
             Program.ServiceLog("Started");

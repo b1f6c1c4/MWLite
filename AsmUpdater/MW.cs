@@ -26,6 +26,10 @@ namespace AsmUpdater
         private AppDomain m_Domain;
         private object m_Facade;
 
+        private readonly int m_NumWorkers;
+        private readonly bool m_IsT;
+        private readonly bool m_Updating;
+
         private string m_Host;
         private string m_AssemblyName;
 
@@ -33,8 +37,12 @@ namespace AsmUpdater
 
         private static string GetPath(string file) => Path.Combine(BaseDirectory, file);
 
-        public MW()
+        public MW(int numWorkers, bool isT, bool updating)
         {
+            m_NumWorkers = numWorkers;
+            m_IsT = isT;
+            m_Updating = updating;
+
             Directory.CreateDirectory(BaseDirectory);
 
             m_BundleConfig = new BundleUpdater(BaseUri, BaseDirectory) { Config };
@@ -60,7 +68,11 @@ namespace AsmUpdater
                          {
                              try
                              {
-                                 RegularUpdate();
+                                 if (m_Updating)
+                                     RegularUpdate();
+                                 else
+                                     LoadConfig();
+
                                  Launch();
                              }
                              catch (Exception e)
@@ -139,7 +151,7 @@ namespace AsmUpdater
                                                  false,
                                                  BindingFlags.Default,
                                                  null,
-                                                 new object[] { m_Host },
+                                                 new object[] { m_NumWorkers, m_Host, m_IsT },
                                                  CultureInfo.InvariantCulture,
                                                  null);
                 OnLog?.Invoke("Launched");

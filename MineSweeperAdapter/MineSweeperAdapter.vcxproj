@@ -19,13 +19,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AdapterWorker.h" />
     <ClInclude Include="Configuration.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Worker.h" />
+    <ClInclude Include="WorkerT.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Worker.cpp" />
+    <ClCompile Include="WorkerT.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0F82BD63-B9FD-42EE-933C-680FD90C6911}</ProjectGuid>

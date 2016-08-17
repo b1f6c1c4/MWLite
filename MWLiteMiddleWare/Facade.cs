@@ -16,11 +16,17 @@ namespace MWLiteMiddleWare
         // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         private readonly Core m_Core;
 
-        public Facade(string host)
+        public Facade(int numWorkers, string host, bool isT)
         {
+            Func<DbHelper, WorkerBase> creator;
+            if (isT)
+                creator = db => new WorkerT(db);
+            else
+                creator = db => new Worker(db);
+
             try
             {
-                m_Core = new Core(Environment.ProcessorCount, host);
+                m_Core = new Core(numWorkers, host, creator);
                 m_Core.OnException += e => OnException?.Invoke(e.ToString());
             }
             catch (Exception e)

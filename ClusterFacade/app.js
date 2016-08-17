@@ -105,7 +105,10 @@ router.post("/lpush", function (req, res) {
 
 router.post("/push", function (req, res) {
     var grp = parseInt(req.query.r);
+    var isT = !!req.query.t;
     var obj;
+    if (isT)
+        console.log("TTTTTT");
     if (Array.isArray(req.body)) {
         obj = new Array();
         for (var i = 0; i < req.body.length; i++) {
@@ -121,7 +124,7 @@ router.post("/push", function (req, res) {
             res.json({ "status": "ok" });
             return;
         }
-        client.rpush("MWLiteWorkLoad", obj, function (err) {
+        client.rpush(isT ? "MWLiteWorkLoadT" : "MWLiteWorkLoad", obj, function (err) {
             if (err) {
                 console.log(err);
                 res.json(err);

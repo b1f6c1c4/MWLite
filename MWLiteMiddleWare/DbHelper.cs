@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using Newtonsoft.Json;
@@ -12,22 +13,29 @@ namespace MWLiteMiddleWare
 
         public DbHelper(string uri) { m_Connection = ConnectionMultiplexer.Connect(uri); }
 
-        public WorkingConfig GetWorkLoad()
+        private string BlockListLeftPop(string key)
         {
             var db = m_Connection.GetDatabase();
             while (true)
             {
-                var res = db.ListLeftPop("MWLiteWorkLoad");
+                var res = db.ListLeftPop(key);
                 if (!res.HasValue)
                     Thread.Sleep(1000);
                 else
-                {
-                    var config = JsonConvert.DeserializeObject<WorkingConfig>(res.ToString());
-                    db.StringIncrement($"Working:{Hash(config.Config)}", config.Repetition, CommandFlags.FireAndForget);
-                    return config;
-                }
+                    return res.ToString();
             }
         }
+
+        public WorkingConfig GetWorkLoad()
+        {
+            var config = JsonConvert.DeserializeObject<WorkingConfig>(BlockListLeftPop("MWLiteWorkLoad"));
+            var db = m_Connection.GetDatabase();
+            db.StringIncrement($"Working:{Hash(config.Config)}", config.Repetition, CommandFlags.FireAndForget);
+            return config;
+        }
+
+        public WorkingConfig GetWorkLoadT() =>
+            JsonConvert.DeserializeObject<WorkingConfig>(BlockListLeftPop("MWLiteWorkLoadT"));
 
         public void PutResult(Configuration config, long[] result)
         {
@@ -46,6 +54,14 @@ namespace MWLiteMiddleWare
             }
             trans.StringDecrementAsync($"Working:{Hash(config)}", cnt);
             trans.Execute();
+        }
+
+        public void PutT(Configuration config, IEnumerable<long> result)
+        {
+            var db = m_Connection.GetDatabase();
+            var key = $"t:{Hash(config)}";
+            foreach (var t in result)
+                db.ListRightPush(key, t);
         }
 
         private static string Hash(Configuration config)

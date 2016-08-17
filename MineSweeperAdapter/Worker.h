@@ -1,14 +1,12 @@
 #pragma once
 #include "stdafx.h"
 #include "../MWLiteFundamental/BLL/BaseWorker.h"
-#include "../../MineSweeperProb/MineSweeperSolver/GameMgr.h"
+#include "AdapterWorker.h"
 
-class Worker : public BaseWorker
+class Worker : public BaseWorker, public AdapterWorker
 {
 public:
     Worker();
-
-    Configuration Config;
 
     NO_COPY(Worker);
     NO_MOVE(Worker);

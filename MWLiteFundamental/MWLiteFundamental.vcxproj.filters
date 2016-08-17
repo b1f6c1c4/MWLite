@@ -24,9 +24,21 @@
     <ClInclude Include="BLL\BaseWorker.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="BLL\BaseWorkerT.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BLL\BaseBaseWorker.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BLL\BaseWorker.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BLL\BaseWorkerT.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BLL\BaseBaseWorker.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
