@@ -60,6 +60,7 @@ namespace MWLiteMiddleWare
                 }
                 catch (Exception e)
                 {
+                    m_Db.PutException(e.ToString());
                     OnException?.Invoke(e);
                 }
         }

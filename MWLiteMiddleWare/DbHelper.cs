@@ -21,7 +21,11 @@ namespace MWLiteMiddleWare
                 if (!res.HasValue)
                     Thread.Sleep(1000);
                 else
-                    return JsonConvert.DeserializeObject<WorkingConfig>(res.ToString());
+                {
+                    var config = JsonConvert.DeserializeObject<WorkingConfig>(res.ToString());
+                    db.StringIncrement($"Working:{Hash(config.Config)}", config.Repetition, CommandFlags.FireAndForget);
+                    return config;
+                }
             }
         }
 
@@ -30,14 +34,17 @@ namespace MWLiteMiddleWare
             var db = m_Connection.GetDatabase();
             var trans = db.CreateTransaction();
             var keyBase = Hash(config);
+            var cnt = 0L;
             for (var i = 0; i < result.Length; i++)
             {
                 var val = result[i];
+                cnt += val;
                 if (val == 0)
                     continue;
                 var key = $"{keyBase}:{i}";
                 trans.StringIncrementAsync(key, val);
             }
+            trans.StringDecrementAsync($"Working:{Hash(config)}", cnt);
             trans.Execute();
         }
 
@@ -107,10 +114,18 @@ namespace MWLiteMiddleWare
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
+            if (config.ExhaustEnabled)
+                sb.Append($"-D{config.ExhaustCriterion}");
             sb.Append($"-{config.Width}-{config.Height}-");
             sb.Append($"T{config.TotalMines}");
             sb.Append("-NR");
             return sb.ToString();
+        }
+
+        public void PutException(string s)
+        {
+            var db = m_Connection.GetDatabase();
+            db.ListRightPush("Exception", s, flags: CommandFlags.FireAndForget);
         }
     }
 }

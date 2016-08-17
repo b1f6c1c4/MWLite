@@ -10,8 +10,19 @@ namespace MWLiteService
     {
         private static readonly string LogFilePath = AppDomain.CurrentDomain.BaseDirectory + "/MWLiteService.log";
 
+        private static readonly object Lock = new object();
         public static void ServiceLog(string str)
-            => File.AppendAllText(LogFilePath, $"{DateTime.Now:O}: {str}{Environment.NewLine}");
+        {
+            lock (Lock)
+                try
+                {
+                    File.AppendAllText(LogFilePath, $"{DateTime.Now:O}: {str}{Environment.NewLine}");
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
+        }
 
         /// <summary>
         ///     应用程序的主入口点。

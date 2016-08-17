@@ -57,17 +57,18 @@ namespace AsmUpdater
                      () =>
                      {
                          while (true)
+                         {
                              try
                              {
                                  RegularUpdate();
                                  Launch();
-
-                                 Thread.Sleep(600000);
                              }
                              catch (Exception e)
                              {
                                  OnLog?.Invoke($"Unhandled error: {e}");
                              }
+                             Thread.Sleep(600000);
+                         }
                          // ReSharper disable once FunctionNeverReturns
                      });
 
