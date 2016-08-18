@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading;
 using Newtonsoft.Json;
@@ -58,10 +59,16 @@ namespace MWLiteMiddleWare
 
         public void PutT(Configuration config, IEnumerable<long> result)
         {
-            var db = m_Connection.GetDatabase();
-            var key = $"t:{Hash(config)}";
-            foreach (var t in result)
-                db.ListRightPush(key, t);
+            //var db = m_Connection.GetDatabase();
+            //var key = $"t:{Hash(config)}";
+            //foreach (var t in result)
+            //    db.ListRightPush(key, t);
+            var dir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"t\");
+            Directory.CreateDirectory(dir);
+            var path = Path.Combine(dir, $"{Hash(config)}.txt");
+            using (var sw = new StreamWriter(path, true))
+                foreach (var t in result)
+                    sw.WriteLine(t);
         }
 
         private static string Hash(Configuration config)
